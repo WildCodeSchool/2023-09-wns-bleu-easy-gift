@@ -3,7 +3,7 @@ import { Ad, NewAdInput, UpdateAdInput } from "../entities/ad";
 import { GraphQLError } from "graphql";
 import { validate } from "class-validator";
 import { In, Like } from "typeorm";
-import { User } from "../entities/user";
+import { User, NewUserInput } from "../entities/user";
 
 @Resolver(User)
 class UsersResolver {
@@ -22,19 +22,18 @@ class UsersResolver {
   //   return ad;
   // }
 
-  // @Mutation(() => Ad)
-  // async createAd(@Arg("data", { validate: true }) data: NewAdInput) {
-  //   const newAd = new Ad();
-  //   Object.assign(newAd, data);
-  //   const errors = await validate(newAd);
-  //   if (errors.length !== 0)
-  //     throw new GraphQLError("invalid data", { extensions: { errors } });
-  //   const { id } = await newAd.save();
-  //   return Ad.findOne({
-  //     where: { id },
-  //     relations: { category: true, tags: true },
-  //   });
-  // }
+  @Mutation(() => User)
+  async createUser(@Arg("data", { validate: true }) data: NewUserInput) {
+    const newUser = new User();
+    Object.assign(newUser, data);
+    const errors = await validate(newUser);
+    if (errors.length !== 0)
+      throw new GraphQLError("invalid data", { extensions: { errors } });
+    const { id } = await newUser.save();
+    return User.findOne({
+      where: { id },
+    });
+  }
 
   // @Mutation(() => Ad)
   // async updateAd(
