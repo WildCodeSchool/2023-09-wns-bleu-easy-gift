@@ -2,6 +2,8 @@ import { DataSource } from "typeorm";
 import { Ad } from "./entities/ad";
 import { Tag } from "./entities/tag";
 import { Category } from "./entities/category";
+import { User } from "./entities/user";
+require("dotenv").config();
 
 export default new DataSource({
   type: "postgres",
@@ -10,7 +12,7 @@ export default new DataSource({
   username: process.env.DB_USER || "postgres",
   password: process.env.DB_PASS || "postgres",
   database: process.env.DB_NAME || "postgres",
-  entities: [Ad, Tag, Category],
+  entities: [Ad, Tag, Category, User],
   synchronize: true,
   logging: true,
 });

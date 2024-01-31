@@ -6,11 +6,12 @@ import AdsResolver from "./resolvers/adsResolver";
 import TagsResolver from "./resolvers/tagsResolver";
 import CategoriesResolver from "./resolvers/categoriesResolver";
 import db from "./db";
+import UsersResolver from "./resolvers/usersResolver";
 
 const port = 4000;
 
 buildSchema({
-  resolvers: [TagsResolver, AdsResolver, CategoriesResolver],
+  resolvers: [TagsResolver, AdsResolver, CategoriesResolver, UsersResolver],
 }).then(async (schema) => {
   await db.initialize();
   const server = new ApolloServer({ schema });

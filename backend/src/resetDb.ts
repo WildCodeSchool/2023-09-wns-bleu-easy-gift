@@ -2,18 +2,19 @@ import db from "./db";
 import { Ad } from "./entities/ad";
 import { Category } from "./entities/category";
 import { Tag } from "./entities/tag";
+import { User } from "./entities/user";
 
 async function clearDB() {
   const runner = db.createQueryRunner();
   await runner.query("SET session_replication_role = 'replica'");
   await Promise.all(
     db.entityMetadatas.map(async (entity) =>
-      runner.query(`ALTER TABLE ${entity.tableName} DISABLE TRIGGER ALL`)
+      runner.query(`ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`)
     )
   );
   await Promise.all(
     db.entityMetadatas.map(async (entity) =>
-      runner.query(`DROP TABLE IF EXISTS ${entity.tableName} CASCADE`)
+      runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`)
     )
   );
   await runner.query("SET session_replication_role = 'origin'");
@@ -24,15 +25,8 @@ async function main() {
   await db.initialize();
   await clearDB();
 
-  const macbook = Ad.create({
-    title: "Macbook pro",
-    description:
-      "MacBook Pro boosté par la puce M2 Pro ou M2 Max. Avec autonomie d'une journée et sublime écran Liquid Retina XDR",
-    owner: "Pierre",
-    price: 1500,
-    picture:
-      "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/macbook-air-midnight-config-20220606?wid=820&hei=498&fmt=jpeg&qlt=90&.v=1654122880566",
-    location: "Lyon",
+  const pierre = User.create({
+    firstName: "Pierre",
   });
   const keyboard = Ad.create({
     title: "Clavier logitech",
@@ -102,9 +96,6 @@ async function main() {
   keyboard.category = computerCat;
   keyboard.tags = [tag1, tag2];
 
-  macbook.category = computerCat;
-  macbook.tags = [tag2, tag3];
-
   peugeot.category = voitureCat;
   renault.category = voitureCat;
   porsche.category = voitureCat;
@@ -113,7 +104,7 @@ async function main() {
   raquette.category = sportCat;
 
   await keyboard.save();
-  await macbook.save();
+  await pierre.save();
   await peugeot.save();
   await renault.save();
   await porsche.save();
