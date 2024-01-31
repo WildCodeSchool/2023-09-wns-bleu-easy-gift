@@ -3,6 +3,7 @@ import { Ad } from "./entities/ad";
 import { Tag } from "./entities/tag";
 import { Category } from "./entities/category";
 import { User } from "./entities/user";
+require("dotenv").config();
 
 export default new DataSource({
   type: "postgres",
