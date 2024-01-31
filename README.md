@@ -25,6 +25,8 @@ Olga Kuzkina - https://github.com/KuzkinaOlga
 
 ## Scripts
 
+test
+
 # backend
 
 Start Development Server: npm run start
