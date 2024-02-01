@@ -8,6 +8,7 @@ import CategoriesResolver from './resolvers/categoriesResolver'
 import db from './db'
 import UsersResolver from './resolvers/usersResolver'
 
+
 const port = 4001
 
 buildSchema({
