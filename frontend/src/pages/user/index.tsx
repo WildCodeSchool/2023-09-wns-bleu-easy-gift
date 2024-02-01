@@ -1,20 +1,25 @@
 import React from "react";
 import { useUsersQuery } from "@/graphql/generated/schema";
 
-export default function Users() {
+export type User = {
+  id: number;
+  firstName: string;
+};
+
+export default function UserList() {
   const { loading, data, error } = useUsersQuery();
-
-  console.log(data);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   const users = data?.users || [];
 
   return (
-    <div className="">
-      <h2 className="">Liste des utilisateurs</h2>
-      {/* Render your users here */}
+    <div>
+      <h2>Liste des utilisateurs</h2>
+      {users.map((user) => (
+        <div>
+          {user.id}
+          {user.firstName}
+        </div>
+      ))}
     </div>
   );
 }
