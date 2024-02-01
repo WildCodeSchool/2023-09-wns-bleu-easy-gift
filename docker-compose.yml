@@ -9,33 +9,32 @@ services:
   backend:
     build: ./backend
     ports:
-      - 4000:4000
+      - 4001:4001
     volumes:
       - ./backend/src:/app/src
       - ./backend/src/db.ts:/app/src/db.ts
-    # env_file:
-    #   - ./global.env
-    #   - ./backend/.env
+    env_file:
+      - ./global.env
+      - ./backend/.env
+      # - ./secret.env
+    environment:
+      - DB_HOST=db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://backend:4001/graphql?query=%7B__typename%7D -H 'Apollo-Require-Preflight: true' || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+  frontend:
+    build: ./frontend
+    # command: "sh -c ./start.sh"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/src:/app/src
+    env_file:
+      - ./frontend/.env
+      - ./global.env
     #   - ./secret.env
-    # healthcheck:
-    #   test:
-    #     [
-    #       "CMD-SHELL",
-    #       "curl -f http://backend:4000/graphql?query=%7B__typename%7D -H 'Apollo-Require-Preflight: true' || exit 1",
-    #     ]
-    #   interval: 10s
-    #   timeout: 30s
-    #   retries: 5
-  # frontend:
-  #   build: ./frontend
-  #   # command: "sh -c ./start.sh"
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - ./frontend/src:/app/src
-  #   env_file:
-  #     - ./global.env
-  #     - ./secret.env
-  #   depends_on:
-  #     backend:
-  #       condition: service_healthy
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
