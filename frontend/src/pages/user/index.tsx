@@ -14,12 +14,21 @@ export default function UserList() {
   return (
     <div>
       <h2>Liste des utilisateurs</h2>
-      {users.map((user) => (
-        <div>
-          {user.id}
-          {user.firstName}
-        </div>
-      ))}
+
+      <thead>
+        <tr>
+          <th scope="col">Id Number</th>
+          <th scope="col">Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((user) => (
+          <tr key={user.id}>
+            <th scope="row">{user.id}</th>
+            <td>{user.firstName}</td>
+          </tr>
+        ))}
+      </tbody>
     </div>
   );
 }
