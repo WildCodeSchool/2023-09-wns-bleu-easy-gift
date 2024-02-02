@@ -2,17 +2,13 @@ import 'reflect-metadata'
 import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
 import { buildSchema } from 'type-graphql'
-import AdsResolver from './resolvers/adsResolver'
-import TagsResolver from './resolvers/tagsResolver'
-import CategoriesResolver from './resolvers/categoriesResolver'
 import db from './db'
 import UsersResolver from './resolvers/usersResolver'
-
 
 const port = 4001
 
 buildSchema({
-    resolvers: [TagsResolver, AdsResolver, CategoriesResolver, UsersResolver],
+    resolvers: [UsersResolver],
 }).then(async schema => {
     await db.initialize()
     const server = new ApolloServer({ schema })
