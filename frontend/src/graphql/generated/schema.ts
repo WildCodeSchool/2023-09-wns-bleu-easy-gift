@@ -15,53 +15,9 @@ export type Scalars = {
   Float: number;
 };
 
-export type Ad = {
-  __typename?: 'Ad';
-  category: Category;
-  createdAt: Scalars['String'];
-  description: Scalars['String'];
-  id: Scalars['Int'];
-  location: Scalars['String'];
-  owner: Scalars['String'];
-  picture: Scalars['String'];
-  price: Scalars['Float'];
-  tags: Array<Tag>;
-  title: Scalars['String'];
-};
-
-export type Category = {
-  __typename?: 'Category';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
-  createAd: Ad;
-  createCategory: Category;
-  createTag: Tag;
   createUser: User;
-  deleteAd: Scalars['String'];
-  deleteCategory: Scalars['String'];
-  deleteTag: Scalars['String'];
-  updateAd: Ad;
-  updateCategory: Category;
-  updateTag: Tag;
-};
-
-
-export type MutationCreateAdArgs = {
-  data: NewAdInput;
-};
-
-
-export type MutationCreateCategoryArgs = {
-  data: NewCategoryInput;
-};
-
-
-export type MutationCreateTagArgs = {
-  data: NewTagInput;
 };
 
 
@@ -69,121 +25,13 @@ export type MutationCreateUserArgs = {
   data: NewUserInput;
 };
 
-
-export type MutationDeleteAdArgs = {
-  adId: Scalars['Float'];
-};
-
-
-export type MutationDeleteCategoryArgs = {
-  categoryId: Scalars['Float'];
-};
-
-
-export type MutationDeleteTagArgs = {
-  tagId: Scalars['Float'];
-};
-
-
-export type MutationUpdateAdArgs = {
-  adId: Scalars['Float'];
-  data: UpdateAdInput;
-};
-
-
-export type MutationUpdateCategoryArgs = {
-  categoryId: Scalars['Float'];
-  data: UpdateCategoryInput;
-};
-
-
-export type MutationUpdateTagArgs = {
-  data: UpdateTagInput;
-  tagId: Scalars['Float'];
-};
-
-export type NewAdInput = {
-  category: ObjectId;
-  description: Scalars['String'];
-  location: Scalars['String'];
-  owner: Scalars['String'];
-  picture: Scalars['String'];
-  price: Scalars['Float'];
-  tags?: InputMaybe<Array<ObjectId>>;
-  title: Scalars['String'];
-};
-
-export type NewCategoryInput = {
-  name: Scalars['String'];
-};
-
-export type NewTagInput = {
-  name: Scalars['String'];
-};
-
 export type NewUserInput = {
   firstName: Scalars['String'];
 };
 
-export type ObjectId = {
-  id: Scalars['Int'];
-};
-
 export type Query = {
   __typename?: 'Query';
-  ads: Array<Ad>;
-  categories: Array<Category>;
-  getAdById: Ad;
-  tags: Array<Tag>;
   users: Array<User>;
-};
-
-
-export type QueryAdsArgs = {
-  categoryId?: InputMaybe<Scalars['Int']>;
-  tagsId?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryCategoriesArgs = {
-  name?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryGetAdByIdArgs = {
-  adId: Scalars['Int'];
-};
-
-
-export type QueryTagsArgs = {
-  name?: InputMaybe<Scalars['String']>;
-};
-
-export type Tag = {
-  __typename?: 'Tag';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-};
-
-export type UpdateAdInput = {
-  category?: InputMaybe<ObjectId>;
-  city?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  location?: InputMaybe<Scalars['String']>;
-  owner?: InputMaybe<Scalars['String']>;
-  picture?: InputMaybe<Scalars['String']>;
-  price?: InputMaybe<Scalars['Float']>;
-  tags?: InputMaybe<Array<ObjectId>>;
-  title?: InputMaybe<Scalars['String']>;
-};
-
-export type UpdateCategoryInput = {
-  name?: InputMaybe<Scalars['String']>;
-};
-
-export type UpdateTagInput = {
-  name?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
