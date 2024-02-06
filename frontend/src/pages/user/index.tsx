@@ -7,14 +7,14 @@ export default function UserList() {
   const users = data?.users || [];
 
   return (
-    <>
-      <h2>Liste des utilisateurs</h2>
+    <div className="flex flex-col gap-2">
+      <h2 className="text-green-700">Liste des utilisateurs</h2>
 
       {users.map((user) => (
         <div key={user.id}>
           {user.id} {user.firstName}
         </div>
       ))}
-    </>
+    </div>
   );
 }
