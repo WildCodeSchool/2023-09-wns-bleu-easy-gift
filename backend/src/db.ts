@@ -1,6 +1,8 @@
 import { DataSource } from 'typeorm'
 import { User } from './entities/user'
-require('dotenv').config()
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 export default new DataSource({
     type: 'postgres',
