@@ -16,6 +16,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../backend/jest.setup copy.ts", "../backend/jest.config copy.ts"],
   "exclude": ["node_modules"]
 }
