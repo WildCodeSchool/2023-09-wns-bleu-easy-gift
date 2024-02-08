@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:15-alpine
+    image: postgres:15
     environment:
       - POSTGRES_PASSWORD=postgres
 
@@ -18,7 +18,11 @@ services:
     environment:
       - DB_HOST=db
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://backend:4001/graphql?query=%7B__typename%7D -H 'Apollo-Require-Preflight: true' || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://backend:4001/graphql?query=%7B__typename%7D -H 'Apollo-Require-Preflight: true' || exit 1",
+        ]
       interval: 10s
       timeout: 30s
       retries: 5
