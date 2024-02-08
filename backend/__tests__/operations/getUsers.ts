@@ -4,7 +4,8 @@ export default gql`
     query Users {
         users {
             id
-            firstName
+            pseudo
+            email
         }
     }
 `

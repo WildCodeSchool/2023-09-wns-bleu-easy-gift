@@ -25,22 +25,34 @@ async function main() {
     await clearDB()
 
     const pierre = User.create({
-        firstName: 'Pierre',
+        pseudo: 'Pierre',
+        email: 'pierre@gmail.com',
+        password: 'test@1234',
     })
     const aurelie = User.create({
-        firstName: 'Aurelie',
+        pseudo: 'Aurelie',
+        email: 'aurelie@gmail.com',
+        password: 'test@1234',
     })
     const olga = User.create({
-        firstName: 'Olga',
+        pseudo: 'Olga',
+        email: 'olga@gmail.com',
+        password: 'test@1234',
     })
     const morgane = User.create({
-        firstName: 'Morgane',
+        pseudo: 'Morgane',
+        email: 'morgane@gmail.com',
+        password: 'test@1234',
     })
     const leopold = User.create({
-        firstName: 'Léopold',
+        pseudo: 'Leopold',
+        email: 'leopold@gmail.com',
+        password: 'test@1234',
     })
     const jeremie = User.create({
-        firstName: 'Jérémie',
+        pseudo: 'Jeremie',
+        email: 'jeremie@gmail.com',
+        password: 'test@1234',
     })
 
     await pierre.save()
