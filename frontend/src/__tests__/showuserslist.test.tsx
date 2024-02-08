@@ -10,7 +10,8 @@ describe("Users list component", () => {
           {
             __typename: "User",
             id: 1,
-            firstName: "Jean",
+            pseudo: "Jean",
+            email: "jean@gmail.com",
           },
         ]}
       />

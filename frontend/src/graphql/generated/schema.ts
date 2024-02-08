@@ -15,42 +15,79 @@ export type Scalars = {
   Float: number;
 };
 
+export type InputLogin = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type InputRegister = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  pseudo: Scalars['String'];
+};
+
+export type Message = {
+  __typename?: 'Message';
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser: User;
+  register: UserWithoutPassword;
 };
 
 
-export type MutationCreateUserArgs = {
-  data: NewUserInput;
-};
-
-export type NewUserInput = {
-  firstName: Scalars['String'];
+export type MutationRegisterArgs = {
+  data: InputRegister;
 };
 
 export type Query = {
   __typename?: 'Query';
+  getUserInfos: UserInfos;
+  login: Message;
+  logout: Message;
+  testAuthorized: Message;
   users: Array<User>;
+};
+
+
+export type QueryLoginArgs = {
+  infos: InputLogin;
 };
 
 export type User = {
   __typename?: 'User';
-  firstName: Scalars['String'];
+  email: Scalars['String'];
   id: Scalars['Int'];
+  pseudo: Scalars['String'];
+};
+
+export type UserInfos = {
+  __typename?: 'UserInfos';
+  email: Scalars['String'];
+  id: Scalars['String'];
+  pseudo: Scalars['String'];
+};
+
+export type UserWithoutPassword = {
+  __typename?: 'UserWithoutPassword';
+  email: Scalars['String'];
+  pseudo: Scalars['String'];
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, firstName: string }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', email: string, id: number, pseudo: string }> };
 
 
 export const UsersDocument = gql`
     query Users {
   users {
+    email
     id
-    firstName
+    pseudo
   }
 }
     `;
