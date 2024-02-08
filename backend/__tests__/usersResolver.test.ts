@@ -1,24 +1,34 @@
 import { User } from '../src/entities/user'
 import getUsers from './operations/getUsers'
 import { execute } from '../jest.setup'
-import createUser from './operations/createUser'
+import register from './operations/register'
 
 describe('user resolver', () => {
     it('should return the users', async () => {
-        await User.create({ firstName: 'John' }).save()
-        await User.create({ firstName: 'Jane' }).save()
+        await User.create({
+            pseudo: 'John',
+            email: 'john@gmail.com',
+            password: 'test@1234',
+        }).save()
+        await User.create({
+            pseudo: 'Jane',
+            email: 'jane@gmail.com',
+            password: 'test@1234',
+        }).save()
         const res = await execute(getUsers)
         expect(res).toMatchInlineSnapshot(`
             {
               "data": {
                 "users": [
                   {
-                    "firstName": "John",
+                    "email": "john@gmail.com",
                     "id": 1,
+                    "pseudo": "John",
                   },
                   {
-                    "firstName": "Jane",
+                    "email": "jane@gmail.com",
                     "id": 2,
+                    "pseudo": "Jane",
                   },
                 ],
               },
@@ -29,14 +39,19 @@ describe('user resolver', () => {
     })
 
     it('can create a user', async () => {
-        const res = await execute(createUser, {
-            data: { firstName: 'Léopold' },
+        const res = await execute(register, {
+            data: {
+                pseudo: 'Léopold',
+                email: 'leopold@gmail.com',
+                password: 'test@1234',
+            },
         })
         expect(res).toMatchInlineSnapshot(`
             {
               "data": {
-                "createUser": {
-                  "firstName": "Léopold",
+                "register": {
+                  "email": "leopold@gmail.com",
+                  "pseudo": "Léopold",
                 },
               },
             }

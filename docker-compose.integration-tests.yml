@@ -1,6 +1,6 @@
 services:
   testDB:
-    image: postgres:15-alpine
+    image: postgres:15
     environment:
       - POSTGRES_PASSWORD=postgres
     ports:
