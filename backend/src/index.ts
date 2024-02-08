@@ -41,7 +41,7 @@ schema.then(async schema => {
     await server.start()
     app.use(
         '/',
-        cors<cors.CorsRequest>({ origin: '*' }),
+        cors<cors.CorsRequest>({ origin: 'http://localhost:3000' }),
         express.json(),
         // expressMiddleware accepts the same arguments:
         // an Apollo Server instance and optional configuration options
