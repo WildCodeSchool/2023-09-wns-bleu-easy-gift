@@ -1,4 +1,4 @@
-import { Resolver, Query, Arg, Mutation, Ctx } from 'type-graphql'
+import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
 import { GraphQLError } from 'graphql'
 // import { validate } from 'class-validator'
 import {
@@ -29,16 +29,6 @@ class UsersResolver {
     async users() {
         return User.find()
     }
-
-    // @Query(() => Ad)
-    // async getAdById(@Arg("adId", () => Int) id: number) {
-    //   const ad = await Ad.findOne({
-    //     where: { id },
-    //     relations: { category: true, tags: true },
-    //   });
-    //   if (!ad) throw new GraphQLError("not found");
-    //   return ad;
-    // }
 
     @Mutation(() => UserWithoutPassword)
     async register(@Arg('data') data: InputRegister) {
@@ -86,6 +76,15 @@ class UsersResolver {
         return responseMessage
     }
 
+    @Authorized()
+    @Query(() => Message)
+    async testAuthorized() {
+        const responseMessage = new Message()
+        responseMessage.message = 'Tu es arrive a cette query'
+        responseMessage.success = true
+        return responseMessage
+    }
+
     @Query(() => UserInfos)
     async getUserInfos(@Ctx() ctx: MyContext) {
         if (!ctx.user) {
@@ -102,43 +101,19 @@ class UsersResolver {
         }
     }
 
-    // @Mutation(() => User)
-    // async createUser(@Arg('data', { validate: true }) data: NewUserInput) {
-    //     const newUser = new User()
-    //     Object.assign(newUser, data)
-    //     const errors = await validate(newUser)
-    //     if (errors.length !== 0)
-    //         throw new GraphQLError('invalid data', { extensions: { errors } })
-    //     const { id } = await newUser.save()
-    //     return User.findOne({
-    //         where: { id },
-    //     })
-    // }
+    @Query(() => Message)
+    async logout(@Ctx() ctx: MyContext) {
+        if (ctx.user) {
+            const cookies = new Cookies(ctx.req, ctx.res)
+            cookies.set('token')
+        }
+        const responseMessage = new Message()
 
-    // @Mutation(() => Ad)
-    // async updateAd(
-    //   @Arg("adId") id: number,
-    //   @Arg("data", { validate: true }) data: UpdateAdInput
-    // ) {
-    //   const adToUpdate = await Ad.findOneBy({ id });
-    //   if (!adToUpdate) throw new GraphQLError("not found");
+        responseMessage.message = 'Vous avez été déconnecté'
+        responseMessage.success = true
 
-    //   await Object.assign(adToUpdate, data);
-
-    //   await adToUpdate.save();
-    //   return Ad.findOne({
-    //     where: { id },
-    //     relations: { category: true, tags: true },
-    //   });
-    // }
-
-    // @Mutation(() => String)
-    // async deleteAd(@Arg("adId") id: number) {
-    //   const ad = await Ad.findOne({ where: { id } });
-    //   if (!ad) throw new GraphQLError("not found");
-    //   await ad.remove();
-    //   return "deleted";
-    // }
+        return responseMessage
+    }
 }
 
 export default UsersResolver
