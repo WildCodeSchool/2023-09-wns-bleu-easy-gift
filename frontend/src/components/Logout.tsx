@@ -10,6 +10,7 @@ export default function Logout() {
     onCompleted: () => {
       router.push("/");
     },
+    fetchPolicy: "cache-and-network",
   });
 
   const isConnected = checkUserConnected();

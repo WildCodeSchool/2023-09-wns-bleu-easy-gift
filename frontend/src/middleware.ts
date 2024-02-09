@@ -12,6 +12,8 @@ export default async function middleware(request: NextRequest) {
   const { cookies } = request;
   const token = cookies.get("token");
 
+  console.log("Middleware token", token);
+
   return await checkToken(token?.value, request);
 }
 
@@ -60,6 +62,6 @@ async function checkToken(token: string | undefined, request: NextRequest) {
   }
 }
 
-export const config = {
-  matcher: "/:path*",
-};
+// export const config = {
+//   matcher: "/:path*",
+// };
