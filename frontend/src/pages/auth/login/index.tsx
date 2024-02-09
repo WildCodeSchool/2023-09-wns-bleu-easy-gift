@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputLogin, useLoginLazyQuery } from "@/graphql/generated/schema";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 function Login() {
@@ -33,6 +34,11 @@ function Login() {
           placeholder="Indiquez votre mot de passe"
         />
         <Button type="submit">{"S'enregistrer"}</Button>
+        <Button variant={"link"}>
+          <Link href={"/auth/register"}>
+            Voulez vous vous creer un compte ?
+          </Link>
+        </Button>
       </form>
     </div>
   );
