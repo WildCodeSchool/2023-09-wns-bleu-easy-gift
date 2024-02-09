@@ -6,7 +6,8 @@ export default function ShowUsersList({
   users: {
     __typename?: "User" | undefined;
     id: number;
-    firstName: string;
+    pseudo: string;
+    email: string;
   }[];
 }) {
   return (
@@ -15,7 +16,7 @@ export default function ShowUsersList({
 
       {users.map((user) => (
         <div key={user.id}>
-          {user.id} {user.firstName}
+          {user.id} {user.pseudo} {user.email}
         </div>
       ))}
     </div>

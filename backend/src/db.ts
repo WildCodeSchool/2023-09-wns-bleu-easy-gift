@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm'
 import { User } from './entities/user'
 import dotenv from 'dotenv'
-
 dotenv.config()
 
 export default new DataSource({

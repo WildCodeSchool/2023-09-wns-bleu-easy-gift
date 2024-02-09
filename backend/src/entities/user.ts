@@ -1,20 +1,88 @@
-import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Field, InputType, Int, ObjectType } from 'type-graphql'
+import {
+    BaseEntity,
+    BeforeInsert,
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+} from 'typeorm'
+import * as argon2 from 'argon2'
 
 @Entity()
 @ObjectType()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  @Field(() => Int)
-  id: number;
+    @BeforeInsert()
+    protected async hashPassword() {
+        this.password = await argon2.hash(this.password)
+    }
+    @Field(() => Int)
+    // @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
+    id: string
 
-  @Column({ length: 50 })
-  @Field()
-  firstName: string;
+    @Column({ length: 50 })
+    @Field()
+    pseudo: string
+
+    @Field()
+    @Column({ unique: true })
+    email: string
+
+    // @Field()
+    @Column()
+    password: string
 }
 
 @InputType()
-export class NewUserInput {
-  @Field()
-  firstName: string;
+export class InputRegister {
+    @Field()
+    pseudo: string
+
+    @Field()
+    email: string
+
+    @Field()
+    password: string
+}
+
+@ObjectType()
+export class UserWithoutPassword {
+    // @Field()
+    // id: string
+
+    @Field()
+    email: string
+
+    @Field()
+    pseudo: string
+}
+
+@InputType()
+export class InputLogin {
+    @Field()
+    email: string
+
+    @Field()
+    password: string
+}
+
+@ObjectType()
+export class Message {
+    @Field()
+    success: boolean
+
+    @Field()
+    message: string
+}
+
+@ObjectType()
+export class UserInfos {
+    @Field()
+    id: string
+
+    @Field()
+    email: string
+
+    @Field()
+    pseudo: string
 }

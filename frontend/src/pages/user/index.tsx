@@ -7,4 +7,5 @@ export default function UserList() {
 
   const users = data?.users || [];
   return <ShowUsersList users={users} />;
+
 }
