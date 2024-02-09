@@ -4,10 +4,10 @@ import { useRegisterUserMutation } from "@/graphql/generated/schema";
 import { useRouter } from "next/router";
 
 function Register() {
-  const rouer = useRouter();
+  const router = useRouter();
   const [register, { data, error }] = useRegisterUserMutation({
     onCompleted: () => {
-      rouer.push("/auth/login");
+      router.push("/auth/login");
     },
   });
 
