@@ -1,13 +1,14 @@
 //frontend/src/pages/auth/login.tsx
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { InputLogin, useLoginLazyQuery } from "@/graphql/generated/schema";
 import { useRouter } from "next/router";
 
 function Login() {
   const router = useRouter();
-
-  const { query } = router;
-
-  const [login, { data, error }] = useLoginLazyQuery();
+  const [login, { data, error }] = useLoginLazyQuery({
+    onCompleted: () => router.push("/user"),
+  });
   console.log(data, error);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,23 +21,20 @@ function Login() {
     }
   };
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24`}
-    >
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input type="text" name="email" placeholder="Indiquez votre email" />
-        </div>
-        <div>
-          <input
-            type="password"
-            name="password"
-            placeholder="Indiquez votre mot de passe"
-          />
-        </div>
-        <input type="submit" />
+    <div className="flex flex-col  justify-center  items-center w-full h-full ">
+      <form
+        className="flex flex-col items-center gap-2"
+        onSubmit={handleSubmit}
+      >
+        <Input type="email" name="email" placeholder="Indiquez votre email" />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Indiquez votre mot de passe"
+        />
+        <Button type="submit">{"S'enregistrer"}</Button>
       </form>
-    </main>
+    </div>
   );
 }
 
