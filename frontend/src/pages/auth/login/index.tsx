@@ -33,11 +33,9 @@ function Login() {
           name="password"
           placeholder="Indiquez votre mot de passe"
         />
-        <Button type="submit">{"S'enregistrer"}</Button>
+        <Button type="submit">{"Se connecter"}</Button>
         <Button variant={"link"}>
-          <Link href={"/auth/register"}>
-            Voulez vous vous creer un compte ?
-          </Link>
+          <Link href={"/auth/register"}>Voulez vous creer un compte ?</Link>
         </Button>
       </form>
     </div>
