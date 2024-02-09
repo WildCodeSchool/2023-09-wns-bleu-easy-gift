@@ -32,7 +32,7 @@ export default function Navbar() {
       <div className="flex gap-2">
         {!isConnected && (
           <Button>
-            <Link href="/auth/login">Login</Link>
+            <Link href="/auth/login">Connexion</Link>
           </Button>
         )}
         <Logout />

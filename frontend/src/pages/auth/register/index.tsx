@@ -32,7 +32,7 @@ function Register() {
         className="flex flex-col items-center gap-2"
         onSubmit={handleSubmit}
       >
-        <Input type="text" name="pseudo" placeholder="Indiquez votre speudo" />
+        <Input type="text" name="pseudo" placeholder="Indiquez votre pseudo" />
         <Input type="email" name="email" placeholder="Indiquez votre email" />
         <Input
           type="password"
