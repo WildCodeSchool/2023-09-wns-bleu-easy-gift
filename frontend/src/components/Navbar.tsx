@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Authentication from "./Authentication";
 import Cookies from "js-cookie";
 import Logout from "./Logout";
+import { checkUserConnected } from "@/utils/checkConnection";
 
 type TopState = {
   email: string;
@@ -23,13 +24,17 @@ export default function Navbar() {
 
   const isLoginPage = pathname.includes("/auth");
 
+  const isConnected = checkUserConnected();
+
   return (
     <nav className="w-full  bg-slate-200 flex justify-between items-center gap-2">
       <h1>Crazy Gift</h1>
       <div className="flex gap-2">
-        <Button>
-          <Link href="/auth/login">Login</Link>
-        </Button>
+        {!isConnected && (
+          <Button>
+            <Link href="/auth/login">Login</Link>
+          </Button>
+        )}
         <Logout />
       </div>
     </nav>
