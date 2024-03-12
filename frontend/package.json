@@ -9,8 +9,7 @@
     "lint": "next lint",
     "codegen": "graphql-codegen --config codegen.yml --watch",
     "test": "jest",
-    "testDB": "docker-compose -f docker-compose.integration-tests.yml up testDB",
-    "testDB:wait": "docker compose -f docker-compose.integration-tests.yml up testDB --wait"
+    "testDB": "docker-compose -f docker-compose.integration-tests.yml up testDB"
   },
   "dependencies": {
     "@apollo/client": "^3.9.1",
