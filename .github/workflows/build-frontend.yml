@@ -1,9 +1,8 @@
 name: build and push production client to dockerhub
 
 on:
-  push:
-    branches:
-      - dev
+  pull_request:
+  workflow_call:
 
 jobs:
   build-and-push-client:
@@ -26,6 +25,6 @@ jobs:
             NEXT_PUBLIC_APOLLO_URI=http://localhost:4001
           context: "{{defaultContext}}:frontend"
           file: "Dockerfile.production"
-          tags: scrip/the-good-corner-client:staging
+          tags: crazygift2024/crazygift-client:dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
