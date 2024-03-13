@@ -27,8 +27,14 @@ function Login() {
         className="flex flex-col items-center gap-2"
         onSubmit={handleSubmit}
       >
-        <Input type="email" name="email" placeholder="Indiquez votre email" />
         <Input
+          data-testid="login-email"
+          id="email"
+          type="email" name="email" placeholder="Indiquez votre email"
+        />
+        <Input
+          data-testid="login-password"
+          id="password"
           type="password"
           name="password"
           placeholder="Indiquez votre mot de passe"

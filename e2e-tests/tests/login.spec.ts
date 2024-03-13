@@ -24,7 +24,10 @@ test('has a valid user name', async ({ page }) => {
     password:passwordToCheck
   }).save();
 
-  await page.goto('http://localhost:3000/auth/login');
 
+  await page.goto('http://localhost:3000/auth/login');
+  await page.getByTestId('login-email').fill(emailToCheck);
+  await page.getByTestId('login-password').fill(passwordToCheck);
+  await page.pause();
 
 });
