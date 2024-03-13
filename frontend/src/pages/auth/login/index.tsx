@@ -8,15 +8,20 @@ import { useRouter } from "next/router";
 function Login() {
   const router = useRouter();
   const [login, { data, error }] = useLoginLazyQuery({
-    onCompleted: () => router.push("/user"),
+    onCompleted: () => {
+      router.push("/user")
+      console.log("here?");
+    },
+
+
   });
   console.log(data, error);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as InputLogin;
     if (data.email && data.password) {
-      login({
+      await login({
         variables: { infos: { email: data.email, password: data.password } },
       });
     }
