@@ -32,6 +32,5 @@ test('has a valid user name', async ({ page }) => {
   await expect(
     page.getByRole("button", {name: "Se déconnecter"})
   ).toBeVisible();
-  await page.pause();
 
 });
