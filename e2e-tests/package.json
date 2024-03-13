@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "pretest": "tsc --incremental -p tests/tsconfig.json",
-    "test": "playwright test -c dist",
-    "e2e": "docker compose -f ../docker-compose.e2e-tests.yml up --wait""test": "playwright test -c dist --headed",
-    "e2e": "docker compose -f ../docker-compose.e2e-tests.yml up"
+    "test": "playwright test -c dist --headed",
+    "e2e": "docker compose -f ../docker-compose.e2e-tests.yml up --wait"
   },
   "keywords": [],
   "author": "",
