@@ -21,7 +21,10 @@ export default function Logout() {
   }
 
   return (
-    <Button variant={"destructive"} onClick={() => logout()}>
+    <Button
+      variant={"destructive"}
+      onClick={() => logout()}
+    >
       Se déconnecter
     </Button>
   );
