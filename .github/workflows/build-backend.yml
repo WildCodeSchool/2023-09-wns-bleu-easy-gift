@@ -2,8 +2,8 @@ name: build and push production server to dockerhub
 
 on:
   push:
-    branches:
-      - staging
+    # branches:
+    #   - staging
 
 jobs:
   build-and-push-server:
