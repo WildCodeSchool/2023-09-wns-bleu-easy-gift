@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  backend:
+    depends_on:
+      db:
+        condition: service_healthy
+
+    build: 
+      context: backend
+      dockerfile: Dockerfile.production
+    env_file: backend/.env
+    ports:
+      - 4001:4001
+  
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.production
+    ports:
+      - 3000:3000
