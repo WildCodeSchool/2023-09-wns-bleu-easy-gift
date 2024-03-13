@@ -24,6 +24,6 @@ jobs:
           push: true
           context: '{{defaultContext}}:backend'
           file: 'Dockerfile.production'
-          tags: eazygift2024/easy-gift-server:staging
+          tags: crazygift2024/easy-gift-server:staging
           # cache-from: type=gha
           # cache-to: type=gha,mode=max
