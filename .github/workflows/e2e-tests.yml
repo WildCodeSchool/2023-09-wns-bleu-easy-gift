@@ -39,15 +39,17 @@ jobs:
       - name: Make envfiles
         run: |
           cp .env.example .env
-          cd ../backend/ && cp .env.example .env 
+          cd ../backend/ && cp .env.example .env
           cd ../frontend/ && cp .env.example .env
       - name: Start app
         run: npm run e2e
       - name: Run Playwright tests
         run: npm run test
       - uses: actions/upload-artifact@v4
-        if: always()
+      - name: Store Artifacts from Failed Tests
+        if: failure()
+        uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: ~/e2e-tests/playwright-report
-          retention-days: 30
+          name: test-results
+          path: e2e-tests/test-results/
+          retention-days: 7
