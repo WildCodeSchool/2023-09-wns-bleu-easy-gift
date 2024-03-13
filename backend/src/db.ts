@@ -15,10 +15,11 @@ const db = new DataSource({
     logging: true,
 })
 
-
 export async function clearDB() {
     const runner = db.createQueryRunner()
     await runner.query("SET session_replication_role = 'replica'")
+    console.log('Coucou')
+
     await Promise.all(
         db.entityMetadatas.map(async entity =>
             runner.query(
@@ -35,5 +36,4 @@ export async function clearDB() {
     await db.synchronize()
 }
 
-
-export default db;
+export default db
