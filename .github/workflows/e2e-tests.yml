@@ -42,7 +42,7 @@ jobs:
           cd ../backend/ && cp .env.example .env 
           cd ../frontend/ && cp .env.example .env
       - name: Start app
-        run: npm run app:start
+        run: npm run e2e
       - name: Run Playwright tests
         run: npm run test
       - uses: actions/upload-artifact@v4
