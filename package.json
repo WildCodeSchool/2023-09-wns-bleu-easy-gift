@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "docker compose up --build",
     "testDB": "docker compose -f docker-compose.integration-tests.yml up testDB",
-    "test": "docker compose -f docker-compose.e2e-tests.yml up testDB"
+    "test": "docker compose -f docker-compose.e2e-tests.yml up testDB",
+    "prod": "docker compose -f docker-compose.production.yml up --build"
   },
   "author": "",
   "license": "ISC"
