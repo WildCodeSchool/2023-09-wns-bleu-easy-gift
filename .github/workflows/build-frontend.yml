@@ -1,8 +1,9 @@
 name: build and push production client to dockerhub
 
 on:
-  pull_request:
-  workflow_call:
+  push:
+    branches:
+      - dev
 
 jobs:
   build-and-push-client:
