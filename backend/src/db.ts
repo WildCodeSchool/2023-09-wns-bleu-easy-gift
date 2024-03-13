@@ -18,7 +18,6 @@ const db = new DataSource({
 export async function clearDB() {
     const runner = db.createQueryRunner()
     await runner.query("SET session_replication_role = 'replica'")
-    console.log('Coucou')
 
     await Promise.all(
         db.entityMetadatas.map(async entity =>
