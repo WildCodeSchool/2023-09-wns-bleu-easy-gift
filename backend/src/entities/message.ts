@@ -19,14 +19,14 @@ export class Message extends BaseEntity {
     id: number
 
     @Field()
-    @Column({ length: 500, type: 'text' })
+    @Column({ type: 'text' })
     content: string
 
     @ManyToOne(() => User, user => user.messages, {
         cascade: true,
         onDelete: 'CASCADE',
     })
-    @Field()
+    @Field(() => User)
     user: User
 
     @ManyToOne(() => Discussion, discussion => discussion.messages, {
