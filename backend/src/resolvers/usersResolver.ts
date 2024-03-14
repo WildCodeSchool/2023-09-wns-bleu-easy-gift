@@ -7,7 +7,7 @@ import {
     UserWithoutPassword,
     InputRegister,
     InputLogin,
-    Message,
+    ResponseMessage,
     UserInfos,
 } from '../entities/user'
 import * as argon2 from 'argon2'
@@ -44,7 +44,7 @@ class UsersResolver {
         return newUser
     }
 
-    @Query(() => Message)
+    @Query(() => ResponseMessage)
     async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
         const user = await findUserByEmail(infos.email)
 
@@ -56,7 +56,7 @@ class UsersResolver {
             user.password,
             infos.password,
         )
-        const responseMessage = new Message()
+        const responseMessage = new ResponseMessage()
         if (isPasswordValid) {
             const token = await new SignJWT({ email: user.email })
                 .setProtectedHeader({ alg: 'HS256', typ: 'jwt' })
@@ -77,9 +77,9 @@ class UsersResolver {
     }
 
     @Authorized()
-    @Query(() => Message)
+    @Query(() => ResponseMessage)
     async testAuthorized() {
-        const responseMessage = new Message()
+        const responseMessage = new ResponseMessage()
         responseMessage.message = 'Tu es arrive a cette query'
         responseMessage.success = true
         return responseMessage
@@ -101,13 +101,13 @@ class UsersResolver {
         }
     }
 
-    @Query(() => Message)
+    @Query(() => ResponseMessage)
     async logout(@Ctx() ctx: MyContext) {
         if (ctx.user) {
             const cookies = new Cookies(ctx.req, ctx.res)
             cookies.set('token')
         }
-        const responseMessage = new Message()
+        const responseMessage = new ResponseMessage()
 
         responseMessage.message = 'Vous avez été déconnecté'
         responseMessage.success = true

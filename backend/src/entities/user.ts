@@ -5,9 +5,9 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    JoinTable,
     ManyToMany,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -45,22 +45,29 @@ export class User extends BaseEntity {
     @Column()
     validated_email: Date
 
-    @ManyToOne(() => Avatar, Avatar => Avatar.id)
-    @Field(() => Int)
-    avatar_id: string
+    @ManyToOne(() => Avatar, avatar => avatar.users, {
+        cascade: true,
+        onDelete: 'CASCADE',
+    })
+    @Field()
+    avatar: Avatar
 
-    @JoinTable()
-    @ManyToMany(() => Discussion, Discussion => Discussion.id)
+    @ManyToMany(() => Discussion, discussion => discussion.users, {
+        cascade: true,
+    })
     @Field(() => [Discussion])
     discussions: Discussion[]
 
+    @OneToMany(() => Message, message => message.user)
+    messages: Message[]
+
     @Field()
     @CreateDateColumn()
-    created_at: Date
+    created_at: string
 
     @Field()
     @UpdateDateColumn()
-    modified_at: Date
+    modified_at: string
 }
 
 @InputType()
@@ -97,7 +104,7 @@ export class InputLogin {
 }
 
 @ObjectType()
-export class Message {
+export class ResponseMessage {
     @Field()
     success: boolean
 
