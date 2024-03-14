@@ -9,7 +9,7 @@ function Login() {
   const router = useRouter();
   const [login, { data, error }] = useLoginLazyQuery({
     onCompleted: () => {
-      router.push("/user")
+      router.push("/user");
     },
   });
   console.log(data, error);
@@ -32,7 +32,9 @@ function Login() {
         <Input
           data-testid="login-email"
           id="email"
-          type="email" name="email" placeholder="Indiquez votre email"
+          type="email"
+          name="email"
+          placeholder="Indiquez votre email"
         />
         <Input
           data-testid="login-password"
