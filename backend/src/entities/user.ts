@@ -42,7 +42,7 @@ export class User extends BaseEntity {
 
     @Field()
     @Column()
-    validated_email: boolean
+    validated_email: Date
 
     @ManyToOne(() => Avatar, Avatar => Avatar.id)
     @Field(() => Int)
