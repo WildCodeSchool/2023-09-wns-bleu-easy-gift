@@ -33,10 +33,10 @@ export class Message extends BaseEntity {
 
   @Field()
   @Column()
-  created_at: Date ;
+  created_at: string ;
 
   @Field()
   @Column()
-  modified_at: Date ;
+  modified_at: string ;
 
 }
