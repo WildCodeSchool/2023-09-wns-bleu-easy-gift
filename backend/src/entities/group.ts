@@ -4,12 +4,14 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
 import { Avatar } from './avatar'
 import { ObjectType, Field, Int } from 'type-graphql'
 import { Length } from 'class-validator'
+import { Discussion } from './discussion'
 
 @ObjectType()
 @Entity()
@@ -32,6 +34,9 @@ export class Group extends BaseEntity {
     @Field()
     @UpdateDateColumn()
     modified_at: string
+
+    @OneToMany(() => Discussion, discussion => discussion.group)
+    discussions: Discussion[]
 
     @ManyToOne(() => Avatar, avatar => avatar.groups, {
         cascade: true,
