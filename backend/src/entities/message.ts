@@ -1,4 +1,4 @@
-import { Field, InputType, Int, ObjectType } from 'type-graphql'
+import { Field, Int, ObjectType } from 'type-graphql'
 import {
     BaseEntity,
     Column,
@@ -6,6 +6,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm'
 
 @Entity()
@@ -40,7 +41,7 @@ export class Message extends BaseEntity {
   created_at: string ;
 
   @Field()
-  @CreateDateColumn()
+  @UpdateDateColumn()
   modified_at: string ;
 
 }
