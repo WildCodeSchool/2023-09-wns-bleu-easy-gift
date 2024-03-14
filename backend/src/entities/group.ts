@@ -33,7 +33,7 @@ export class Group extends BaseEntity {
     @UpdateDateColumn()
     modified_at: string
 
-    @ManyToOne(() => Avatar, avatar => avatar.group, {
+    @ManyToOne(() => Avatar, avatar => avatar.groups, {
         cascade: true,
         onDelete: 'CASCADE',
     })
