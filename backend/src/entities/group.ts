@@ -1,6 +1,7 @@
 import {
     BaseEntity,
     Column,
+    CreateDateColumn,
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -24,12 +25,12 @@ export class Group extends BaseEntity {
     name: string
 
     @Field()
-    @Column()
-    created_at: Date
+    @CreateDateColumn()
+    created_at: string
 
     @Field()
-    @Column()
-    modified_at: Date
+    @CreateDateColumn()
+    modified_at: string
 
     @Field(() => Avatar)
     @ManyToOne(() => Avatar, avatar => avatar.group)
