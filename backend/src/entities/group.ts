@@ -42,6 +42,6 @@ export class Group extends BaseEntity {
         cascade: true,
         onDelete: 'CASCADE',
     })
-    @Field()
+    @Field(() => Avatar)
     avatar: Avatar
 }

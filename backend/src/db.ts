@@ -1,5 +1,9 @@
 import { DataSource } from 'typeorm'
 import { User } from './entities/user'
+import { Avatar } from './entities/avatar'
+import { Group } from './entities/group'
+import { Message } from './entities/message'
+import { Discussion } from './entities/discussion'
 import * as dotenv from 'dotenv'
 dotenv.config()
 
@@ -10,7 +14,7 @@ const db = new DataSource({
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASS || 'postgres',
     database: process.env.DB_NAME || 'postgres',
-    entities: [User],
+    entities: [User, Group, Avatar, Message, Discussion],
     synchronize: true,
     logging: true,
 })

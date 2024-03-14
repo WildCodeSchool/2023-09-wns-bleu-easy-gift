@@ -41,11 +41,11 @@ export class User extends BaseEntity {
     password: string
 
     @Field()
-    @Column()
+    @Column({ nullable: true })
     birthday: Date
 
     @Field()
-    @Column()
+    @Column({ nullable: true })
     validated_email: Date
 
     @ManyToOne(() => Avatar, avatar => avatar.users, {
@@ -55,9 +55,7 @@ export class User extends BaseEntity {
     @Field()
     avatar: Avatar
 
-    @ManyToMany(() => Discussion, discussion => discussion.users, {
-        cascade: true,
-    })
+    @ManyToMany(() => Discussion, discussion => discussion.users)
     @Field(() => [Discussion])
     discussions: Discussion[]
 
