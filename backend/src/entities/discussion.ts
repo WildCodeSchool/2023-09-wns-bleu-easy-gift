@@ -9,6 +9,7 @@ import {
     OneToMany,
     JoinTable,
     ManyToMany,
+    ManyToOne,
 } from 'typeorm'
 import { Group } from './group'
 import { Message } from './message'
@@ -33,10 +34,14 @@ export class Discussion extends BaseEntity {
     @Field()
     modified_at: string
 
+    @ManyToOne(() => Group, g => g.discussions, {
+        cascade: true,
+        onDelete: 'CASCADE',
+    })
     @Field(() => Group)
     group: Group
 
-    @OneToMany(() => Message, message => message.discussion)
+    @OneToMany(() => Message, m => m.discussion)
     messages: Message[]
 
     @JoinTable()
