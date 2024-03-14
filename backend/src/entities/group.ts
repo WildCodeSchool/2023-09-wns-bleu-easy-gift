@@ -21,7 +21,7 @@ export class Group extends BaseEntity {
     @Field()
     @Column({ length: 30 })
     @Length(3, 30, {
-        message: 'Le nom du group doit contenir entre 3 and 30 caractères',
+        message: 'Le nom du groupe doit contenir entre 3 and 30 caractères',
     })
     name: string
 
@@ -37,6 +37,6 @@ export class Group extends BaseEntity {
         cascade: true,
         onDelete: 'CASCADE',
     })
-    @Field(() => Int)
+    @Field()
     avatar: Avatar
 }
