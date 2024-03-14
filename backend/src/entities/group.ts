@@ -17,7 +17,7 @@ export class Group extends BaseEntity {
     id: number
 
     @Field()
-    @Column()
+    @Column({ length: 30 })
     @Length(3, 30, {
         message: "Le nom de l'avatar doit contenir entre 3 and 30 caractères",
     })
