@@ -20,7 +20,7 @@ import { User } from './user'
 export class Discussion extends BaseEntity {
     @Field(() => Int)
     @PrimaryGeneratedColumn()
-    id: string
+    id: number
 
     @Column({ length: 50 })
     @Field()
