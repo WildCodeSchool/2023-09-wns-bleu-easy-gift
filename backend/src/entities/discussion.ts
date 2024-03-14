@@ -27,11 +27,11 @@ export class Discussion extends BaseEntity {
 
     @CreateDateColumn()
     @Field()
-    createdAt: string
+    created_at: string
 
     @UpdateDateColumn()
     @Field()
-    modifiedAt: string
+    modified_at: string
 
     @Field(() => Group)
     group: Group
