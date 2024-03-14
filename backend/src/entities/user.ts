@@ -5,6 +5,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -48,8 +49,9 @@ export class User extends BaseEntity {
     @Field(() => Int)
     avatar_id: string
 
-    @OneToMany(() => UserDiscusion, UserDiscusion => UserDiscusion.user_id)
-    discusions: UserDiscusion.id[]
+    @JoinTable()
+    @ManyToOne(() => Discussion, Discussion => Discussion.id)
+    discussions: Discussion[]
 
     @Field()
     @CreateDateColumn()
