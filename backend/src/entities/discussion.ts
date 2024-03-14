@@ -6,8 +6,13 @@ import {
     PrimaryGeneratedColumn,
     CreateDateColumn,
     UpdateDateColumn,
+    OneToMany,
+    JoinTable,
+    ManyToMany,
 } from 'typeorm'
 import { Group } from './group'
+import { Message } from './message'
+import { User } from './user'
 
 @Entity()
 @ObjectType()
@@ -30,4 +35,14 @@ export class Discussion extends BaseEntity {
 
     @Field(() => Group)
     group: Group
+
+    @OneToMany(() => Message, message => message.discussion)
+    messages: Message[]
+
+    @JoinTable()
+    @ManyToMany(() => User, u => u.discussions, {
+        cascade: true,
+    })
+    @Field(() => [User])
+    users: User[]
 }
