@@ -51,6 +51,7 @@ export class User extends BaseEntity {
 
     @JoinTable()
     @ManyToMany(() => Discussion, Discussion => Discussion.id)
+    @Field(() => [Discussion])
     discussions: Discussion[]
 
     @Field()
