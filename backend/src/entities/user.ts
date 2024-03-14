@@ -3,8 +3,12 @@ import {
     BaseEntity,
     BeforeInsert,
     Column,
+    CreateDateColumn,
     Entity,
+    ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm'
 import * as argon2 from 'argon2'
 
@@ -20,17 +24,40 @@ export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: string
 
-    @Column({ length: 50 })
-    @Field()
-    pseudo: string
-
     @Field()
     @Column({ unique: true })
     email: string
 
+    @Column({ length: 50 })
+    @Field()
+    pseudo: string
+
     // @Field()
     @Column()
     password: string
+
+    @Field()
+    @Column()
+    birthday: Date
+
+    @Field()
+    @Column()
+    validated_email: boolean
+
+    @ManyToOne(() => Avatar, Avatar => Avatar.id)
+    @Field(() => Int)
+    avatar_id: string
+
+    @OneToMany(() => UserDiscusion, UserDiscusion => UserDiscusion.user_id)
+    discusions: UserDiscusion.id[]
+
+    @Field()
+    @CreateDateColumn()
+    created_at: Date
+
+    @Field()
+    @UpdateDateColumn()
+    modified_at: Date
 }
 
 @InputType()
