@@ -2,6 +2,7 @@ import { Field, InputType, Int, ObjectType } from 'type-graphql'
 import {
     BaseEntity,
     Column,
+    CreateDateColumn,
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
@@ -20,23 +21,26 @@ export class Message extends BaseEntity {
   content: string
 
 
-  @ManyToOne(() => User, (user) => user.id)
-  @Field()
-  user_id: User ;
-
-
-  @ManyToOne(() => Discussion, (discussion) => discussion.id, {
+  @ManyToOne(() => User, (user) => user.messages, {
     cascade: true,
     onDelete: "CASCADE",
   })
-  discussion_id: Discussion ;
+  @Field()
+  user: User;
+
+
+  @ManyToOne(() => Discussion, (discussion) => discussion.messages , {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  discussion: Discussion ;
 
   @Field()
-  @Column()
+  @CreateDateColumn()
   created_at: string ;
 
   @Field()
-  @Column()
+  @CreateDateColumn()
   modified_at: string ;
 
 }
