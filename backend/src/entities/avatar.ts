@@ -33,8 +33,8 @@ export class Avatar extends BaseEntity {
     url: string
 
     @OneToMany(() => User, user => user.avatar)
-    Users: User[]
+    users: User[]
 
     @OneToMany(() => Group, group => group.avatar)
-    Groups: Group[]
+    groups: Group[]
 }

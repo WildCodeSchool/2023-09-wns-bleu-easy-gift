@@ -1,4 +1,7 @@
 import { Field, InputType, Int, ObjectType } from 'type-graphql'
+import { Avatar } from './avatar'
+import { Discussion } from './discussion'
+import { Message } from './message'
 import {
     BaseEntity,
     BeforeInsert,
