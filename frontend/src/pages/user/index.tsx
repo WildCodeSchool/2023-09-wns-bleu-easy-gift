@@ -1,5 +1,5 @@
 import React from "react";
-import { useUsersQuery } from "@/graphql/generated/schema";
+import { UserInfos, useUsersQuery } from "@/graphql/generated/schema";
 import ShowUsersList from "@/components/ShowUsersList";
 
 export default function UserList() {
@@ -8,5 +8,6 @@ export default function UserList() {
   });
 
   const users = data?.users || [];
+
   return <ShowUsersList users={users} />;
 }

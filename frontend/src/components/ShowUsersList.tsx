@@ -1,14 +1,19 @@
-import { UsersQuery, useUsersQuery } from "@/graphql/generated/schema";
+import {
+  UserInfos,
+  UsersQuery,
+  useUsersQuery,
+} from "@/graphql/generated/schema";
 
 export default function ShowUsersList({
   users,
 }: {
-  users: {
-    __typename?: "User" | undefined;
-    id: number;
-    pseudo: string;
-    email: string;
-  }[];
+  // users: {
+  //   __typename?: "User" | undefined;
+  //   id: number;
+  //   pseudo: string;
+  //   email: string;
+  // }[];
+  users: UserInfos[];
 }) {
   return (
     <div className="flex flex-col gap-2">
