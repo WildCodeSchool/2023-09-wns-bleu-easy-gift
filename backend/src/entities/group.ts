@@ -5,6 +5,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm'
 import { Avatar } from './avatar'
 import { ObjectType, Field, Int } from 'type-graphql'
@@ -20,7 +21,7 @@ export class Group extends BaseEntity {
     @Field()
     @Column({ length: 30 })
     @Length(3, 30, {
-        message: "Le nom de l'avatar doit contenir entre 3 and 30 caractères",
+        message: 'Le nom du group doit contenir entre 3 and 30 caractères',
     })
     name: string
 
@@ -29,10 +30,13 @@ export class Group extends BaseEntity {
     created_at: string
 
     @Field()
-    @CreateDateColumn()
+    @UpdateDateColumn()
     modified_at: string
 
-    @Field(() => Avatar)
-    @ManyToOne(() => Avatar, avatar => avatar.group)
+    @ManyToOne(() => Avatar, avatar => avatar.group, {
+        cascade: true,
+        onDelete: 'CASCADE',
+    })
+    @Field(() => Int)
     avatar: Avatar
 }
