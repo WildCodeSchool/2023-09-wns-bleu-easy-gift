@@ -6,8 +6,8 @@ import {
     CreateDateColumn,
     Entity,
     JoinTable,
+    ManyToMany,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -50,7 +50,7 @@ export class User extends BaseEntity {
     avatar_id: string
 
     @JoinTable()
-    @ManyToOne(() => Discussion, Discussion => Discussion.id)
+    @ManyToMany(() => Discussion, Discussion => Discussion.id)
     discussions: Discussion[]
 
     @Field()
