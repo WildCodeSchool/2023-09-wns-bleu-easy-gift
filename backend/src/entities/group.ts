@@ -9,7 +9,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm'
 import { Avatar } from './avatar'
-import { ObjectType, Field, Int } from 'type-graphql'
+import { ObjectType, Field, Int, InputType } from 'type-graphql'
 import { Length } from 'class-validator'
 import { Discussion } from './discussion'
 import { UserToGroup } from './userToGroup'
@@ -48,4 +48,13 @@ export class Group extends BaseEntity {
 
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.group)
     userToGroups: UserToGroup[]
+}
+
+@InputType()
+export class NewGroupInput {
+    @Field()
+    @Length(5, 50, {
+        message: 'Le nom du groupe doit contenir entre 5 et 50 caractères',
+    })
+    name: string
 }
