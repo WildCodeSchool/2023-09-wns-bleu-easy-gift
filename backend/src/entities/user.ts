@@ -15,6 +15,7 @@ import {
     UpdateDateColumn,
 } from 'typeorm'
 import * as argon2 from 'argon2'
+import { UserToGroup } from './userToGroup'
 
 @Entity()
 @ObjectType()
@@ -40,9 +41,9 @@ export class User extends BaseEntity {
     @Column()
     password: string
 
-    @Field()
-    @Column({ nullable: true })
-    birthday: Date
+    @Field(() => Date, { nullable: true })
+    @Column({ default: null, type: 'date' })
+    birthday?: Date
 
     @Field()
     @Column({ nullable: true })
@@ -61,6 +62,9 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Message, message => message.user)
     messages: Message[]
+
+    @OneToMany(() => UserToGroup, userToGroup => userToGroup.user)
+    userToGroups: UserToGroup[]
 
     @Field()
     @CreateDateColumn()

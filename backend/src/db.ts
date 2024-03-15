@@ -5,6 +5,7 @@ import { Group } from './entities/group'
 import { Message } from './entities/message'
 import { Discussion } from './entities/discussion'
 import * as dotenv from 'dotenv'
+import { UserToGroup } from './entities/userToGroup'
 dotenv.config()
 
 const db = new DataSource({
@@ -14,7 +15,7 @@ const db = new DataSource({
     username: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASS || 'postgres',
     database: process.env.DB_NAME || 'postgres',
-    entities: [User, Group, Avatar, Message, Discussion],
+    entities: [User, Group, Avatar, Message, Discussion, UserToGroup],
     synchronize: true,
     logging: true,
 })

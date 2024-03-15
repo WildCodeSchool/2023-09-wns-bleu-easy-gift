@@ -4,21 +4,27 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
-    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
-import { Avatar } from './avatar'
 import { ObjectType, Field, Int } from 'type-graphql'
-import { Length } from 'class-validator'
-import { Discussion } from './discussion'
+import { User } from './user'
+import { Group } from './group'
 
 @ObjectType()
 @Entity()
-export class Group extends BaseEntity {
+export class UserToGroup extends BaseEntity {
     @Field(() => Int)
     @PrimaryGeneratedColumn()
     id: number
+
+    @Field()
+    @Column()
+    user_id: number
+
+    @Field()
+    @Column()
+    group_id: number
 
     @Field()
     @Column()
@@ -32,13 +38,9 @@ export class Group extends BaseEntity {
     @UpdateDateColumn()
     modified_at: string
 
-    @OneToMany(() => Discussion, discussion => discussion.group)
-    discussions: Discussion[]
+    @ManyToOne(() => User, user => user.userToGroups)
+    user: User
 
-    @ManyToOne(() => Avatar, avatar => avatar.groups, {
-        cascade: true,
-        onDelete: 'CASCADE',
-    })
-    @Field(() => Avatar)
-    avatar: Avatar
+    @ManyToOne(() => Group, group => group.userToGroups)
+    group: Group
 }

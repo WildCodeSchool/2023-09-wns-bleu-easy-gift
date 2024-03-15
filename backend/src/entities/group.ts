@@ -12,6 +12,7 @@ import { Avatar } from './avatar'
 import { ObjectType, Field, Int } from 'type-graphql'
 import { Length } from 'class-validator'
 import { Discussion } from './discussion'
+import { UserToGroup } from './userToGroup'
 
 @ObjectType()
 @Entity()
@@ -44,4 +45,7 @@ export class Group extends BaseEntity {
     })
     @Field(() => Avatar)
     avatar: Avatar
+
+    @OneToMany(() => UserToGroup, userToGroup => userToGroup.group)
+    userToGroups: UserToGroup[]
 }
