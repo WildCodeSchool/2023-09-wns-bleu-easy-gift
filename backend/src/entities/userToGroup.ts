@@ -7,7 +7,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
-import { ObjectType, Field, Int } from 'type-graphql'
+import { ObjectType, Field, Int, InputType } from 'type-graphql'
 import { User } from './user'
 import { Group } from './group'
 
@@ -43,4 +43,12 @@ export class UserToGroup extends BaseEntity {
 
     @ManyToOne(() => Group, group => group.userToGroups)
     group: Group
+}
+
+@InputType()
+export class NewGroupUserInput {
+    @Field()
+    group_id: number
+    user_id: number
+    is_admin: boolean
 }

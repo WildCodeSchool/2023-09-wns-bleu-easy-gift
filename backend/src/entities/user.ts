@@ -27,7 +27,7 @@ export class User extends BaseEntity {
     @Field(() => Int)
     // @PrimaryGeneratedColumn('uuid')
     @PrimaryGeneratedColumn()
-    id: string
+    id: number
 
     @Field()
     @Column({ unique: true })
