@@ -13,6 +13,34 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTimeISO: any;
+};
+
+export type Avatar = {
+  __typename?: 'Avatar';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  type: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type Discussion = {
+  __typename?: 'Discussion';
+  created_at: Scalars['String'];
+  group: Group;
+  id: Scalars['Int'];
+  modified_at: Scalars['String'];
+  name: Scalars['String'];
+  users: Array<User>;
+};
+
+export type Group = {
+  __typename?: 'Group';
+  avatar: Avatar;
+  created_at: Scalars['String'];
+  id: Scalars['Int'];
+  modified_at: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type InputLogin = {
@@ -21,20 +49,21 @@ export type InputLogin = {
 };
 
 export type InputRegister = {
+  avatar?: InputMaybe<ObjectId>;
   email: Scalars['String'];
   password: Scalars['String'];
   pseudo: Scalars['String'];
 };
 
-export type Message = {
-  __typename?: 'Message';
-  message: Scalars['String'];
-  success: Scalars['Boolean'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
+  createGroup: Group;
   register: UserWithoutPassword;
+};
+
+
+export type MutationCreateGroupArgs = {
+  data: NewGroupInput;
 };
 
 
@@ -42,12 +71,22 @@ export type MutationRegisterArgs = {
   data: InputRegister;
 };
 
+export type NewGroupInput = {
+  name: Scalars['String'];
+};
+
+export type ObjectId = {
+  id: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getUserInfos: UserInfos;
-  login: Message;
-  logout: Message;
-  testAuthorized: Message;
+  groups: Array<Group>;
+  login: ResponseMessage;
+  logout: ResponseMessage;
+  profilAvatars: Array<Avatar>;
+  testAuthorized: ResponseMessage;
   users: Array<User>;
 };
 
@@ -56,15 +95,28 @@ export type QueryLoginArgs = {
   infos: InputLogin;
 };
 
+export type ResponseMessage = {
+  __typename?: 'ResponseMessage';
+  message: Scalars['String'];
+  success: Scalars['Boolean'];
+};
+
 export type User = {
   __typename?: 'User';
+  avatar?: Maybe<Avatar>;
+  birthday?: Maybe<Scalars['DateTimeISO']>;
+  created_at: Scalars['String'];
+  discussions: Array<Discussion>;
   email: Scalars['String'];
   id: Scalars['Int'];
+  modified_at: Scalars['String'];
   pseudo: Scalars['String'];
+  validated_email?: Maybe<Scalars['DateTimeISO']>;
 };
 
 export type UserInfos = {
   __typename?: 'UserInfos';
+  avatar?: Maybe<Avatar>;
   email: Scalars['String'];
   id: Scalars['String'];
   pseudo: Scalars['String'];
@@ -72,6 +124,7 @@ export type UserInfos = {
 
 export type UserWithoutPassword = {
   __typename?: 'UserWithoutPassword';
+  avatar: Avatar;
   email: Scalars['String'];
   pseudo: Scalars['String'];
 };
@@ -79,19 +132,19 @@ export type UserWithoutPassword = {
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', email: string, id: number, pseudo: string }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', email: string, id: number, pseudo: string, avatar?: { __typename?: 'Avatar', url: string } | null }> };
 
 export type LoginQueryVariables = Exact<{
   infos: InputLogin;
 }>;
 
 
-export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'Message', message: string, success: boolean } };
+export type LoginQuery = { __typename?: 'Query', login: { __typename?: 'ResponseMessage', message: string, success: boolean } };
 
 export type LogoutQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutQuery = { __typename?: 'Query', logout: { __typename?: 'Message', success: boolean, message: string } };
+export type LogoutQuery = { __typename?: 'Query', logout: { __typename?: 'ResponseMessage', success: boolean, message: string } };
 
 export type RegisterUserMutationVariables = Exact<{
   data: InputRegister;
@@ -107,6 +160,9 @@ export const UsersDocument = gql`
     email
     id
     pseudo
+    avatar {
+      url
+    }
   }
 }
     `;

@@ -1,7 +1,10 @@
 query Users {
-    users {
+  users {
     email
     id
     pseudo
+    avatar {
+      url
+    }
   }
 }
