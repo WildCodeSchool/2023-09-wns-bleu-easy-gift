@@ -33,13 +33,11 @@ export default function Navbar() {
         className={`max-w-[${maxWidthScreen}] h-full flex justify-between items-center gap-2 mx-auto px-10`}
       >
         <Link href='/'>
-          <h1 style={{ color: 'var(--primary-color)' }} className='font-rubik'>
-            Crazy Gift
-          </h1>
+          <h1 className='font-rubik'>Crazy Gift</h1>
         </Link>
         <div className='flex gap-2'>
           {!isConnected && (
-            <Button variant='default' className='shadow-md'>
+            <Button className='shadow-md'>
               <Link href='/auth/login'>Connexion</Link>
             </Button>
           )}
