@@ -4,13 +4,20 @@
 
 @layer base {
   @font-face {
-    font-family: "Rubik";
-    src: url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+    font-family: 'Rubik';
+    src: url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
   }
 }
 
 @layer base {
   :root {
+    --background-color: #eff1f6;
+    --primary-color: #567dff;
+    --secondary-color: #f94c63;
+
+    --primary-foreground: #ffffff;
+    --secondary-foreground: #ffffff;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -21,7 +28,7 @@
     --popover-foreground: 222.2 84% 4.9%;
 
     --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* --primary-foreground: 210 40% 98%; */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -79,5 +86,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: var(--background-color);
+    color: var(--primary-foreground);
   }
 }
