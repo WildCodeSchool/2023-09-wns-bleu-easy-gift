@@ -1,4 +1,5 @@
 import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
+import { Not } from 'typeorm'
 import { GraphQLError } from 'graphql'
 // import { validate } from 'class-validator'
 import {
@@ -27,12 +28,15 @@ async function createUser({ pseudo, email, password }: InputRegister) {
 class UsersResolver {
     @Query(() => [User])
     async users() {
-        return User.find()
+        return User.find({ relations: ['avatar'] })
     }
 
     @Mutation(() => UserWithoutPassword)
     async register(@Arg('data') data: InputRegister) {
-        const { pseudo, email, password } = data
+        const { pseudo, email, password, avatar } = data
+
+        const avatarToUse = avatar !== undefined ? avatar : null
+
         const user = await findUserByEmail(email)
 
         if (user) {
@@ -40,7 +44,12 @@ class UsersResolver {
                 `User already exist, fait pas trop le malin ${pseudo}`,
             )
         }
-        const newUser = await createUser({ pseudo, email, password })
+        const newUser = await createUser({
+            pseudo,
+            email,
+            password,
+            avatar: avatarToUse,
+        })
         return newUser
     }
 
@@ -98,6 +107,7 @@ class UsersResolver {
             id: userData.id,
             pseudo: userData.pseudo,
             email: userData.email,
+            avatar: userData.avatar,
         }
     }
 
