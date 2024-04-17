@@ -11,6 +11,7 @@
 
 @layer base {
   :root {
+    --bg-primary: #eff1f6;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
