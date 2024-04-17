@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-// import MyGroups from "../../components/MyGroups";
+import MyGroups from "../../components/MyGroups";
 
 function Home() {
   return (
@@ -36,7 +36,7 @@ function Home() {
       <section>
         <h2>Tes groupes</h2>
         <p>Dans la famille thématique... je voudrais le groupe... </p>
-        {/* <MyGroups /> */}
+        <MyGroups />
       </section>
     </>
   )
