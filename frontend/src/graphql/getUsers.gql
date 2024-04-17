@@ -1,0 +1,10 @@
+query Users {
+  users {
+    email
+    id
+    pseudo
+    avatar {
+      url
+    }
+  }
+}

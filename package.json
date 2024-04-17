@@ -1,0 +1,14 @@
+{
+  "name": "2023-09-wns-bleu-easy-gift",
+  "version": "1.0.0",
+  "description": "Enable family members or a group of friends to discuss gift ideas without seeing what others are preparing for them. A discussion thread would be dedicated to each member, allowing other members to exchange ideas for individual or collective gifts.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "docker compose up --build",
+    "testDB": "docker compose -f docker-compose.integration-tests.yml up testDB",
+    "test": "docker compose -f docker-compose.e2e-tests.yml up testDB",
+    "prod": "docker compose -f docker-compose.production.yml up --build"
+  },
+  "author": "",
+  "license": "ISC"
+}
