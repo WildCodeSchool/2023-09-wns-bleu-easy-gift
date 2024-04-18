@@ -17,6 +17,7 @@ function Login() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as InputLogin;
+    console.log("data login", data);
     if (data.email && data.password) {
       await login({
         variables: { infos: { email: data.email, password: data.password } },
@@ -25,24 +26,9 @@ function Login() {
   };
   return (
     <div className="flex flex-col  justify-center  items-center w-full h-full ">
-      <form
-        className="flex flex-col items-center gap-2"
-        onSubmit={handleSubmit}
-      >
-        <Input
-          data-testid="login-email"
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Indiquez votre email"
-        />
-        <Input
-          data-testid="login-password"
-          id="password"
-          type="password"
-          name="password"
-          placeholder="Indiquez votre mot de passe"
-        />
+      <form className="flex flex-col items-center gap-2" onSubmit={handleSubmit}>
+        <Input data-testid="login-email" id="email" type="email" name="email" placeholder="Indiquez votre email" />
+        <Input data-testid="login-password" id="password" type="password" name="password" placeholder="Indiquez votre mot de passe" />
         <Button type="submit">{"Se connecter"}</Button>
         <Button variant={"link"}>
           <Link href={"/auth/register"}>Voulez vous creer un compte ?</Link>

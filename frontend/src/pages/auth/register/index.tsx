@@ -14,7 +14,9 @@ function Register() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
     const data = Object.fromEntries(formData);
+    console.log("data register", data);
     register({
       variables: {
         data: {
@@ -28,17 +30,10 @@ function Register() {
 
   return (
     <div className="flex flex-col  justify-center  items-center w-full h-full ">
-      <form
-        className="flex flex-col items-center gap-2"
-        onSubmit={handleSubmit}
-      >
+      <form className="flex flex-col items-center gap-2" onSubmit={handleSubmit}>
         <Input type="text" name="pseudo" placeholder="Indiquez votre pseudo" />
         <Input type="email" name="email" placeholder="Indiquez votre email" />
-        <Input
-          type="password"
-          name="password"
-          placeholder="Indiquez votre mot de passe"
-        />
+        <Input type="password" name="password" placeholder="Indiquez votre mot de passe" />
         <Button type="submit">{"S'enregistrer"}</Button>
       </form>
     </div>
