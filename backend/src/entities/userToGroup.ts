@@ -4,6 +4,7 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
+    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -14,17 +15,24 @@ import { Group } from './group'
 @ObjectType()
 @Entity()
 export class UserToGroup extends BaseEntity {
+    // @Field(() => Int)
+    // @PrimaryGeneratedColumn()
+    // id: number
     @Field(() => Int)
-    @PrimaryGeneratedColumn()
-    id: number
-
-    @Field()
-    @Column()
+    @PrimaryColumn()
     user_id: number
 
-    @Field()
-    @Column()
+    @Field(() => Int)
+    @PrimaryColumn()
     group_id: number
+
+    // @Field()
+    // @Column()
+    // user_id: number
+
+    // @Field()
+    // @Column()
+    // group_id: number
 
     @Field()
     @Column()

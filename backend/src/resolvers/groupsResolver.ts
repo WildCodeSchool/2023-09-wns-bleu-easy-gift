@@ -4,12 +4,13 @@ import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
 import { MyContext } from '..'
+import { findUserByEmail } from './usersResolver'
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
 }
 
-async function createGroup({ name }: NewGroupInput) {
+async function createGroup(name: string) {
     return await Group.create({ name }).save()
 }
 
@@ -33,8 +34,8 @@ class GroupsResolver {
     }
     @Authorized()
     @Mutation(() => Group)
-    async createGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
-        const { name } = data
+    async addNewGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
+        const { name, emailUsers } = data
         const group = await findGroupByName(name)
 
         if (group) {
@@ -42,12 +43,23 @@ class GroupsResolver {
                 `Group already exist, fait pas trop le malin.`,
             )
         }
-        const newGroup = await createGroup({ name })
+        const newGroup = await createGroup(name)
         if (!ctx.user) throw new GraphQLError("T'es pas la chef(fe) t'es un BZ")
-        const NewUserToGroup = await createUserToGroup({
+        await createUserToGroup({
             group_id: newGroup.id,
             user_id: ctx.user?.id,
             is_admin: true,
+        })
+
+        emailUsers.forEach(async email => {
+            const isUser = await findUserByEmail(email)
+            if (isUser) {
+                await createUserToGroup({
+                    group_id: newGroup.id,
+                    user_id: isUser.id,
+                    is_admin: false,
+                })
+            }
         })
 
         return newGroup
