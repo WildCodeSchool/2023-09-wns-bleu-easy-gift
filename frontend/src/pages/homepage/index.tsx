@@ -5,22 +5,23 @@ import MyGroups from "../../components/MyGroups";
 function Home() {
   return (
     <>
-      <section>
-        <h1 className="">Easy Gift</h1>
-        <p>
+      <section className="h-2/4 flex flex-col  justify-evenly items-center">
+        <h1 className="text-4xl md:text-6xl font-bold text-primaryBlue">Easy Gift</h1>
+        <p className="text-base md:text-2xl">
           Prêt à déclarer la guerre aux cadeaux ratés ? 🎁😅
           Et aux cafteurs ? 😮🤫
-          Easy Gift à la rescousse! <br />
-          <b>
-            Organisez, échangez entre amis et trouvez "LA" pépite
-          </b>
+          <br />
+          Easy Gift à la rescousse!
+          <br />
+          <b>Organisez, échangez entre amis et trouvez "LA" pépite</b>
           sans prise de tête.
+          <br />
           C'est fun, c'est facile,... c'est cadeau !🎉</p>
         <Button>rejoins les Easy Gifteurs</Button>
       </section>
-      <section>
+      <section className="h-2/4 flex ">
         <article>
-          <h2>Crée ton groupe</h2>
+          <h2 className="text-3xl font-bold text-primaryRed">Crée ton groupe</h2>
           <p>
             Fini les "oups,... tu n'as rien entendu !"🤭
             Parce que chez Easy Gift on aime les surprises, on a crée pour vous le premier espace dédié 100% confidentiel.

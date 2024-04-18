@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className={`w-full bg-primaryRed h-16 absolute bottom-0`}>
+    <footer className={`w-full bg-primaryRed`}>
       <ul>
         <li className="w-10 h-10">
           <svg
