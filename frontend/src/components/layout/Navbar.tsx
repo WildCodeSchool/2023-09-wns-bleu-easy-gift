@@ -13,16 +13,16 @@ export default function Navbar() {
   const closeMenu = () => setMenuOpen(false);
 
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         closeMenu();
       }
-    }
+    };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isMenuOpen]);
+  }, []);
 
   return (
     <nav className='w-full h-16 sticky top-0 shadow-lg z-10 bg-bgPrimary'>
@@ -48,13 +48,13 @@ export default function Navbar() {
 
         {/* Logo Link */}
         <Link href='/'>
-          <h1 className='font-rubik'>Crazy Gift</h1>
+          <h1 className='font-rubik'>Easy Gift</h1>
         </Link>
 
         {/* Links for Larger Screens */}
         <div className={`hidden md:flex md:flex-row gap-4`}>
-          <Link href='#'>Link 1</Link>
-          <Link href='#'>Link 2</Link>
+          <Link href='#'>Mes groupes</Link>
+          <Link href='#'>Mes chats</Link>
           <Link href='#'>Link 3</Link>
         </div>
 
@@ -82,10 +82,10 @@ export default function Navbar() {
             </svg>
           </button>
           <Link href='#' onClick={closeMenu}>
-            Link 1
+            Mes groupes
           </Link>
           <Link href='#' onClick={closeMenu}>
-            Link 2
+            Mes chats
           </Link>
           <Link href='#' onClick={closeMenu}>
             Link 3
@@ -119,7 +119,7 @@ export default function Navbar() {
               </Button>
             </>
           )}
-          <Logout />
+          {isConnected && <Logout />}
         </div>
       </div>
     </nav>

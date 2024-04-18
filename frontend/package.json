@@ -15,6 +15,7 @@
     "@apollo/client": "^3.9.1",
     "@hookform/resolvers": "^3.3.4",
     "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
