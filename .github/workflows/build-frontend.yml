@@ -1,9 +1,16 @@
 name: build and push production client to dockerhub
 
 on:
-  push:
-    branches:
-      - dev
+  workflow_call:
+    inputs:
+      image_name:
+        type: string
+        required: true
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
 
 jobs:
   build-and-push-client:
@@ -26,6 +33,7 @@ jobs:
             NEXT_PUBLIC_APOLLO_URI=http://localhost:4001
           context: "{{defaultContext}}:frontend"
           file: "Dockerfile.production"
-          tags: crazygift2024/crazygift-client:dev
+          tags: ${{inputs.image_name}}
+          #tags: crazygift2024/crazygift-client:dev
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          #cache-to: type=gha,mode=max

@@ -16,6 +16,7 @@ import {
 } from 'typeorm'
 import * as argon2 from 'argon2'
 import { UserToGroup } from './userToGroup'
+import { ObjectId } from '../utils'
 
 @Entity()
 @ObjectType()
@@ -45,16 +46,20 @@ export class User extends BaseEntity {
     @Column({ default: null, type: 'date' })
     birthday?: Date
 
-    @Field()
-    @Column({ nullable: true })
-    validated_email: Date
+    // @Field()
+    // @Column({ nullable: true })
+    // validated_email: Date
+
+    @Column({ default: null, type: 'date', nullable: true })
+    @Field(() => Date, { nullable: true })
+    validated_email: Date | null
 
     @ManyToOne(() => Avatar, avatar => avatar.users, {
         cascade: true,
         onDelete: 'CASCADE',
     })
-    @Field()
-    avatar: Avatar
+    @Field(() => Avatar, { nullable: true })
+    avatar: Avatar | null
 
     @ManyToMany(() => Discussion, discussion => discussion.users)
     @Field(() => [Discussion])
@@ -85,6 +90,9 @@ export class InputRegister {
 
     @Field()
     password: string
+
+    @Field(() => ObjectId, { nullable: true })
+    avatar?: Avatar | null
 }
 
 @ObjectType()
@@ -97,6 +105,9 @@ export class UserWithoutPassword {
 
     @Field()
     pseudo: string
+
+    @Field()
+    avatar: Avatar
 }
 
 @InputType()
@@ -127,4 +138,7 @@ export class UserInfos {
 
     @Field()
     pseudo: string
+
+    @Field(() => Avatar, { nullable: true })
+    avatar?: Avatar | null
 }
