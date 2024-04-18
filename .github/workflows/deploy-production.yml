@@ -46,4 +46,4 @@ jobs:
       - name: Call VPS webhook to update production
         uses: wei/curl@master
         with:
-          args: https://ops.the-good-corner.duckdns.org/hooks/update-production
+          args: https://ops.easy-gift.0923-bleu-3.wns.wilders.dev/hooks/update-production
