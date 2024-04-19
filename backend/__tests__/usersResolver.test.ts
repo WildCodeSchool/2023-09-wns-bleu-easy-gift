@@ -44,6 +44,7 @@ describe('user resolver', () => {
                 pseudo: 'Léopold',
                 email: 'leopold@gmail.com',
                 password: 'test@1234',
+                avatar: 22,
             },
         })
         expect(res).toMatchInlineSnapshot(`
