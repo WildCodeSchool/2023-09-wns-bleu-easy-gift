@@ -69,7 +69,7 @@ export class User extends BaseEntity {
     messages: Message[]
 
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.user)
-    userToGroups: UserToGroup[]
+    public userToGroups: UserToGroup[]
 
     @Field()
     @CreateDateColumn()
