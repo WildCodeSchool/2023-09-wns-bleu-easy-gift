@@ -55,7 +55,7 @@ export default function Navbar() {
         <div className={`hidden md:flex md:flex-row gap-4`}>
           <Link href="#">Mes groupes</Link>
           <Link href="#">Mes chats</Link>
-          <Link href="#">TestChmod</Link>
+          <Link href="#">TestOPSSur Staging</Link>
         </div>
 
         {/* Side Drawer for Mobile Screens */}
