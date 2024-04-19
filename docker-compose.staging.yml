@@ -25,17 +25,19 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    build:
-      context: backend
-      dockerfile: Dockerfile.production
+    # build:
+    #   context: backend
+    #   dockerfile: Dockerfile.production
+    image: crazygift2024/easy-gift-server
 
   frontend:
     environment:
       SECRET_KEY: ${SECRET_KEY:-changeme}
     stop_grace_period: 0s
-    build:
-      context: frontend
-      dockerfile: Dockerfile.production
+    # build:
+    #   context: frontend
+    #   dockerfile: Dockerfile.production
+    image: crazygift2024/crazygift-client
 
   gateway:
     stop_grace_period: 0s
