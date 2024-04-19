@@ -15,14 +15,26 @@ import * as argon2 from 'argon2'
 import { SignJWT } from 'jose'
 import { MyContext } from '..'
 import Cookies from 'cookies'
+import { Avatar } from '../entities/avatar'
 
 export async function findUserByEmail(email: string) {
     return await User.findOneBy({ email })
 }
 
-async function createUser({ pseudo, email, password }: InputRegister) {
-    return await User.create({ pseudo, email, password }).save()
-}
+// async function createUser({ pseudo, email, password }: InputRegister) {
+//     // Générer un identifiant d'avatar aléatoire entre 1 et 31
+//     const randomAvatarId = Math.floor(Math.random() * 31) + 1
+
+//     // Récupérer l'avatar correspondant à l'ID aléatoire
+//     const avatar = await Avatar.findOne({ where: { id: randomAvatarId } })
+
+//     // Vérifier si l'avatar correspondant à l'ID existe
+//     if (!avatar) {
+//         throw new Error(`Avatar with ID ${randomAvatarId} not found`)
+//     }
+
+//     return await User.create({ pseudo, email, password, avatar }).save()
+// }
 
 @Resolver(User)
 class UsersResolver {
@@ -35,21 +47,18 @@ class UsersResolver {
     async register(@Arg('data') data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
-        const avatarToUse = avatar !== undefined ? avatar : null
+        const randomAvatarId = Math.floor(Math.random() * 31) + 1
+        const randomAvatar = await Avatar.findOne({
+            where: { id: randomAvatarId },
+        })
 
-        const user = await findUserByEmail(email)
-
-        if (user) {
-            throw new GraphQLError(
-                `User already exist, fait pas trop le malin ${pseudo}`,
-            )
-        }
-        const newUser = await createUser({
+        const newUser = await User.create({
             pseudo,
             email,
             password,
-            avatar: avatarToUse,
-        })
+            avatar: avatar !== undefined ? avatar : randomAvatar,
+        }).save()
+
         return newUser
     }
 

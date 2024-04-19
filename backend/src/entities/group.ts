@@ -47,7 +47,7 @@ export class Group extends BaseEntity {
     avatar: Avatar
 
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.group)
-    userToGroups: UserToGroup[]
+    public userToGroups: UserToGroup[]
 }
 
 @InputType()

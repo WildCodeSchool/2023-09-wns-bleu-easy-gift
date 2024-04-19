@@ -7,6 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className='w-screen min-h-screen bg-bgPrimary relative h-screen overflow-y-scroll'>
       <Navbar />
       <main className='relative my-10 w-full  max-w-[1400px] mx-auto'>
+
         {children}
       </main>
       <Footer />

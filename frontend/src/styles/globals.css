@@ -4,13 +4,14 @@
 
 @layer base {
   @font-face {
-    font-family: "Rubik";
-    src: url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+    font-family: 'Rubik';
+    src: url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
   }
 }
 
 @layer base {
   :root {
+    --bg-primary: #eff1f6;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
