@@ -9,6 +9,7 @@ class AvatarsResolver {
             where: { type: 'profil' },
         })
     }
+    // for commit
 }
 
 export default AvatarsResolver

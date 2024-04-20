@@ -31,6 +31,29 @@ class GroupsResolver {
     async groups() {
         return Group.find()
     }
+
+    // Aurelie : return all groups of the user - test, has not been verified
+    @Query(() => [Group])
+    async userGroups(@Ctx() ctx: MyContext) {
+        if (!ctx.user)
+            throw new GraphQLError(
+                'Il faut être connecté pour voir tes groupes',
+            )
+        return Group.find({
+            join: {
+                alias: 'group',
+                leftJoinAndSelect: {
+                    userToGroups: 'group.userToGroups',
+                },
+            },
+            where: {
+                userToGroups: {
+                    user_id: ctx.user.id,
+                },
+            },
+        })
+    }
+
     @Authorized()
     @Mutation(() => Group)
     async createGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
