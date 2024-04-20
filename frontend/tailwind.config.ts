@@ -27,6 +27,7 @@ const config = {
         ring: "hsl(var(--ring))",
         bgPrimary: "#EFF1F6",
         primaryBlue: "#567DFF",
+        blue600: "2F3DFC",
         primaryRed: "#F94C63",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -63,6 +64,16 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      width: {
+        '128': "80rem",
+      },
+      minHeight: {
+        '128': "40rem",
+        '140': "50rem",
+      },
+      maxHeight: {
+        '140': "50rem",
       },
       keyframes: {
         "accordion-down": {
