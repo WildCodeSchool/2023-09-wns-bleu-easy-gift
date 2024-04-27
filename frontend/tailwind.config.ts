@@ -69,8 +69,14 @@ const config = {
         '128': "80rem",
       },
       minHeight: {
-        '128': "40rem",
+        // tailwind s'arrête à 96 qui équivaut à 24rem
+        '120': "30rem",
+        '130': "40rem",
         '140': "50rem",
+        '150': "60rem",
+        '160': "70rem",
+        '165': "75rem",
+        '170': "80rem"
       },
       maxHeight: {
         '140': "50rem",
