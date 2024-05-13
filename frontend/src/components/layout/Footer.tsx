@@ -30,14 +30,14 @@ export default function Footer() {
     <footer className='w-full bg-primaryRed h-40'>
       <div className='flex justify-center flex-col h-full'>
         <div className='space-y-1 flex justify-center items-center w-full'>
-          {/* Logo Link */}
+          <img src="/images/logo/logo-easy-gift-tablet.png" alt="Logo d'easy-gift" />
           <div>
             <Link href='/'>
               <h1 className='font-rubik text-lg text-bgPrimary'>Easy Gift</h1>
             </Link>
           </div>
         </div>
-        {/* <Separator className='w-1/2 self-center my-4' /> */}
+        <Separator className='w-1/2 self-center my-4' />
         {/* Circle elements */}
         <div className='flex justify-center items-center space-x-2'>
           {icons.map((icon) => (
