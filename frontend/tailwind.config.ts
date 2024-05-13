@@ -25,10 +25,12 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        /*Liste des couleurs persos disponibles dans le figma*/
         bgPrimary: "#EFF1F6",
         primaryBlue: "#567DFF",
         blue600: "2F3DFC",
         primaryRed: "#F94C63",
+        red400: "#FB7182",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
