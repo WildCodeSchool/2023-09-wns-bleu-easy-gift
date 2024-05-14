@@ -57,4 +57,7 @@ export class NewGroupInput {
         message: 'Le nom du groupe doit contenir entre 5 et 50 caractères',
     })
     name: string
+
+    @Field(() => [String])
+    emailUsers: string[]
 }
