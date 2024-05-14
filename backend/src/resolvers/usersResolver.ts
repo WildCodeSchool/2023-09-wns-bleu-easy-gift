@@ -1,5 +1,5 @@
 import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
-import { Not } from 'typeorm'
+// import { Not } from 'typeorm'
 import { GraphQLError } from 'graphql'
 // import { validate } from 'class-validator'
 import {
@@ -36,6 +36,27 @@ export async function findUserByEmail(email: string) {
 //     return await User.create({ pseudo, email, password, avatar }).save()
 // }
 
+export async function createUser({
+    pseudo,
+    email,
+    password,
+    avatar,
+}: InputRegister) {
+    const randomAvatarId = Math.floor(Math.random() * 31) + 1
+    const randomAvatar = await Avatar.findOne({
+        where: { id: randomAvatarId },
+    })
+
+    const newUser = await User.create({
+        pseudo,
+        email,
+        password,
+        avatar: avatar !== undefined ? avatar : randomAvatar,
+    }).save()
+
+    return newUser
+}
+
 @Resolver(User)
 class UsersResolver {
     @Query(() => [User])
@@ -47,17 +68,19 @@ class UsersResolver {
     async register(@Arg('data') data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
-        const randomAvatarId = Math.floor(Math.random() * 31) + 1
-        const randomAvatar = await Avatar.findOne({
-            where: { id: randomAvatarId },
-        })
+        // const randomAvatarId = Math.floor(Math.random() * 31) + 1
+        // const randomAvatar = await Avatar.findOne({
+        //     where: { id: randomAvatarId },
+        // })
 
-        const newUser = await User.create({
-            pseudo,
-            email,
-            password,
-            avatar: avatar !== undefined ? avatar : randomAvatar,
-        }).save()
+        // const newUser = await User.create({
+        //     pseudo,
+        //     email,
+        //     password,
+        //     avatar: avatar !== undefined ? avatar : randomAvatar,
+        // }).save()
+
+        const newUser = await createUser({ pseudo, email, password, avatar })
 
         return newUser
     }
