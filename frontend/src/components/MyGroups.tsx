@@ -24,9 +24,10 @@ export default MyGroups;
  */
 
 function MyGroups() {
+
   return (
     <div className="flex flex-col sm:flex-col justify-center items-center gap-8 md:flex-row md:flex-wrap">
-      <Card className="w-80">
+      <Card className="w-80 shadow-lg shadow-slate-400 hover:scale-110 hover:-translate-x-12 transition-transform duration-300 ease-in-out flex-grow">
         <CardHeader className="bg-white shadow-sm h-350
         rounded-t-lg
         ">
@@ -39,7 +40,7 @@ function MyGroups() {
           </p>
         </CardContent>
       </Card>
-      <Card className="w-80">
+      <Card className="w-80 shadow-lg shadow-slate-400 hover:scale-110 transition-transform duration-300 ease-in-out flex-grow">
         <CardHeader className="bg-white shadow-sm h-350
         rounded-t-lg">
           <img src="/images/avatar/group_xmas4.png" alt="" className="w-full h-full object-cover rounded-t-lg mb-4" />
@@ -51,7 +52,7 @@ function MyGroups() {
           </p>
         </CardContent>
       </Card>
-      <Card className="w-80">
+      <Card className="card w-80 shadow-lg shadow-slate-400 hover:scale-110 hover:translate-x-12 transition-transform duration-300 ease-in-out flex-grow">
         <CardHeader className="bg-white shadow-sm h-350
         rounded-t-lg">
           <img src="/images/avatar/profil_ghibli2.png" alt="" className="w-full h-full object-cover rounded-t-lg mb-4" />

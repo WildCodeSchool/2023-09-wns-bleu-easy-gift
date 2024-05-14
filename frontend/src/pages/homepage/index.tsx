@@ -27,12 +27,12 @@ function Home() {
             <br />
             C'est fun, c'est facile,... c'est cadeau !🎉
           </p>
-          <Button className="text-base h-9 rounded-md px-3 md:h-11 md:text-lg md:px-8 xl:h-14 xl:px-10 xl:text-2xl">
+          <Button className="text-base h-9 rounded-md px-3 shadow-lg shadow-slate-400 md:h-11 md:text-lg md:px-8 xl:h-14 xl:px-10 xl:text-2xl">
             rejoins les Easy Gifteurs
           </Button>
         </div>
       </section>
-      <section className="mb-14 mx-auto min-h-170 h-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-165 lg:min-h-170 lg:flex-wrap 2xl:items-start 2xl:justify-center 2xl:min-h-140 2xl:flex-row">
+      <section className="mb-14 mx-auto min-h-180 h-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-165 lg:min-h-170 lg:flex-wrap 2xl:items-start 2xl:justify-center 2xl:min-h-140 2xl:flex-row">
         <h2 className="w-4/5 text-3xl text-primaryRed mb-10 sm:text-center md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl">Crée ton groupe</h2>
         <article className="w-4/5 sm:max-w-xl 2xl:mr-36 4xl:mr-52">
           <p className="mb-8 text-lg md:mb-10 md:text-2xl 2xl:pt-12">
@@ -47,11 +47,11 @@ function Home() {
             Fête de fin d'année, anniversaire, babyshower...
             et <b>retrouve instantanément toutes les discussions secrètes pour chaque membre</b>.
           </p>
-          <Button className="text-base h-9 rounded-md px-3 mb-28
+          <Button className="text-base h-9 rounded-md px-3 mb-28 shadow-lg shadow-slate-400
           md:h-11 md:text-lg md:px-8 xl:h-14 xl:px-10 xl:text-2xl">Essaie gratuitement</Button>
         </article>
         <Carousel className="max-w-96 max-h-140 sm:max-w-xl xl:max-w-2xl">
-          <CarouselPrevious>Précédent</CarouselPrevious>
+          <CarouselPrevious className="top-[-25px] left-8 md:top-2/4">Précédent</CarouselPrevious>
           <CarouselContent className="max-w-[600px] max-h-[700px]">
             <CarouselItem className="max-w-[700px] max-h-[500px]">
               <img src="/images/img-pages/chat-mobile-mockup.png" alt="" className="object-contain w-full h-full" />
@@ -63,7 +63,7 @@ function Home() {
               <img src="/images/img-pages/man-with-a-gift.webp" alt="" className="object-contain w-full h-full" />
             </CarouselItem>
           </CarouselContent>
-          <CarouselNext>Suivant</CarouselNext>
+          <CarouselNext className="top-[-25px] right-8 md:top-2/4">Suivant</CarouselNext>
         </Carousel>
       </section>
       <section className="mb-40 mx-auto min-h-150 h-full flex flex-col justify-evenly items-center sm:min-h-160 lg:flex-wrap lg:justify-center 2xl:justify-center 2xl:min-h-140 2xl:items-center 2xl:flex-row">
