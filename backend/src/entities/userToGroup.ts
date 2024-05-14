@@ -19,7 +19,6 @@ export class UserToGroup extends BaseEntity {
     // @PrimaryGeneratedColumn()
     // id: number
     @Field(() => Int)
-<<<<<<< HEAD
     @PrimaryGeneratedColumn()
     public id: number
 
@@ -30,14 +29,6 @@ export class UserToGroup extends BaseEntity {
     @Field()
     @Column()
     public group_id: number
-=======
-    @PrimaryColumn()
-    user_id: number
-
-    @Field(() => Int)
-    @PrimaryColumn()
-    group_id: number
->>>>>>> e864be6577ab68159beb2ec908fbe52ed8812350
 
     // @Field()
     // @Column()
