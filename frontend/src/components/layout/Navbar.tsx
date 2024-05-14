@@ -27,7 +27,7 @@ export default function Navbar() {
   return (
     <nav className="w-full h-16 sticky top-0 shadow-lg z-10 bg-bgPrimary">
       <div
-        className={`max-w-[${maxWidthScreen}] h-full flex justify-between items-center gap-2 mx-auto px-10`}
+        className={`max-w-[${maxWidthScreen}] h-full flex justify-between items-center gap-2 mx-auto px-10 2xl:px-[350px]`}
       >
         {/* Burger Icon for Mobile Screens */}
         <button onClick={() => setMenuOpen(!isMenuOpen)} className="md:hidden">
@@ -46,24 +46,31 @@ export default function Navbar() {
           </svg>
         </button>
 
-        {/* Logo Link */}
-        <Link href="/">
-          <h1 className="font-rubik">Easy Gift</h1>
-        </Link>
+        <div className='space-y-1 flex justify-center items-center'>
+          <img
+            src="/images/logo/logo-easy-gift-tablet.png"
+            alt="Logo d'easy-gift"
+            className='mr-2'
+          />
+          <div>
+            <Link href='/'>
+              <h1 className='font-rubik text-2xl text-primaryBlue font-bold'>Easy Gift</h1>
+            </Link>
+          </div>
+        </div>
 
         {/* Links for Larger Screens */}
         <div className={`hidden md:flex md:flex-row gap-4`}>
-          <Link href="#">Mes groupes</Link>
-          <Link href="#">Mes chats</Link>
-          <Link href="#">TestOPSSur Staging</Link>
+          <Link href="#" className="font-semibold">Mes groupes</Link>
+          <Link href="#" className="font-semibold">Mes chats</Link>
+          <Link href="#" className="font-semibold">TestOPSSur Staging</Link>
         </div>
 
         {/* Side Drawer for Mobile Screens */}
         <div
           ref={menuRef}
-          className={`absolute left-0 top-0 w-[75%] h-110 bg-bgPrimary shadow-lg transform ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out flex flex-col gap-4 p-4 md:hidden`}
+          className={`absolute left-0 top-0 w-[75%] h-110 bg-bgPrimary shadow-lg transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 ease-in-out flex flex-col gap-4 p-4 md:hidden`}
         >
           {/* Close Button */}
           <button onClick={() => setMenuOpen(false)} className="self-end">

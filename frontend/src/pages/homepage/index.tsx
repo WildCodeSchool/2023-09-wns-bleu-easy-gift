@@ -32,7 +32,7 @@ function Home() {
           </Button>
         </div>
       </section>
-      <section className="mb-40 mx-auto min-h-170 h-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-165 lg:min-h-170 lg:flex-wrap 2xl:items-start 2xl:justify-center 2xl:min-h-140 2xl:flex-row">
+      <section className="mb-14 mx-auto min-h-170 h-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-165 lg:min-h-170 lg:flex-wrap 2xl:items-start 2xl:justify-center 2xl:min-h-140 2xl:flex-row">
         <h2 className="w-4/5 text-3xl text-primaryRed mb-10 sm:text-center md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl">Crée ton groupe</h2>
         <article className="w-4/5 sm:max-w-xl 2xl:mr-36 4xl:mr-52">
           <p className="mb-8 text-lg md:mb-10 md:text-2xl 2xl:pt-12">
@@ -65,11 +65,10 @@ function Home() {
           </CarouselContent>
           <CarouselNext>Suivant</CarouselNext>
         </Carousel>
-
       </section>
       <section className="mb-40 mx-auto min-h-150 h-full flex flex-col justify-evenly items-center sm:min-h-160 lg:flex-wrap lg:justify-center 2xl:justify-center 2xl:min-h-140 2xl:items-center 2xl:flex-row">
         <h2 className="w-4/5 text-3xl text-primaryRed mb-10 sm:text-center md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl">Tes groupes</h2>
-        <p className="w-4/5 mb-8 text-lg text-center md:mb-10 md:text-2xl md:mb-16 lg:mb-10 ">Dans la famille thématique... je voudrais le groupe... </p>
+        <p className="w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 ">Dans la famille thématique... je voudrais le groupe... </p>
         <MyGroups />
       </section>
     </>

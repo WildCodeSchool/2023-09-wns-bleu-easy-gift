@@ -31,6 +31,7 @@ const config = {
         blue600: "2F3DFC",
         primaryRed: "#F94C63",
         red400: "#FB7182",
+        red600: "#E3264C",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {

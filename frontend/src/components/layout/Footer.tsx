@@ -27,10 +27,14 @@ const icons = [
 
 export default function Footer() {
   return (
-    <footer className='w-full bg-primaryRed h-40'>
+    <footer className='w-full bg-primaryRed h-48'>
       <div className='flex justify-center flex-col h-full'>
-        <div className='space-y-1 flex justify-center items-center w-full'>
-          <img src="/images/logo/logo-easy-gift-tablet.png" alt="Logo d'easy-gift" />
+        <div className='space-y-1 flex justify-center items-center w-full mt-3'>
+          <img
+            src="/images/logo/logo-easy-gift-tablet.png"
+            alt="Logo d'easy-gift"
+            className='mr-2'
+          />
           <div>
             <Link href='/'>
               <h1 className='font-rubik text-lg text-bgPrimary'>Easy Gift</h1>
