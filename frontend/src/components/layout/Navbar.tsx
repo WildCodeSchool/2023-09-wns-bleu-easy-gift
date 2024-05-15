@@ -26,37 +26,19 @@ export default function Navbar() {
 
   return (
     <nav className="w-full h-16 sticky top-0 shadow-lg z-10 bg-bgPrimary">
-      <div
-        className={`max-w-[${maxWidthScreen}] h-full flex justify-between items-center gap-2 mx-auto px-10 2xl:px-[350px]`}
-      >
+      <div className={`max-w-[${maxWidthScreen}] h-full flex justify-between items-center gap-2 mx-auto px-10 2xl:px-[350px]`}>
         {/* Burger Icon for Mobile Screens */}
         <button onClick={() => setMenuOpen(!isMenuOpen)} className="md:hidden">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
         <div className="space-y-1 flex justify-center items-center">
-          <img
-            src="/images/logo/logo-easy-gift-tablet.png"
-            alt="Logo d'easy-gift"
-            className="mr-2"
-          />
+          <img src="/images/logo/logo-easy-gift-tablet.png" alt="Logo d'easy-gift" className="mr-2" />
           <div>
             <Link href="/">
-              <h1 className="font-rubik text-2xl text-primaryBlue font-bold">
-                Easy Gift
-              </h1>
+              <h1 className="font-rubik text-2xl text-primaryBlue font-bold">Easy Gift</h1>
             </Link>
           </div>
         </div>
@@ -70,7 +52,10 @@ export default function Navbar() {
             Mes chats
           </Link>
           <Link href="#" className="font-semibold">
-            Test Sur Staging
+            TestOPSSur Staging
+          </Link>
+          <Link href="/mon-profil" className="font-semibold">
+            Mon profil
           </Link>
         </div>
 
@@ -83,18 +68,8 @@ export default function Navbar() {
         >
           {/* Close Button */}
           <button onClick={() => setMenuOpen(false)} className="self-end">
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
           <Link href="#" onClick={closeMenu}>
