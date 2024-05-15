@@ -1,10 +1,12 @@
 import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
 import { GraphQLError } from 'graphql'
-
+import { getRepository } from 'typeorm'
 import { Group, NewGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
+import { User } from '../entities/user'
 import { MyContext } from '..'
 import { createUser, findUserByEmail } from './usersResolver'
+import { In } from 'typeorm'
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
@@ -33,26 +35,31 @@ class GroupsResolver {
         return Group.find()
     }
 
-    // Aurelie : return all groups of the user - test, has not been verified
     @Query(() => [Group])
     async userGroups(@Ctx() ctx: MyContext) {
         if (!ctx.user)
             throw new GraphQLError(
                 'Il faut être connecté pour voir tes groupes',
             )
-        return Group.find({
-            join: {
-                alias: 'group',
-                leftJoinAndSelect: {
-                    userToGroups: 'group.userToGroups',
-                },
-            },
-            where: {
-                userToGroups: {
-                    user_id: ctx.user.id,
-                },
-            },
+
+        // SELECT * FROM group WHERE id IN ([1, 2, 3])
+        // SELECT * FROM group WHERE id IN (SELECT group_id FROM user_to_group WHERE user_id = ctx.user.id)
+
+        const groupIds = await (
+            await UserToGroup.findBy({ user_id: ctx.user.id })
+        ).map(utg => utg.group_id)
+
+        const ctxUserGroups = await Group.findBy({
+            id: In(groupIds),
         })
+
+        // not working
+        // const haha = await UserToGroup.find({
+        //     relations: { group: true },
+        //     where: { user_id: ctx.user.id },
+        // })
+
+        return ctxUserGroups
     }
 
     @Authorized()
