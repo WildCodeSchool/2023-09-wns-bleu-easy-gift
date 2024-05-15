@@ -47,6 +47,30 @@ URL:
 
 ## Setup
 
+## Run test localy
+
+Several test have been setup to secure the integrity of the website.
+To run them localy:
+
+1. Start by building an image of the website by runing the command in the terminal of the projet, from the root :
+   `npm run dev`
+
+2. Go in the backend folder to run the integration tests. Start with initializing the test database, before lauching the actual test
+   `cd backend`
+   `npm run testDB:wait`
+   `npm run test`
+
+3. Go in the frontend folder to run the unit test
+   `..`
+   `cd frontend`
+   `npm run test`
+
+4. Go in the e2e folder to run the end to end test. But first, in dockerhub, stop the backend/testDB-1 container, and start the easy-gift/testDB-1 container.
+   `..`
+   `npm run test-headed`
+
+Hopefully, by now, all the test should have passed !
+
 ## Docker Setup
 
 Build Docker containers:
