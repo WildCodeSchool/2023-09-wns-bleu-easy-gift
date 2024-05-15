@@ -46,31 +46,40 @@ export default function Navbar() {
           </svg>
         </button>
 
-        <div className='space-y-1 flex justify-center items-center'>
+        <div className="space-y-1 flex justify-center items-center">
           <img
             src="/images/logo/logo-easy-gift-tablet.png"
             alt="Logo d'easy-gift"
-            className='mr-2'
+            className="mr-2"
           />
           <div>
-            <Link href='/'>
-              <h1 className='font-rubik text-2xl text-primaryBlue font-bold'>Easy Gift</h1>
+            <Link href="/">
+              <h1 className="font-rubik text-2xl text-primaryBlue font-bold">
+                Easy Gift
+              </h1>
             </Link>
           </div>
         </div>
 
         {/* Links for Larger Screens */}
         <div className={`hidden md:flex md:flex-row gap-4`}>
-          <Link href="#" className="font-semibold">Mes groupes</Link>
-          <Link href="#" className="font-semibold">Mes chats</Link>
-          <Link href="#" className="font-semibold">TestOPSSur Staging</Link>
+          <Link href="#" className="font-semibold">
+            Mes groupes
+          </Link>
+          <Link href="#" className="font-semibold">
+            Mes chats
+          </Link>
+          <Link href="#" className="font-semibold">
+            Test Sur Staging
+          </Link>
         </div>
 
         {/* Side Drawer for Mobile Screens */}
         <div
           ref={menuRef}
-          className={`absolute left-0 top-0 w-[75%] h-110 bg-bgPrimary shadow-lg transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 ease-in-out flex flex-col gap-4 p-4 md:hidden`}
+          className={`absolute left-0 top-0 w-[75%] h-110 bg-bgPrimary shadow-lg transform ${
+            isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          } transition-transform duration-300 ease-in-out flex flex-col gap-4 p-4 md:hidden`}
         >
           {/* Close Button */}
           <button onClick={() => setMenuOpen(false)} className="self-end">
