@@ -75,6 +75,8 @@ class GroupsResolver {
         })
 
         emailUsers.forEach(async email => {
+            if (email === ctx.user?.email) return
+
             const isUser = await findUserByEmail(email)
             if (isUser) {
                 await createUserToGroup({
