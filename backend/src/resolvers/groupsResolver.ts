@@ -29,10 +29,6 @@ async function createUserToGroup({
     }).save()
 }
 
-interface GroupWithUsers extends Group {
-    otherUsers: User[]
-}
-
 @Resolver(Group)
 class GroupsResolver {
     @Query(() => [Group])
@@ -40,7 +36,6 @@ class GroupsResolver {
         return Group.find({ relations: ['avatar'] })
     }
 
-    //working but not returning the users of each groups
     @Query(() => [Group])
     async userGroups(@Ctx() ctx: MyContext) {
         if (!ctx.user)
@@ -50,8 +45,6 @@ class GroupsResolver {
 
         // SELECT * FROM group WHERE id IN ([1, 2, 3])
         // SELECT * FROM group WHERE id IN (SELECT group_id FROM user_to_group WHERE user_id = ctx.user.id)
-
-        console.log('ctx.user.id', ctx.user.id)
 
         const groupIds = (
             await UserToGroup.findBy({ user_id: ctx.user.id })
@@ -93,13 +86,11 @@ class GroupsResolver {
             )
         }
         const newGroup = await createGroup(name)
-        console.log('newGroup', newGroup)
 
         if (randomGroupAvatar) {
             newGroup.avatar = randomGroupAvatar
             await newGroup.save()
         }
-        console.log('newGroup after avatar add', newGroup)
 
         if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
 
