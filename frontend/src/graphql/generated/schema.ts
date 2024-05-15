@@ -52,17 +52,17 @@ export type InputRegister = {
   avatar?: InputMaybe<ObjectId>;
   email: Scalars['String'];
   password: Scalars['String'];
-  pseudo: Scalars['String'];
+  pseudo?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createGroup: Group;
+  addNewGroup: Group;
   register: UserWithoutPassword;
 };
 
 
-export type MutationCreateGroupArgs = {
+export type MutationAddNewGroupArgs = {
   data: NewGroupInput;
 };
 
@@ -72,6 +72,7 @@ export type MutationRegisterArgs = {
 };
 
 export type NewGroupInput = {
+  emailUsers: Array<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -87,7 +88,9 @@ export type Query = {
   logout: ResponseMessage;
   profilAvatars: Array<Avatar>;
   testAuthorized: ResponseMessage;
+  userGroups: Array<Group>;
   users: Array<User>;
+  usersToGroups: Array<UserToGroup>;
 };
 
 
@@ -120,6 +123,16 @@ export type UserInfos = {
   email: Scalars['String'];
   id: Scalars['String'];
   pseudo: Scalars['String'];
+};
+
+export type UserToGroup = {
+  __typename?: 'UserToGroup';
+  created_at: Scalars['String'];
+  group_id: Scalars['Float'];
+  id: Scalars['Int'];
+  is_admin: Scalars['Boolean'];
+  modified_at: Scalars['String'];
+  user_id: Scalars['Float'];
 };
 
 export type UserWithoutPassword = {
