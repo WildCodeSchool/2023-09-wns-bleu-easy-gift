@@ -32,6 +32,7 @@ services:
     ports:
       - 3000:3000
     volumes:
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
       - ./frontend/src:/app/src
     env_file:
       - ./frontend/.env

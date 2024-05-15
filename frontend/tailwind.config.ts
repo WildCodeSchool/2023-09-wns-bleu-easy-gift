@@ -22,14 +22,18 @@ const config = {
         rubik: ['Rubik', 'sans-serif'],
       },
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        bgPrimary: '#EFF1F6',
-        primaryBlue: '#567DFF',
-        primaryRed: '#F94C63',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        /*Liste des couleurs persos disponibles dans le figma*/
+        bgPrimary: "#EFF1F6",
+        primaryBlue: "#567DFF",
+        blue600: "2F3DFC",
+        primaryRed: "#F94C63",
+        red400: "#FB7182",
+        red600: "#E3264C",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
@@ -63,6 +67,23 @@ const config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      width: {
+        '128': "80rem",
+      },
+      minHeight: {
+        // tailwind s'arrête à 96 qui équivaut à 24rem
+        '120': "30rem",
+        '130': "40rem",
+        '140': "50rem",
+        '150': "60rem",
+        '160': "70rem",
+        '165': "75rem",
+        '170': "80rem",
+        '180': "90rem"
+      },
+      maxHeight: {
+        '140': "50rem",
       },
       keyframes: {
         'accordion-down': {

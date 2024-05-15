@@ -11,5 +11,8 @@
     "staging": "docker compose -f docker-compose.staging.yml up --build"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@radix-ui/react-separator": "^1.0.3"
+  }
 }
