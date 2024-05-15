@@ -4,7 +4,7 @@ import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
 import { MyContext } from '..'
-import { findUserByEmail } from './usersResolver'
+import { createUser, findUserByEmail } from './usersResolver'
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
@@ -67,7 +67,7 @@ class GroupsResolver {
             )
         }
         const newGroup = await createGroup(name)
-        if (!ctx.user) throw new GraphQLError("T'es pas la chef(fe) t'es un BZ")
+        if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
         await createUserToGroup({
             group_id: newGroup.id,
             user_id: ctx.user?.id,
@@ -75,6 +75,8 @@ class GroupsResolver {
         })
 
         emailUsers.forEach(async email => {
+            if (email === ctx.user?.email) return
+
             const isUser = await findUserByEmail(email)
             if (isUser) {
                 await createUserToGroup({
@@ -82,7 +84,20 @@ class GroupsResolver {
                     user_id: isUser.id,
                     is_admin: false,
                 })
+                return
             }
+
+            const pseudo = email.split('@')[0]
+
+            const password = 'Test@1234' // TODO
+
+            const newUser = await createUser({ pseudo, email, password })
+
+            await createUserToGroup({
+                group_id: newGroup.id,
+                user_id: newUser.id,
+                is_admin: false,
+            })
         })
 
         return newGroup
