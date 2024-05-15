@@ -7,6 +7,7 @@ import { User } from '../entities/user'
 import { MyContext } from '..'
 import { createUser, findUserByEmail } from './usersResolver'
 import { In } from 'typeorm'
+import { Avatar } from '../entities/avatar'
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
@@ -28,13 +29,18 @@ async function createUserToGroup({
     }).save()
 }
 
+interface GroupWithUsers extends Group {
+    otherUsers: User[]
+}
+
 @Resolver(Group)
 class GroupsResolver {
     @Query(() => [Group])
     async groups() {
-        return Group.find()
+        return Group.find({ relations: ['avatar'] })
     }
 
+    //working but not returning the users of each groups
     @Query(() => [Group])
     async userGroups(@Ctx() ctx: MyContext) {
         if (!ctx.user)
@@ -45,13 +51,22 @@ class GroupsResolver {
         // SELECT * FROM group WHERE id IN ([1, 2, 3])
         // SELECT * FROM group WHERE id IN (SELECT group_id FROM user_to_group WHERE user_id = ctx.user.id)
 
-        const groupIds = await (
+        console.log('ctx.user.id', ctx.user.id)
+
+        const groupIds = (
             await UserToGroup.findBy({ user_id: ctx.user.id })
         ).map(utg => utg.group_id)
 
-        const ctxUserGroups = await Group.findBy({
-            id: In(groupIds),
-        })
+        // WORKING well but not returning the avatars
+        // const ctxUserGroups = await Group.findBy({
+        //     id: In(groupIds),
+        // })
+
+        // ENABLE TO GET AVATAR
+        const ctxUserGroups = await Group.createQueryBuilder('group')
+            .leftJoinAndSelect('group.avatar', 'avatar')
+            .whereInIds(groupIds)
+            .getMany()
 
         // not working
         // const haha = await UserToGroup.find({
@@ -68,13 +83,26 @@ class GroupsResolver {
         const { name, emailUsers } = data
         const group = await findGroupByName(name)
 
+        const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
+        const randomGroupAvatar =
+            groupAvatars[Math.floor(Math.random() * groupAvatars.length)]
+
         if (group) {
             throw new GraphQLError(
                 `Group already exist, fait pas trop le malin.`,
             )
         }
         const newGroup = await createGroup(name)
+        console.log('newGroup', newGroup)
+
+        if (randomGroupAvatar) {
+            newGroup.avatar = randomGroupAvatar
+            await newGroup.save()
+        }
+        console.log('newGroup after avatar add', newGroup)
+
         if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
+
         await createUserToGroup({
             group_id: newGroup.id,
             user_id: ctx.user?.id,
