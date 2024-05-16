@@ -55,10 +55,17 @@ export type InputRegister = {
   pseudo: Scalars['String'];
 };
 
+export type InputRegistrationWithToken = {
+  password: Scalars['String'];
+  pseudo: Scalars['String'];
+  token: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addNewGroup: Group;
   register: UserWithoutPassword;
+  registrationWithToken: UserWithoutPassword;
 };
 
 
@@ -69,6 +76,11 @@ export type MutationAddNewGroupArgs = {
 
 export type MutationRegisterArgs = {
   data: InputRegister;
+};
+
+
+export type MutationRegistrationWithTokenArgs = {
+  data: InputRegistrationWithToken;
 };
 
 export type NewGroupInput = {
@@ -178,6 +190,13 @@ export type RegisterUserMutationVariables = Exact<{
 
 
 export type RegisterUserMutation = { __typename?: 'Mutation', register: { __typename?: 'UserWithoutPassword', email: string, pseudo: string } };
+
+export type RegisterWithTokenMutationVariables = Exact<{
+  data: InputRegistrationWithToken;
+}>;
+
+
+export type RegisterWithTokenMutation = { __typename?: 'Mutation', registrationWithToken: { __typename?: 'UserWithoutPassword', email: string, pseudo: string } };
 
 
 export const GetUserByTokenDocument = gql`
@@ -360,3 +379,37 @@ export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
+export const RegisterWithTokenDocument = gql`
+    mutation registerWithToken($data: InputRegistrationWithToken!) {
+  registrationWithToken(data: $data) {
+    email
+    pseudo
+  }
+}
+    `;
+export type RegisterWithTokenMutationFn = Apollo.MutationFunction<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>;
+
+/**
+ * __useRegisterWithTokenMutation__
+ *
+ * To run a mutation, you first call `useRegisterWithTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterWithTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerWithTokenMutation, { data, loading, error }] = useRegisterWithTokenMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useRegisterWithTokenMutation(baseOptions?: Apollo.MutationHookOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>(RegisterWithTokenDocument, options);
+      }
+export type RegisterWithTokenMutationHookResult = ReturnType<typeof useRegisterWithTokenMutation>;
+export type RegisterWithTokenMutationResult = Apollo.MutationResult<RegisterWithTokenMutation>;
+export type RegisterWithTokenMutationOptions = Apollo.BaseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>;
