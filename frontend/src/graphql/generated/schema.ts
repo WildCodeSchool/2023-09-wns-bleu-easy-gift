@@ -57,12 +57,12 @@ export type InputRegister = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createGroup: Group;
+  addNewGroup: Group;
   register: UserWithoutPassword;
 };
 
 
-export type MutationCreateGroupArgs = {
+export type MutationAddNewGroupArgs = {
   data: NewGroupInput;
 };
 
@@ -72,6 +72,7 @@ export type MutationRegisterArgs = {
 };
 
 export type NewGroupInput = {
+  emailUsers: Array<Scalars['String']>;
   name: Scalars['String'];
 };
 
@@ -81,13 +82,21 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
+  getUserByToken: User;
   getUserInfos: UserInfos;
   groups: Array<Group>;
   login: ResponseMessage;
   logout: ResponseMessage;
   profilAvatars: Array<Avatar>;
   testAuthorized: ResponseMessage;
+  userGroups: Array<Group>;
   users: Array<User>;
+  usersToGroups: Array<UserToGroup>;
+};
+
+
+export type QueryGetUserByTokenArgs = {
+  token: Scalars['String'];
 };
 
 
@@ -122,12 +131,29 @@ export type UserInfos = {
   pseudo: Scalars['String'];
 };
 
+export type UserToGroup = {
+  __typename?: 'UserToGroup';
+  created_at: Scalars['String'];
+  group_id: Scalars['Float'];
+  id: Scalars['Int'];
+  is_admin: Scalars['Boolean'];
+  modified_at: Scalars['String'];
+  user_id: Scalars['Float'];
+};
+
 export type UserWithoutPassword = {
   __typename?: 'UserWithoutPassword';
   avatar: Avatar;
   email: Scalars['String'];
   pseudo: Scalars['String'];
 };
+
+export type GetUserByTokenQueryVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type GetUserByTokenQuery = { __typename?: 'Query', getUserByToken: { __typename?: 'User', email: string, pseudo: string } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -154,6 +180,42 @@ export type RegisterUserMutationVariables = Exact<{
 export type RegisterUserMutation = { __typename?: 'Mutation', register: { __typename?: 'UserWithoutPassword', email: string, pseudo: string } };
 
 
+export const GetUserByTokenDocument = gql`
+    query GetUserByToken($token: String!) {
+  getUserByToken(token: $token) {
+    email
+    pseudo
+  }
+}
+    `;
+
+/**
+ * __useGetUserByTokenQuery__
+ *
+ * To run a query within a React component, call `useGetUserByTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserByTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserByTokenQuery({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useGetUserByTokenQuery(baseOptions: Apollo.QueryHookOptions<GetUserByTokenQuery, GetUserByTokenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserByTokenQuery, GetUserByTokenQueryVariables>(GetUserByTokenDocument, options);
+      }
+export function useGetUserByTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserByTokenQuery, GetUserByTokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserByTokenQuery, GetUserByTokenQueryVariables>(GetUserByTokenDocument, options);
+        }
+export type GetUserByTokenQueryHookResult = ReturnType<typeof useGetUserByTokenQuery>;
+export type GetUserByTokenLazyQueryHookResult = ReturnType<typeof useGetUserByTokenLazyQuery>;
+export type GetUserByTokenQueryResult = Apollo.QueryResult<GetUserByTokenQuery, GetUserByTokenQueryVariables>;
 export const UsersDocument = gql`
     query Users {
   users {
