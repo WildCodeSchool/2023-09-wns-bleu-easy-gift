@@ -44,19 +44,19 @@ export async function createUser({
     password,
     avatar,
 }: InputRegister) {
-    const randomAvatarId = Math.floor(Math.random() * 31) + 1
-    const randomAvatar = await Avatar.findOne({
-        where: { id: randomAvatarId },
-    })
+    const profilAvatars = await Avatar.find({ where: { type: 'profil' } })
+    const randomProfilAvatar =
+        profilAvatars[Math.floor(Math.random() * profilAvatars.length)]
 
     const token = crypto.randomBytes(32).toString('hex')
 
     const newUser = await User.create({
-        pseudo,
+        pseudo: pseudo !== undefined ? pseudo : email.split('@')[0],
         email,
         password,
-        avatar: avatar !== undefined ? avatar : randomAvatar,
+
         token: token,
+        avatar: avatar !== undefined ? avatar : randomProfilAvatar,
     }).save()
 
     return newUser
@@ -162,7 +162,10 @@ class UsersResolver {
         if (!ctx.user) {
             throw new GraphQLError("No JWT, t'es crazy (gift)")
         }
-        const userData = await User.findOneBy({ email: ctx.user.email })
+        const userData = await User.findOne({
+            where: { email: ctx.user.email },
+            relations: ['avatar'],
+        })
 
         if (!userData) throw new GraphQLError('Cannot find user')
 

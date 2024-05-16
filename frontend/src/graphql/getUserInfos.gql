@@ -1,0 +1,12 @@
+query GetUserInfos {
+  getUserInfos {
+    id
+    email
+    pseudo
+    avatar {
+      id
+      name
+      url
+    }
+  }
+}
