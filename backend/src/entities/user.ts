@@ -88,7 +88,7 @@ export class User extends BaseEntity {
 
 @InputType()
 export class InputRegister {
-    @Field()
+    @Field({ nullable: true })
     pseudo: string
 
     @Field()
