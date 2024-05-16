@@ -22,10 +22,6 @@ test("has a valid user name", async ({ page }) => {
     password: passwordToCheck,
   }).save();
 
-  const emailInput = page.getByTestId("login-email");
-
-  console.log("emailInput : ", emailInput);
-
   await page.goto("http://localhost:3000/auth/login");
   await page.getByTestId("login-email").fill(emailToCheck);
   await page.getByTestId("login-password").fill(passwordToCheck);
