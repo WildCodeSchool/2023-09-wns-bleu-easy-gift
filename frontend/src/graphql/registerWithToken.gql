@@ -1,0 +1,6 @@
+mutation registerWithToken($data: InputRegistrationWithToken!) {
+  registrationWithToken(data: $data) {
+    email
+    pseudo
+  }
+}

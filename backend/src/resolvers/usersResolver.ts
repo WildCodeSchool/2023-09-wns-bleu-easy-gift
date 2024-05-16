@@ -10,12 +10,14 @@ import {
     InputLogin,
     ResponseMessage,
     UserInfos,
+    InputRegistrationWithToken,
 } from '../entities/user'
 import * as argon2 from 'argon2'
 import { SignJWT } from 'jose'
 import { MyContext } from '..'
 import Cookies from 'cookies'
 import { Avatar } from '../entities/avatar'
+import crypto from 'crypto'
 
 export async function findUserByEmail(email: string) {
     return await User.findOneBy({ email })
@@ -46,10 +48,14 @@ export async function createUser({
     const randomProfilAvatar =
         profilAvatars[Math.floor(Math.random() * profilAvatars.length)]
 
+    const token = crypto.randomBytes(32).toString('hex')
+
     const newUser = await User.create({
         pseudo: pseudo !== undefined ? pseudo : email.split('@')[0],
         email,
         password,
+
+        token: token,
         avatar: avatar !== undefined ? avatar : randomProfilAvatar,
     }).save()
 
@@ -61,6 +67,32 @@ class UsersResolver {
     @Query(() => [User])
     async users() {
         return User.find({ relations: ['avatar'] })
+    }
+
+    @Query(() => User)
+    async getUserByToken(@Arg('token') token: string) {
+        const user = await User.findOneBy({ token })
+        if (!user) {
+            throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
+        }
+        return user
+    }
+
+    @Mutation(() => UserWithoutPassword)
+    async registrationWithToken(@Arg('data') data: InputRegistrationWithToken) {
+        const user = await User.findOne({ where: { token: data.token } })
+        if (!user) {
+            throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
+        }
+
+        Object.assign(user, {
+            ...data,
+            token: null,
+        })
+
+        await user.save()
+
+        return user
     }
 
     @Mutation(() => UserWithoutPassword)

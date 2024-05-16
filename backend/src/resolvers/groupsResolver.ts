@@ -6,8 +6,12 @@ import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
 import { User } from '../entities/user'
 import { MyContext } from '..'
 import { createUser, findUserByEmail } from './usersResolver'
+
+import mailer from '../mailer'
+
 import { In } from 'typeorm'
 import { Avatar } from '../entities/avatar'
+
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
@@ -124,6 +128,18 @@ class GroupsResolver {
                 user_id: newUser.id,
                 is_admin: false,
             })
+
+            try {
+                await mailer.sendMail({
+                    subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                    to: email,
+                    from: 'crazygift24@gmail.com',
+                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                })
+            } catch (error) {
+                console.log('______________ Error sending mail', error)
+                throw new GraphQLError("Erreur d'envoi de mail")
+            }
         })
 
         return newGroup
