@@ -5,7 +5,7 @@ import { Message } from './message'
 import {
     BaseEntity,
     BeforeInsert,
-    BeforeUpdate,
+    // BeforeUpdate,
     Column,
     CreateDateColumn,
     Entity,
@@ -23,7 +23,7 @@ import { ObjectId } from '../utils'
 @ObjectType()
 export class User extends BaseEntity {
     @BeforeInsert()
-    @BeforeUpdate()
+    // @BeforeUpdate()
     protected async hashPassword() {
         this.password = await argon2.hash(this.password)
     }
