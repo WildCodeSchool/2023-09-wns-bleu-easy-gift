@@ -41,7 +41,7 @@ export default function Home() {
           <h1 className='mb-10 text-4xl md:text-5xl md:mb-14 2xl::text-6xl font-bold text-primaryBlue'>
             Easy Gift
           </h1>
-          <p className='mb-9 text-lg text-left md:mb-10 xl:text-xl 2xl:text-2xl'>
+          <p className='mb-9 text-lg text-left md:mb-10 md:text-xl 2xl:text-2xl'>
             Prêt à déclarer la guerre aux cadeaux ratés 🎁😅 ?
             <br />
             <b>Organisez, échangez</b> entre ami(e)s et trouvez "LA" pépite sans
@@ -54,12 +54,12 @@ export default function Home() {
           </Button>
         </div>
       </section>
-      <section className='mb-28 mx-auto min-h-180 h-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-170 lg:flex-wrap lg:flex-row lg:mb-32 lg:content-center lg:justify-around lg:min-h-140 2xl:pb-28 2xl:items-start 2xl:justify-center 2xl:mb-20 2xl:content-end 2xl:min-h-150 2xl:flex-row'>
-        <h2 className='w-4/5 text-3xl mb-10 text-primaryRed sm:text-center md:text-4xl lg:w-full lg:mb-14 font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-28'>
+      <section className='mb-28 mx-auto min-h-175 h-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-170 lg:flex-wrap lg:flex-row lg:mb-32 lg:content-center lg:justify-around lg:min-h-140 2xl:pb-28 2xl:items-start 2xl:justify-center 2xl:mb-20 2xl:content-end 2xl:min-h-150 2xl:flex-row'>
+        <h2 className='w-4/5 text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl lg:w-full lg:mb-14 font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-28'>
           Crée ton groupe
         </h2>
         <article className='w-4/5 sm:max-w-xl 2xl:ml-36 4xl:ml-52 lg:order-3'>
-          <p className='mb-8 text-lg md:mb-10 md:text-2xl lg:text-xl xl:text-2xl 2xl:pt-12'>
+          <p className='mb-8 text-lg md:mb-10 md:text-xl  2xl:text-2xl 2xl:pt-12'>
             Fini les "oups,... tu n'as rien entendu !"🤭
             <br />
             Parce que chez Easy Gift on aime les surprises, on a crée pour vous
@@ -116,7 +116,7 @@ export default function Home() {
         </Carousel>
       </section>
       <section className='mb-40 mx-auto min-h-150 h-full flex flex-col justify-evenly items-center sm:min-h-160 lg:min-h-130 lg:flex-wrap lg:justify-evenly 2xl:justify-center 2xl:min-h-140 2xl:items-center 2xl:flex-row'>
-        <h2 className='w-4/5 text-3xl text-primaryRed mb-10 sm:text-center md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl'>
+        <h2 className='w-4/5 text-3xl text-primaryRed mb-8  sm:text-center md:mb-10 md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl'>
           Tes groupes
         </h2>
         <p className='w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 '>

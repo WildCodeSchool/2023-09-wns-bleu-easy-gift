@@ -40,7 +40,7 @@ function MyGroups() {
           </p>
         </CardContent>
       </Card>
-      <Card className="w-80 shadow-lg hover:scale-110 shadow-slate-300 hover:-translate-x-12 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400">
+      <Card className="w-80 shadow-lg hover:scale-110 shadow-slate-300 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400">
         <CardHeader className="bg-white shadow-sm h-350
         rounded-t-lg">
           <img src="/images/avatar/group_xmas4.png" alt="" className="w-full h-full object-cover rounded-t-lg mb-4" />
@@ -52,7 +52,7 @@ function MyGroups() {
           </p>
         </CardContent>
       </Card>
-      <Card className="w-80 shadow-lg hover:scale-110 shadow-slate-300 hover:-translate-x-12 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400">
+      <Card className="w-80 shadow-lg hover:scale-110 shadow-slate-300 hover:translate-x-12 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400">
         <CardHeader className="bg-white shadow-sm h-350
         rounded-t-lg">
           <img src="/images/avatar/profil_ghibli2.png" alt="" className="w-full h-full object-cover rounded-t-lg mb-4" />

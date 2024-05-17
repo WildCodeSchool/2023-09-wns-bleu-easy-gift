@@ -75,6 +75,7 @@ const config = {
         "160": "70rem",
         "165": "75rem",
         "170": "80rem",
+        "175": "85rem",
         "180": "90rem",
       },
       maxHeight: {
