@@ -5,6 +5,7 @@ import { Message } from './message'
 import {
     BaseEntity,
     BeforeInsert,
+    BeforeUpdate,
     Column,
     CreateDateColumn,
     Entity,
@@ -22,6 +23,7 @@ import { ObjectId } from '../utils'
 @ObjectType()
 export class User extends BaseEntity {
     @BeforeInsert()
+    @BeforeUpdate()
     protected async hashPassword() {
         this.password = await argon2.hash(this.password)
     }
@@ -78,11 +80,15 @@ export class User extends BaseEntity {
     @Field()
     @UpdateDateColumn()
     modified_at: string
+
+    // @Field(() => String, { nullable: true })
+    @Column({ nullable: true, type: 'varchar', unique: true })
+    token: string | null
 }
 
 @InputType()
 export class InputRegister {
-    @Field()
+    @Field({ nullable: true })
     pseudo: string
 
     @Field()
@@ -141,4 +147,16 @@ export class UserInfos {
 
     @Field(() => Avatar, { nullable: true })
     avatar?: Avatar | null
+}
+
+@InputType()
+export class InputRegistrationWithToken {
+    @Field()
+    pseudo: string
+
+    @Field()
+    password: string
+
+    @Field()
+    token: string
 }

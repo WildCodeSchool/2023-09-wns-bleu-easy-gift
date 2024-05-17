@@ -65,8 +65,11 @@ To run them localy:
    `cd frontend`
    `npm run test`
 
-4. Go in the e2e folder to run the end to end test. But first, in dockerhub, stop the backend/testDB-1 container, and start the easy-gift/testDB-1 container.
+4. Go in the e2e folder to run the end to end test
+
+   In dockerhub, stop the backend/testDB-1 container, and start the easy-gift/testDB-1 container.
    `..`
+   `cd e2e-tests`
    `npm run test-headed`
 
 Hopefully, by now, all the test should have passed !

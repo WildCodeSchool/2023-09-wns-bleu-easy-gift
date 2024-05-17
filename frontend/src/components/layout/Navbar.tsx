@@ -72,6 +72,9 @@ export default function Navbar() {
           <Link href="#" className="font-semibold">
             Test Sur Staging
           </Link>
+          <Link href="/mon-profil" className="font-semibold">
+            Mon profil
+          </Link>
         </div>
 
         {/* Side Drawer for Mobile Screens */}

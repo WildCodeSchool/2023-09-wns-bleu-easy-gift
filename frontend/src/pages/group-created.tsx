@@ -15,10 +15,10 @@ export default function GroupCreated() {
           Сréer un nouveau groupe
         </Button>
         <Button className='mb-4' onClick={() => router.push('/gift-deteil')}>
-          Voir les details de la groupe
+          Voir les details du groupe
         </Button>
         <Button className='mb-4' onClick={() => router.push('/gift-list')}>
-          Voir le list des groupes
+          Voir la liste des groupes
         </Button>
       </div>
       <p className='text-green-600 mt-4'>Succès</p>
