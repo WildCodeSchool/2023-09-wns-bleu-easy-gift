@@ -20,7 +20,7 @@ export default function Profile() {
       <section className="mb-40 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-4/5  md:max-w-2xl lg:max-w-4xl xl:max-w-7xl 2xl:max-w-[1000px]">
         <div>
           <h2 className="mb-8 text-2xl md:mb-3 md:text-4xl font-bold text-primaryBlue">Informations personnelles</h2>
-          <p className="mb-9 text-lg text-justify md:mb-10 md:text-xl">Gère les informations de ton compte Easy Gift.</p>
+          <p className="mb-9 text-lg text-left md:mb-10 md:text-xl">Gère les informations de ton compte Easy Gift.</p>
           <div className="flex justify-between items-center mb-7">
             <div className="relative w-32 h-32">
               <img
