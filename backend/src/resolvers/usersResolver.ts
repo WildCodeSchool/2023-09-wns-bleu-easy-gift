@@ -18,6 +18,8 @@ import { MyContext } from '..'
 import Cookies from 'cookies'
 import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
+import { getUsersByGroup } from './usersToGroupsResolver'
+
 
 export async function findUserByEmail(email: string) {
     return await User.findOneBy({ email })
@@ -62,6 +64,7 @@ export async function createUser({
     return newUser
 }
 
+
 @Resolver(User)
 class UsersResolver {
     @Query(() => [User])
@@ -76,6 +79,20 @@ class UsersResolver {
             throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
         }
         return user
+    }
+
+
+    @Query(() => [User])
+    async getUsersByGroup(@Arg('group_id') group_id: number) {
+
+        const UsersGroup = await getUsersByGroup(group_id);
+
+        const userId =
+
+
+            console.log("ICIIIIIIIIIIIIIIIIIIIIIII", UsersGroup);
+
+        return
     }
 
     @Mutation(() => UserWithoutPassword)
