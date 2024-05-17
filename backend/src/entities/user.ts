@@ -160,3 +160,12 @@ export class InputRegistrationWithToken {
     @Field()
     token: string
 }
+
+@InputType()
+export class InputUpdateUser {
+    @Field({ nullable: true })
+    pseudo?: string
+
+    @Field({ nullable: true })
+    email?: string
+}

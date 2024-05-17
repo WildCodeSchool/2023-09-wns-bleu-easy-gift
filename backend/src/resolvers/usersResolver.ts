@@ -11,6 +11,7 @@ import {
     ResponseMessage,
     UserInfos,
     InputRegistrationWithToken,
+    InputUpdateUser,
 } from '../entities/user'
 import * as argon2 from 'argon2'
 import { SignJWT } from 'jose'
@@ -189,6 +190,37 @@ class UsersResolver {
         responseMessage.success = true
 
         return responseMessage
+    }
+
+    @Mutation(() => UserWithoutPassword)
+    async updateUser(
+        @Arg('data') data: InputUpdateUser,
+        @Ctx() ctx: MyContext,
+    ) {
+        if (!ctx.user) {
+            throw new GraphQLError("L'utilisateur n'est pas authentifié")
+        }
+        const user = await User.findOne({ where: { id: ctx.user.id } })
+        if (!user) {
+            throw new GraphQLError('Utilisateur non trouvé')
+        }
+        if (data.email) {
+            const existingUser = await User.findOne({
+                where: { email: data.email },
+            })
+            if (existingUser && existingUser.id !== user.id) {
+                throw new GraphQLError('cet email est déjà utilisé')
+            }
+            user.email = data.email
+        }
+        if (data.pseudo) {
+            user.pseudo = data.pseudo
+        }
+        await user.save()
+        return {
+            email: user.email,
+            pseudo: user.pseudo,
+        }
     }
 }
 
