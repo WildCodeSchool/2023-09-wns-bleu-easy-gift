@@ -1,0 +1,10 @@
+mutation AddNewGroup($data: NewGroupInput!) {
+  addNewGroup(data: $data) {
+    id
+    name
+    avatar {
+      id
+      name
+    }
+  }
+}
