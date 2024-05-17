@@ -5,7 +5,7 @@ export default function GroupCreated() {
   const router = useRouter();
 
   return (
-    <div className='min-h-screen flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center'>
       <h1 className='text-3xl font-bold mb-4'>Votre groupe a été créé !</h1>
       <div className='flex flex-col item-center'>
         <Button

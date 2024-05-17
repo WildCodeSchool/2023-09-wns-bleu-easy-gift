@@ -1,9 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAddNewGroupMutation } from '@/graphql/generated/schema';
-import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 
 const iconStar = {
   id: 'star',
@@ -20,6 +19,7 @@ export default function CreatingGroups() {
   const [email, setEmail] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [emails, setEmails] = useState<string[]>([]);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   const [addNewGroup, { error }] = useAddNewGroupMutation({
     onCompleted: () => {
@@ -27,6 +27,11 @@ export default function CreatingGroups() {
     },
   });
   const router = useRouter();
+
+  useEffect(() => {
+    const formIsValid = name.trim() !== '' && emails.length >= 3;
+    setIsFormValid(formIsValid);
+  }, [name, emails]);
 
   const handleAddEmail = () => {
     if (email && !emails.includes(email)) {
@@ -68,6 +73,16 @@ export default function CreatingGroups() {
           Les échanges de cadeaux nécessitent au moins 3 participants
         </p>
         <div className='mb-4'>
+          <label className='block mb-2 font-bold'>Nom du groupe</label>
+          <Input
+            type='text'
+            placeholder='name'
+            value={name}
+            onChange={handleNameChange}
+            className='w-full p-2 border rounded'
+          />
+        </div>
+        <div className='mb-4'>
           <label className='block mb-2 font-bold'>
             Ajouter des personnes (e-mail)
           </label>
@@ -79,19 +94,10 @@ export default function CreatingGroups() {
             className='w-full p-2 border rounded'
           />
         </div>
-        <div className='mb-4'>
-          <label className='block mb-2 font-bold'>Nom de la groupe</label>
-          <Input
-            type='text'
-            placeholder='name'
-            value={name}
-            onChange={handleNameChange}
-            className='w-full p-2 border rounded'
-          />
-        </div>
+
         <div className='flex justify-end mb-4'>
           <Button type='button' onClick={handleAddEmail}>
-            Ajouter
+            +
           </Button>
         </div>
         <div className='mb-4'>
@@ -124,7 +130,9 @@ export default function CreatingGroups() {
           </div>
         </div>
         <div className='flex justify-end mb-4'>
-          <Button type='submit'>Confirmez</Button>
+          <Button type='submit' disabled={!isFormValid}>
+            Confirmez
+          </Button>
         </div>
         {error && <p className='text-red-500 mt-2'>{error.message}</p>}
       </form>

@@ -11,12 +11,18 @@ import {
   CarouselNext,
 } from '@/components/ui/carousel';
 import { useRouter } from 'next/router';
+import { checkUserConnected } from '@/utils/checkConnection';
 
 export default function Home() {
   const router = useRouter();
+  const isConnected = checkUserConnected();
 
   const handleButtonClick = () => {
-    router.push('/creating-groups');
+    if (isConnected) {
+      router.push('/creating-groups');
+    } else {
+      router.push('/auth/login');
+    }
   };
   return (
     <>
