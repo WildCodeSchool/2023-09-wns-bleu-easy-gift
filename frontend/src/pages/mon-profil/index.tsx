@@ -17,7 +17,7 @@ export default function Profile() {
 
   return (
     <>
-      <section className="mb-40 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-4/5  md:max-w-2xl lg:max-w-4xl xl:max-w-7xl 2xl:max-w-[1000px]">
+      <section className="mb-40 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-1/2  md:max-w-2xl lg:max-w-4xl xl:max-w-7xl 2xl:max-w-[1000px]">
         <div>
           <h2 className="mb-8 text-2xl md:mb-3 md:text-4xl font-bold text-primaryBlue">Informations personnelles</h2>
           <p className="mb-9 text-lg text-left md:mb-10 md:text-xl">Gère les informations de ton compte Easy Gift.</p>
@@ -29,7 +29,7 @@ export default function Profile() {
                 alt="Avatar for the group"
               />
               <div
-                className="absolute inset-0 rounded-full flex justify-center items-center text-2xl text-primaryBlue font-semibold opacity-0 hover:opacity-100 duration-300 bg-stone-200 bg-opacity-50"
+                className="absolute inset-0 rounded-full flex justify-center items-center text-2xl text-primaryBlue font-semibold opacity-0 hover:opacity-100 duration-300 bg-stone-100 bg-opacity-75"
                 onClick={() => {
                   console.log("hello");
                 }}
@@ -37,10 +37,10 @@ export default function Profile() {
                 Modifier
               </div>
             </div>
-            <Button>Modifier mes infos</Button>
+            <Button>Modifier mes informations</Button>
           </div>
 
-          <div className="grid-cols-2 w-128">
+          <div className="grid-cols-2">
             <div className="flex items-center h-14">
               <p className="text-base font-semibold w-32">Pseudo</p>
               <p className="text-base">{user?.pseudo}</p>
@@ -53,7 +53,7 @@ export default function Profile() {
             <Separator />
             <div className="flex items-center h-14">
               <p className="text-base font-semibold w-32">Mot de passe</p>
-              <Button>Modifier</Button>
+              <Button>Modifier mon mot de passe</Button>
             </div>
           </div>
         </div>
