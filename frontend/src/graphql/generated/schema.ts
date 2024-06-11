@@ -61,11 +61,22 @@ export type InputRegistrationWithToken = {
   token: Scalars['String'];
 };
 
+export type InputUpdateAvatar = {
+  avatarId: Scalars['Int'];
+};
+
+export type InputUpdateUser = {
+  email?: InputMaybe<Scalars['String']>;
+  pseudo?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addNewGroup: Group;
   register: UserWithoutPassword;
   registrationWithToken: UserWithoutPassword;
+  updateAvatar: UserWithoutPassword;
+  updateUser: UserWithoutPassword;
 };
 
 
@@ -81,6 +92,16 @@ export type MutationRegisterArgs = {
 
 export type MutationRegistrationWithTokenArgs = {
   data: InputRegistrationWithToken;
+};
+
+
+export type MutationUpdateAvatarArgs = {
+  data: InputUpdateAvatar;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: InputUpdateUser;
 };
 
 export type NewGroupInput = {
@@ -160,6 +181,13 @@ export type UserWithoutPassword = {
   pseudo: Scalars['String'];
 };
 
+export type UpdateAvatarMutationVariables = Exact<{
+  data: InputUpdateAvatar;
+}>;
+
+
+export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: { __typename?: 'UserWithoutPassword', email: string, pseudo: string, avatar: { __typename?: 'Avatar', url: string, id: number, name: string } } };
+
 export type AddNewGroupMutationVariables = Exact<{
   data: NewGroupInput;
 }>;
@@ -221,6 +249,45 @@ export type RegisterWithTokenMutationVariables = Exact<{
 export type RegisterWithTokenMutation = { __typename?: 'Mutation', registrationWithToken: { __typename?: 'UserWithoutPassword', email: string, pseudo: string } };
 
 
+export const UpdateAvatarDocument = gql`
+    mutation UpdateAvatar($data: InputUpdateAvatar!) {
+  updateAvatar(data: $data) {
+    email
+    pseudo
+    avatar {
+      url
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdateAvatarMutationFn = Apollo.MutationFunction<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
+
+/**
+ * __useUpdateAvatarMutation__
+ *
+ * To run a mutation, you first call `useUpdateAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAvatarMutation, { data, loading, error }] = useUpdateAvatarMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAvatarMutation, UpdateAvatarMutationVariables>(UpdateAvatarDocument, options);
+      }
+export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
+export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
+export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
 export const AddNewGroupDocument = gql`
     mutation AddNewGroup($data: NewGroupInput!) {
   addNewGroup(data: $data) {

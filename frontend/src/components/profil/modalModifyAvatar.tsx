@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { Avatar, useProfilAvatarsQuery } from "../../graphql/generated/schema";
+import { Avatar, useProfilAvatarsQuery, useUpdateAvatarMutation } from "../../graphql/generated/schema";
 import { useState, useEffect, useRef, CSSProperties } from "react";
 import clsx from "clsx";
 
@@ -35,7 +35,13 @@ export default function ModalModifyAvatar({ isOpen, handleClose, avatarId }: { i
   }, [isOpen]);
 
   const onConfirm = () => {
-    handleClose();
+    try {
+      updateAvatarMutation({ variables: { data: { avatarId: avatar! } } });
+      handleClose();
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   //end of inmport code scroll modal
@@ -47,6 +53,8 @@ export default function ModalModifyAvatar({ isOpen, handleClose, avatarId }: { i
       setAvatars(data.profilAvatars as Avatar[]);
     }
   }, [data]);
+
+  const [updateAvatarMutation, { loading: updating, error: updateError }] = useUpdateAvatarMutation();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading avatars</div>;
