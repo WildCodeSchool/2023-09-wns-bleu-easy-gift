@@ -110,6 +110,15 @@ export class UserWithoutPassword {
 
     @Field()
     pseudo: string
+}
+
+@ObjectType()
+export class UserWithoutPasswordAvatar {
+    @Field()
+    email: string
+
+    @Field()
+    pseudo: string
 
     @Field()
     avatar: Avatar

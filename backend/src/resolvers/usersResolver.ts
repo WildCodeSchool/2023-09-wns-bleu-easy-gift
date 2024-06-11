@@ -6,6 +6,7 @@ import {
     User,
     // NewUserInput,
     UserWithoutPassword,
+    UserWithoutPasswordAvatar,
     InputRegister,
     InputLogin,
     ResponseMessage,
@@ -218,7 +219,7 @@ class UsersResolver {
             pseudo: user.pseudo,
         }
     }
-    @Mutation(() => UserWithoutPassword)
+    @Mutation(() => UserWithoutPasswordAvatar)
     async updateAvatar(
         @Arg('data') data: InputUpdateAvatar,
         @Ctx() ctx: MyContext,
