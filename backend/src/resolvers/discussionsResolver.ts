@@ -13,14 +13,9 @@ import { Group } from '../entities/group';
 } */
 
 
-
-
-@Resolver(Discussion)
-class DiscussionResolver {
-
-
-  async function createDiscussionAtGroupCreation() {
+async function createDiscussionAtGroupCreation() {
   // Récupérer les users associés au groupe
+
   // récupérer les emails des users concernés
   // récupérer l'email du user connecté,
 
@@ -30,6 +25,14 @@ class DiscussionResolver {
   // boucler
 
 }
+
+
+
+@Resolver(Discussion)
+class DiscussionResolver {
+
+
+
 
 }
 

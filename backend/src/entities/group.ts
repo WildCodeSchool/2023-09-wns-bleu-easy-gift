@@ -8,6 +8,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
+import { User } from './user'
 import { Avatar } from './avatar'
 import { ObjectType, Field, Int, InputType } from 'type-graphql'
 import { Length } from 'class-validator'
@@ -48,6 +49,9 @@ export class Group extends BaseEntity {
 
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.group)
     public userToGroups: UserToGroup[]
+
+    // @Field(() => [User])
+    // users?: User[]
 }
 
 @InputType()

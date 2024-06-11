@@ -11,6 +11,7 @@ import mailer from '../mailer'
 
 import { In } from 'typeorm'
 import { Avatar } from '../entities/avatar'
+import UsersToGroupsResolver from './usersToGroupsResolver'
 
 
 export async function findGroupByName(name: string) {
@@ -74,6 +75,39 @@ class GroupsResolver {
         return ctxUserGroups
     }
 
+    @Query(() => [Group])
+    async getUsersByGroup(
+        @Arg('id') id: number,
+        @Ctx() ctx: MyContext) {
+
+        console.log('_________id : ', id)
+        if (!ctx.user)
+            throw new GraphQLError(
+                'Il faut être connecté pour voir les membres du groupe',
+            )
+        // const group = await Group.find({
+        //     relations: { userToGroups: true },
+        //     where: {
+        //         id
+        //     },
+        // })
+
+        const group = await Group.findOne({
+            where: { id },
+            relations: ['userToGroups', 'userToGroups.user']
+        });
+
+        if (!group) {
+            throw new GraphQLError('Group not found');
+        }
+
+
+        console.log(group)
+
+        return group.userToGroups.map(utg => utg.user);
+        // return group
+    }
+
     @Authorized()
     @Mutation(() => Group)
     async addNewGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
@@ -104,46 +138,124 @@ class GroupsResolver {
             is_admin: true,
         })
 
-        emailUsers.forEach(async email => {
-            if (email === ctx.user?.email) return
+        const groupUsersIds = emailUsers.map(email => {
+            return (async () => {
+                if (email === ctx.user?.email) return ctx.user.id
 
-            const isUser = await findUserByEmail(email)
-            if (isUser) {
+                const isUser = await findUserByEmail(email)
+                if (isUser) {
+                    await createUserToGroup({
+                        group_id: newGroup.id,
+                        user_id: isUser.id,
+                        is_admin: false,
+                    })
+                    return isUser.id
+                }
+
+                const pseudo = email.split('@')[0]
+
+                const password = 'Test@1234' // TODO
+
+                const newUser = await createUser({ pseudo, email, password })
+
                 await createUserToGroup({
                     group_id: newGroup.id,
-                    user_id: isUser.id,
+                    user_id: newUser.id,
                     is_admin: false,
                 })
-                return
-            }
 
-            const pseudo = email.split('@')[0]
+                try {
+                    await mailer.sendMail({
+                        subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                        to: email,
+                        from: 'crazygift24@gmail.com',
+                        text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                    })
 
-            const password = 'Test@1234' // TODO
-
-            const newUser = await createUser({ pseudo, email, password })
-
-            await createUserToGroup({
-                group_id: newGroup.id,
-                user_id: newUser.id,
-                is_admin: false,
-            })
-
-            try {
-                await mailer.sendMail({
-                    subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
-                    to: email,
-                    from: 'crazygift24@gmail.com',
-                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
-                })
-            } catch (error) {
-                console.log('______________ Error sending mail', error)
-                throw new GraphQLError("Erreur d'envoi de mail")
-            }
+                    return newUser.id
+                } catch (error) {
+                    console.log('______________ Error sending mail', error)
+                    throw new GraphQLError("Erreur d'envoi de mail")
+                }
+            })()
         })
 
-        return newGroup
+        Promise.all(groupUsersIds).then((ids) => console.log('Group created, usersIds : ', ids))
+
+        /*
+        const promise1 = Promise.resolve(3);
+    const promise2 = 42;
+    const promise3 = new Promise((resolve, reject) => {
+      setTimeout(resolve, 100, 'foo');
+    });
+
+    Promise.all([promise1, promise2, promise3]).then((values) => {
+      console.log(values);
+    });
+        */
+
+        // emailUsers.forEach(async email => {
+        //     if (email === ctx.user?.email) return
+
+        //     const isUser = await findUserByEmail(email)
+        //     if (isUser) {
+        //         await createUserToGroup({
+        //             group_id: newGroup.id,
+        //             user_id: isUser.id,
+        //             is_admin: false,
+        //         })
+        //         return
+        //     }
+
+        //     const pseudo = email.split('@')[0]
+
+        //     const password = 'Test@1234' // TODO
+
+        //     const newUser = await createUser({ pseudo, email, password })
+
+        //     await createUserToGroup({
+        //         group_id: newGroup.id,
+        //         user_id: newUser.id,
+        //         is_admin: false,
+        //     })
+
+        //     try {
+        //         await mailer.sendMail({
+        //             subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+        //             to: email,
+        //             from: 'crazygift24@gmail.com',
+        //             text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+        //         })
+        //     } catch (error) {
+        //         console.log('______________ Error sending mail', error)
+        //         throw new GraphQLError("Erreur d'envoi de mail")
+        //     }
+        // })
+
+        // pour chaque member, creer une discussion qui contient tous les membres sauf lui-même
+        // 1 - récupérer l'id du groupe juste créé
+        // 3 - récupérer la liste des users
+        // ------ Entrée dans le foreach ------
+        // 2 - créer un nom pour les discussions avec les pseudos (autant de discussions que de users)
+        // 4 - créer autant de discussions que de user
+        // 5 - récupérer les ID des discussions
+        // 4 - boucler pour crée chaque user-discussion tupples
+        // ------- Sortie du Foreach ---------
+
+
+        // récupérer l'id du groupe
+        const newGroupId = newGroup.id
+
+        // recuperer le groupe, les emails des users et leur id
+        // const group = async getUsersByGroup(newGroup.id)
+
+        // récupérer la liste des users
+
+
+        return newGroup;
     }
+
+
 
     // @Query(() => ResponseMessage)
     // async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
