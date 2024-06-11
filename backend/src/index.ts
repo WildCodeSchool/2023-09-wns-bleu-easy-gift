@@ -42,7 +42,11 @@ schema.then(async schema => {
     app.use(
         '/',
         cors<cors.CorsRequest>({
-            origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+            origin: [
+                'http://localhost:3000',
+                'https://studio.apollographql.com',
+                'https://staging.0923-bleu-3.wns.wilders.dev',
+            ],
             credentials: true,
         }),
         express.json(),
