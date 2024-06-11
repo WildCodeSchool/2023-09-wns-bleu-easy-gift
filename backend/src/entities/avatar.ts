@@ -5,7 +5,7 @@ import {
     Column,
     OneToMany,
 } from 'typeorm'
-import { ObjectType, Field, Int } from 'type-graphql'
+import { ObjectType, Field, Int, InputType } from 'type-graphql'
 import { Length } from 'class-validator'
 import { User } from './user'
 import { Group } from './group'
