@@ -159,3 +159,18 @@ export class InputRegistrationWithToken {
     @Field()
     token: string
 }
+
+@InputType()
+export class InputUpdateUser {
+    @Field({ nullable: true })
+    pseudo?: string
+
+    @Field({ nullable: true })
+    email?: string
+}
+
+@InputType()
+export class InputUpdateAvatar {
+    @Field(() => Int)
+    avatarId: number
+}

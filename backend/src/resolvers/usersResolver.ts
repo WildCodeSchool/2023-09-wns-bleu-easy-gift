@@ -11,6 +11,8 @@ import {
     ResponseMessage,
     UserInfos,
     InputRegistrationWithToken,
+    InputUpdateUser,
+    InputUpdateAvatar,
 } from '../entities/user'
 import * as argon2 from 'argon2'
 import { SignJWT } from 'jose'
@@ -184,6 +186,64 @@ class UsersResolver {
         responseMessage.success = true
 
         return responseMessage
+    }
+
+    @Mutation(() => UserWithoutPassword)
+    async updateUser(
+        @Arg('data') data: InputUpdateUser,
+        @Ctx() ctx: MyContext,
+    ) {
+        if (!ctx.user) {
+            throw new GraphQLError("L'utilisateur n'est pas authentifié")
+        }
+        const user = await User.findOne({ where: { id: ctx.user.id } })
+        if (!user) {
+            throw new GraphQLError('Utilisateur non trouvé')
+        }
+        if (data.email) {
+            const existingUser = await User.findOne({
+                where: { email: data.email },
+            })
+            if (existingUser && existingUser.id !== user.id) {
+                throw new GraphQLError('cet email est déjà utilisé')
+            }
+            user.email = data.email
+        }
+        if (data.pseudo) {
+            user.pseudo = data.pseudo
+        }
+        await user.save()
+        return {
+            email: user.email,
+            pseudo: user.pseudo,
+        }
+    }
+    @Mutation(() => UserWithoutPassword)
+    async updateAvatar(
+        @Arg('data') data: InputUpdateAvatar,
+        @Ctx() ctx: MyContext,
+    ) {
+        if (!ctx.user) {
+            throw new GraphQLError("L'utilisateur n'est pas authentifié")
+        }
+        const user = await User.findOne({
+            where: { id: ctx.user.id },
+            relations: ['avatar'],
+        })
+        if (!user) {
+            throw new GraphQLError('Utilisateur non trouvé')
+        }
+        const newAvatar = await Avatar.findOne({ where: { id: data.avatarId } })
+        if (!newAvatar) {
+            throw new GraphQLError('Avatar non trouvé')
+        }
+        user.avatar = newAvatar
+        await user.save()
+        return {
+            email: user.email,
+            pseudo: user.pseudo,
+            avatar: user.avatar,
+        }
     }
 }
 
