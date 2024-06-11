@@ -169,3 +169,9 @@ export class InputUpdateUser {
     @Field({ nullable: true })
     email?: string
 }
+
+@InputType()
+export class InputUpdateAvatar {
+    @Field(() => Int)
+    avatarId: number
+}
