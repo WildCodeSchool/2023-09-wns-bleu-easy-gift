@@ -26,8 +26,8 @@ export default function Home() {
   };
   return (
     <>
-      <section className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto w-4/5 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>
-        <div className='hidden relative w-full order-2 md:block  md:max-w-4xl md:min-w-96 lg:mb-24 lg:order-1 lg:max-w-xl:min-h-130 lg:max-w-lg lg:mb-0 2xl:max-w-4xl'>
+      <section className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto w-4/5 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>
+        <div className='hidden relative w-full order-2 md:block md:max-w-4xl md:min-w-96 lg:mb-24 lg:order-1 lg:max-w-xl:min-h-130 lg:max-w-lg 2xl:max-w-4xl'>
           <Image
             src="/images/img-pages/hero-img.png"
             alt="hero of the page"
@@ -120,7 +120,7 @@ export default function Home() {
           Tes groupes
         </h2>
         <p className="w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 ">
-          Dans la famille thématique... je voudrais le groupe...{" "}
+          Dans la famille thématique... je voudrais le groupe...
         </p>
         <MyGroups />
       </section>
