@@ -29,10 +29,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          build-args: NEXT_PUBLIC_APOLLO_URI:/graphql
+          build-args: |
+            NEXT_PUBLIC_APOLLO_URI=/graphql
           context: "{{defaultContext}}:frontend"
           file: "Dockerfile.production"
           tags: ${{inputs.image_name}}
-          #tags: crazygift2024/crazygift-client:dev
-          # cache-from: type=gha
-          #cache-to: type=gha,mode=max
