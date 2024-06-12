@@ -20,8 +20,7 @@ import { MyContext } from '..'
 import Cookies from 'cookies'
 import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
-import { getUsersByGroup } from './usersToGroupsResolver'
-
+// import { getUsersByGroup } from './usersToGroupsResolver'
 
 export async function findUserByEmail(email: string) {
     return await User.findOneBy({ email })
@@ -66,12 +65,11 @@ export async function createUser({
     return newUser
 }
 
-
 @Resolver(User)
 class UsersResolver {
     @Query(() => [User])
     async users() {
-        return User.find({ relations: ['avatar'] })
+        return User.find({ relations: ['avatar', 'discussions'] })
     }
 
     @Query(() => User)
@@ -83,19 +81,17 @@ class UsersResolver {
         return user
     }
 
+    // @Query(() => [User])
+    // async getUsersByGroup(@Arg('group_id') group_id: number) {
 
-    @Query(() => [User])
-    async getUsersByGroup(@Arg('group_id') group_id: number) {
+    //     const UsersGroup = await getUsersByGroup(group_id);
 
-        const UsersGroup = await getUsersByGroup(group_id);
+    //     const userId =
 
-        const userId =
+    //         console.log("ICIIIIIIIIIIIIIIIIIIIIIII", UsersGroup);
 
-
-            console.log("ICIIIIIIIIIIIIIIIIIIIIIII", UsersGroup);
-
-        return
-    }
+    //     return
+    // }
 
     @Mutation(() => UserWithoutPassword)
     async registrationWithToken(@Arg('data') data: InputRegistrationWithToken) {
@@ -183,7 +179,7 @@ class UsersResolver {
         }
         const userData = await User.findOne({
             where: { email: ctx.user.email },
-            relations: ['avatar'],
+            relations: ['avatar', 'discussions'],
         })
 
         if (!userData) throw new GraphQLError('Cannot find user')
@@ -193,6 +189,7 @@ class UsersResolver {
             pseudo: userData.pseudo,
             email: userData.email,
             avatar: userData.avatar,
+            discussions: userData.discussions,
         }
     }
 

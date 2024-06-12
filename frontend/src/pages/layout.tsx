@@ -4,11 +4,9 @@ import React from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-screen min-h-screen bg-bgPrimary relative  overflow-y-scroll flex flex-col justify-between">
+    <div className="w-screen min-h-screen bg-bgPrimary relative  flex flex-col justify-between">
       <Navbar />
-      <main className="mt-20 w-full mx-auto h-auto ">
-        {children}
-      </main>
+      <main className="mt-20 w-full mx-auto h-auto ">{children}</main>
       <Footer />
     </div>
   );

@@ -3,8 +3,8 @@ import UsersResolver from './resolvers/usersResolver'
 import AvatarsResolver from './resolvers/avatarsResolver'
 import { customAuthChecker } from './lib/authChecker'
 import GroupsResolver from './resolvers/groupsResolver'
-import { UserToGroup } from './entities/userToGroup'
 import UsersToGroupsResolver from './resolvers/usersToGroupsResolver'
+import DiscussionResolver from './resolvers/discussionsResolver'
 
 export default buildSchema({
     resolvers: [
@@ -12,6 +12,7 @@ export default buildSchema({
         GroupsResolver,
         AvatarsResolver,
         UsersToGroupsResolver,
+        DiscussionResolver,
     ],
     authChecker: customAuthChecker,
 })

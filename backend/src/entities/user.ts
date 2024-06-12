@@ -147,6 +147,9 @@ export class UserInfos {
 
     @Field(() => Avatar, { nullable: true })
     avatar?: Avatar | null
+
+    @Field(() => [Discussion])
+    discussions: Discussion[]
 }
 
 @InputType()

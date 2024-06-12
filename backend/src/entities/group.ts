@@ -8,7 +8,6 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
-import { User } from './user'
 import { Avatar } from './avatar'
 import { ObjectType, Field, Int, InputType } from 'type-graphql'
 import { Length } from 'class-validator'

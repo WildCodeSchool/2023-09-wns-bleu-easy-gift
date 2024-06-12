@@ -1,12 +1,10 @@
-import { Resolver, Query, Arg } from 'type-graphql'
+import { Resolver, Query } from 'type-graphql'
 import { UserToGroup } from '../entities/userToGroup'
 
-
 export async function getUsersByGroup(group_id: number) {
-
     const userIntoGroup = await UserToGroup.findBy({ group_id })
 
-    return userIntoGroup;
+    return userIntoGroup
 }
 
 @Resolver(UserToGroup)
