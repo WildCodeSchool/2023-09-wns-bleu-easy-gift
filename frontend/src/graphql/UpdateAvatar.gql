@@ -1,0 +1,11 @@
+mutation UpdateAvatar($data: InputUpdateAvatar!) {
+  updateAvatar(data: $data) {
+    email
+    pseudo
+    avatar {
+      url
+      id
+      name
+    }
+  }
+}

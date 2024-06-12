@@ -1,15 +1,23 @@
 import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
 import { GraphQLError } from 'graphql'
-
+import { getRepository } from 'typeorm'
 import { Group, NewGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
+import { User } from '../entities/user'
 import { MyContext } from '..'
+import { createUser, findUserByEmail } from './usersResolver'
+
+import mailer from '../mailer'
+
+import { In } from 'typeorm'
+import { Avatar } from '../entities/avatar'
+
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
 }
 
-async function createGroup({ name }: NewGroupInput) {
+async function createGroup(name: string) {
     return await Group.create({ name }).save()
 }
 
@@ -29,48 +37,109 @@ async function createUserToGroup({
 class GroupsResolver {
     @Query(() => [Group])
     async groups() {
-        return Group.find()
+        return Group.find({ relations: ['avatar'] })
     }
 
-    // Aurelie : return all groups of the user - test, has not been verified
     @Query(() => [Group])
     async userGroups(@Ctx() ctx: MyContext) {
         if (!ctx.user)
             throw new GraphQLError(
                 'Il faut être connecté pour voir tes groupes',
             )
-        return Group.find({
-            join: {
-                alias: 'group',
-                leftJoinAndSelect: {
-                    userToGroups: 'group.userToGroups',
-                },
-            },
-            where: {
-                userToGroups: {
-                    user_id: ctx.user.id,
-                },
-            },
-        })
+
+        // SELECT * FROM group WHERE id IN ([1, 2, 3])
+        // SELECT * FROM group WHERE id IN (SELECT group_id FROM user_to_group WHERE user_id = ctx.user.id)
+
+        const groupIds = (
+            await UserToGroup.findBy({ user_id: ctx.user.id })
+        ).map(utg => utg.group_id)
+
+        // WORKING well but not returning the avatars
+        // const ctxUserGroups = await Group.findBy({
+        //     id: In(groupIds),
+        // })
+
+        // ENABLE TO GET AVATAR
+        const ctxUserGroups = await Group.createQueryBuilder('group')
+            .leftJoinAndSelect('group.avatar', 'avatar')
+            .whereInIds(groupIds)
+            .getMany()
+
+        // not working
+        // const haha = await UserToGroup.find({
+        //     relations: { group: true },
+        //     where: { user_id: ctx.user.id },
+        // })
+
+        return ctxUserGroups
     }
 
     @Authorized()
     @Mutation(() => Group)
-    async createGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
-        const { name } = data
+    async addNewGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
+        const { name, emailUsers } = data
         const group = await findGroupByName(name)
+
+        const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
+        const randomGroupAvatar =
+            groupAvatars[Math.floor(Math.random() * groupAvatars.length)]
 
         if (group) {
             throw new GraphQLError(
                 `Group already exist, fait pas trop le malin.`,
             )
         }
-        const newGroup = await createGroup({ name })
-        if (!ctx.user) throw new GraphQLError("T'es pas la chef(fe) t'es un BZ")
-        const NewUserToGroup = await createUserToGroup({
+        const newGroup = await createGroup(name)
+
+        if (randomGroupAvatar) {
+            newGroup.avatar = randomGroupAvatar
+            await newGroup.save()
+        }
+
+        if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
+
+        await createUserToGroup({
             group_id: newGroup.id,
             user_id: ctx.user?.id,
             is_admin: true,
+        })
+
+        emailUsers.forEach(async email => {
+            if (email === ctx.user?.email) return
+
+            const isUser = await findUserByEmail(email)
+            if (isUser) {
+                await createUserToGroup({
+                    group_id: newGroup.id,
+                    user_id: isUser.id,
+                    is_admin: false,
+                })
+                return
+            }
+
+            const pseudo = email.split('@')[0]
+
+            const password = 'Test@1234' // TODO
+
+            const newUser = await createUser({ pseudo, email, password })
+
+            await createUserToGroup({
+                group_id: newGroup.id,
+                user_id: newUser.id,
+                is_admin: false,
+            })
+
+            try {
+                await mailer.sendMail({
+                    subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                    to: email,
+                    from: 'crazygift24@gmail.com',
+                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                })
+            } catch (error) {
+                console.log('______________ Error sending mail', error)
+                throw new GraphQLError("Erreur d'envoi de mail")
+            }
         })
 
         return newGroup

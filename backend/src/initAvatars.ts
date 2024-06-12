@@ -188,6 +188,54 @@ export default async function initAvatars() {
         url: 'https://ucarecdn.com/f74f7d0e-a540-4eb3-9564-7a5c080536ca/-/preview/1000x1000/',
     })
 
+    const generic1 = Avatar.create({
+        name: 'generic1',
+        type: 'generic',
+        url: 'https://ucarecdn.com/3da611b7-6a40-4c8f-8163-65895c0ddf44/-/preview/1000x1000/',
+    })
+
+    const generic2 = Avatar.create({
+        name: 'generic2',
+        type: 'generic',
+        url: 'https://ucarecdn.com/0d17da9c-ea08-4222-b689-1a53cdc185a1/-/preview/1000x1000/',
+    })
+
+    const generic3 = Avatar.create({
+        name: 'generic3',
+        type: 'generic',
+        url: 'https://ucarecdn.com/df1cf50f-0cff-415b-80e5-2e34884076c7/-/preview/1000x1000/',
+    })
+
+    const generic4 = Avatar.create({
+        name: 'generic4',
+        type: 'generic',
+        url: 'https://ucarecdn.com/c7ea3dbe-f1af-473e-ba62-f348b267adb8/-/preview/1000x1000/',
+    })
+
+    const generic5 = Avatar.create({
+        name: 'generic5',
+        type: 'generic',
+        url: 'https://ucarecdn.com/4a8610aa-6f64-401a-a155-2db03244c7ad/-/preview/1000x1000/',
+    })
+
+    const generic6 = Avatar.create({
+        name: 'generic6',
+        type: 'generic',
+        url: 'https://ucarecdn.com/4ef50c61-0ad5-40ec-b649-0e16789931ce/-/preview/1000x1000/',
+    })
+
+    const generic7 = Avatar.create({
+        name: 'generic7',
+        type: 'generic',
+        url: 'https://ucarecdn.com/adcacefd-41f7-4f50-b0d2-36a5ad9c2a75/-/preview/1000x1000/',
+    })
+
+    const generic8 = Avatar.create({
+        name: 'generic8',
+        type: 'generic',
+        url: 'https://ucarecdn.com/cd4d3e5e-929f-4ca7-8975-069aefcdaf90/-/preview/1000x1000/',
+    })
+
     await yeti.save()
     await racoon2.save()
     await racoon3.save()
@@ -219,4 +267,12 @@ export default async function initAvatars() {
     await bunny.save()
     await cat1.save()
     await cat2.save()
+    await generic1.save()
+    await generic2.save()
+    await generic3.save()
+    await generic4.save()
+    await generic5.save()
+    await generic6.save()
+    await generic7.save()
+    await generic8.save()
 }

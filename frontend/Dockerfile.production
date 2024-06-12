@@ -10,6 +10,7 @@ COPY postcss.config.js postcss.config.js
 COPY next.config.mjs next.config.mjs
 COPY components.json components.json
 COPY src src
+COPY public public
 
 ARG NEXT_PUBLIC_APOLLO_URI
 ENV NEXT_PUBLIC_APOLLO_URI ${NEXT_PUBLIC_APOLLO_URI}
