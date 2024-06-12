@@ -7,8 +7,12 @@
     "dev": "docker compose up --build",
     "testDB": "docker compose -f docker-compose.integration-tests.yml up testDB",
     "test": "docker compose -f docker-compose.e2e-tests.yml up testDB",
-    "prod": "docker compose -f docker-compose.production.yml up --build"
+    "prod": "docker compose -f docker-compose.production.yml up --build",
+    "staging": "docker compose -f docker-compose.staging.yml up --build"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@radix-ui/react-separator": "^1.0.3"
+  }
 }

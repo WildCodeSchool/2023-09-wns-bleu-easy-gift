@@ -2,12 +2,7 @@ import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -25,9 +20,13 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        /*Liste des couleurs persos disponibles dans le figma*/
         bgPrimary: "#EFF1F6",
         primaryBlue: "#567DFF",
+        blue600: "2F3DFC",
         primaryRed: "#F94C63",
+        red400: "#FB7182",
+        red600: "#E3264C",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -63,6 +62,24 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      width: {
+        "128": "32rem",
+      },
+      minHeight: {
+        // tailwind s'arrête à 96 qui équivaut à 24rem
+        "120": "30rem",
+        "130": "40rem",
+        "140": "50rem",
+        "150": "60rem",
+        "160": "70rem",
+        "165": "75rem",
+        "170": "80rem",
+        "175": "85rem",
+        "180": "90rem",
+      },
+      maxHeight: {
+        "140": "50rem",
       },
       keyframes: {
         "accordion-down": {

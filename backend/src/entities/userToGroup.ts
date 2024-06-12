@@ -4,6 +4,7 @@ import {
     CreateDateColumn,
     Entity,
     ManyToOne,
+    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -16,33 +17,33 @@ import { Group } from './group'
 export class UserToGroup extends BaseEntity {
     @Field(() => Int)
     @PrimaryGeneratedColumn()
-    id: number
+    public id: number
 
     @Field()
     @Column()
-    user_id: number
+    public user_id: number
 
     @Field()
     @Column()
-    group_id: number
+    public group_id: number
 
     @Field()
     @Column()
-    is_admin: boolean
+    public is_admin: boolean
 
     @Field()
     @CreateDateColumn()
-    created_at: string
+    public created_at: string
 
     @Field()
     @UpdateDateColumn()
-    modified_at: string
+    public modified_at: string
 
     @ManyToOne(() => User, user => user.userToGroups)
-    user: User
+    public user: User
 
     @ManyToOne(() => Group, group => group.userToGroups)
-    group: Group
+    public group: Group
 }
 
 @InputType()

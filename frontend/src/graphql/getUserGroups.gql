@@ -1,0 +1,10 @@
+query UserGroups {
+  userGroups {
+    id
+    name
+    avatar {
+      id
+      url
+    }
+  }
+}

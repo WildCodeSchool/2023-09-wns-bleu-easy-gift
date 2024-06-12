@@ -3,8 +3,6 @@ services:
     image: postgres:15
     environment:
       - POSTGRES_PASSWORD=postgres
-    ports:
-      - 5432:5432
 
   backend:
     build: ./backend
@@ -24,12 +22,14 @@ services:
       interval: 10s
       timeout: 30s
       retries: 5
+
   frontend:
     build: ./frontend
     # command: "sh -c ./start.sh"
     ports:
       - 3000:3000
     volumes:
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
       - ./frontend/src:/app/src
     env_file:
       - ./frontend/.env
