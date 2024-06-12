@@ -26,10 +26,10 @@ test("has a valid user name", async ({ page }) => {
   await page.getByTestId("login-email").fill(emailToCheck);
   await page.getByTestId("login-password").fill(passwordToCheck);
   await page.getByRole("button", { name: "Se connecter" }).click();
-  const disconenctButton = page.getByRole("button", {
+  const disconnectButton = page.getByRole("button", {
     name: "Se déconnecter",
   });
-  await expect(disconenctButton).toBeVisible();
+  await expect(disconnectButton).toBeVisible();
   // await expect(
   //   page.getByRole("button", {name: "Se déconnecter"})
   // ).toBeVisible();
