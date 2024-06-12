@@ -25,7 +25,9 @@ export class User extends BaseEntity {
     @BeforeInsert()
     @BeforeUpdate()
     protected async hashPassword() {
-        this.password = await argon2.hash(this.password)
+        if (!this.password.startsWith('$argon2')) {
+            this.password = await argon2.hash(this.password)
+        }
     }
     @Field(() => Int)
     // @PrimaryGeneratedColumn('uuid')
@@ -103,9 +105,15 @@ export class InputRegister {
 
 @ObjectType()
 export class UserWithoutPassword {
-    // @Field()
-    // id: string
+    @Field()
+    email: string
 
+    @Field()
+    pseudo: string
+}
+
+@ObjectType()
+export class UserWithoutPasswordAvatar {
     @Field()
     email: string
 
@@ -147,6 +155,9 @@ export class UserInfos {
 
     @Field(() => Avatar, { nullable: true })
     avatar?: Avatar | null
+
+    @Field(() => [Discussion])
+    discussions: Discussion[]
 }
 
 @InputType()

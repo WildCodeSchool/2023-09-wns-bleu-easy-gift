@@ -3,6 +3,9 @@ import getUsers from './operations/getUsers'
 import { execute } from '../jest.setup'
 import register from './operations/register'
 
+// !!!! IMPORTANT !!!!
+// If the test fails, you can try to erase what is written between brackets in the toMatchInlineSnapshot() function
+
 describe('user resolver', () => {
     it('should return the users', async () => {
         await User.create({
@@ -16,19 +19,20 @@ describe('user resolver', () => {
             password: 'test@1234',
         }).save()
         const res = await execute(getUsers)
+        console.log(res)
         expect(res).toMatchInlineSnapshot(`
             {
               "data": {
                 "users": [
                   {
-                    "email": "john@gmail.com",
-                    "id": 1,
-                    "pseudo": "John",
-                  },
-                  {
                     "email": "jane@gmail.com",
                     "id": 2,
                     "pseudo": "Jane",
+                  },
+                  {
+                    "email": "john@gmail.com",
+                    "id": 1,
+                    "pseudo": "John",
                   },
                 ],
               },

@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from 'type-graphql'
+import { Field, Int, ObjectType, InputType } from 'type-graphql'
 import {
     BaseEntity,
     Column,
@@ -14,6 +14,7 @@ import {
 import { Group } from './group'
 import { Message } from './message'
 import { User } from './user'
+import { ObjectId } from '../utils'
 
 @Entity()
 @ObjectType()
@@ -50,4 +51,16 @@ export class Discussion extends BaseEntity {
     })
     @Field(() => [User])
     users: User[]
+}
+
+@InputType()
+export class NewDiscussionInput {
+    @Field()
+    name: string
+
+    @Field(() => ObjectId)
+    group: ObjectId
+
+    @Field(() => [ObjectId], { nullable: true })
+    users?: ObjectId[]
 }
