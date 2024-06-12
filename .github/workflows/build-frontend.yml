@@ -30,10 +30,7 @@ jobs:
         with:
           push: true
           build-args: |
-            NEXT_PUBLIC_APOLLO_URI=http://localhost:4001
+            NEXT_PUBLIC_APOLLO_URI=/graphql
           context: "{{defaultContext}}:frontend"
           file: "Dockerfile.production"
           tags: ${{inputs.image_name}}
-          #tags: crazygift2024/crazygift-client:dev
-          cache-from: type=gha
-          #cache-to: type=gha,mode=max
