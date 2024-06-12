@@ -1,10 +1,7 @@
 import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
-// import { Not } from 'typeorm'
 import { GraphQLError } from 'graphql'
-// import { validate } from 'class-validator'
 import {
     User,
-    // NewUserInput,
     UserWithoutPassword,
     UserWithoutPasswordAvatar,
     InputRegister,
@@ -25,21 +22,6 @@ import crypto from 'crypto'
 export async function findUserByEmail(email: string) {
     return await User.findOneBy({ email })
 }
-
-// async function createUser({ pseudo, email, password }: InputRegister) {
-//     // Générer un identifiant d'avatar aléatoire entre 1 et 31
-//     const randomAvatarId = Math.floor(Math.random() * 31) + 1
-
-//     // Récupérer l'avatar correspondant à l'ID aléatoire
-//     const avatar = await Avatar.findOne({ where: { id: randomAvatarId } })
-
-//     // Vérifier si l'avatar correspondant à l'ID existe
-//     if (!avatar) {
-//         throw new Error(`Avatar with ID ${randomAvatarId} not found`)
-//     }
-
-//     return await User.create({ pseudo, email, password, avatar }).save()
-// }
 
 export async function createUser({
     pseudo,
@@ -69,7 +51,7 @@ export async function createUser({
 class UsersResolver {
     @Query(() => [User])
     async users() {
-        return User.find({ relations: ['avatar'] })
+        return User.find({ relations: ['avatar', 'discussions'] })
     }
 
     @Query(() => User)
@@ -162,7 +144,7 @@ class UsersResolver {
         }
         const userData = await User.findOne({
             where: { email: ctx.user.email },
-            relations: ['avatar'],
+            relations: ['avatar', 'discussions'],
         })
 
         if (!userData) throw new GraphQLError('Cannot find user')
@@ -172,6 +154,7 @@ class UsersResolver {
             pseudo: userData.pseudo,
             email: userData.email,
             avatar: userData.avatar,
+            discussions: userData.discussions,
         }
     }
 

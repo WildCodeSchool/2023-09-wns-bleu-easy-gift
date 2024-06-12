@@ -48,6 +48,9 @@ export class Group extends BaseEntity {
 
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.group)
     public userToGroups: UserToGroup[]
+
+    // @Field(() => [User])
+    // users?: User[]
 }
 
 @InputType()
