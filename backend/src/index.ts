@@ -45,6 +45,7 @@ schema.then(async schema => {
             origin: [
                 'http://localhost:3000',
                 'https://studio.apollographql.com',
+                'https://staging.0923-bleu-3.wns.wilders.dev/',
             ],
             credentials: true,
         }),
