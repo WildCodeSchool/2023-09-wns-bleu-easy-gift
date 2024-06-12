@@ -1,5 +1,4 @@
-import React from "react";
-import { UserInfos, useUsersQuery } from "@/graphql/generated/schema";
+import { useUsersQuery } from "@/graphql/generated/schema";
 import ShowUsersList from "@/components/ShowUsersList";
 
 export default function UserList() {
