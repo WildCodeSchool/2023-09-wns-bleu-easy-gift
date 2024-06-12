@@ -158,7 +158,6 @@ class GroupsResolver {
         })
 
         Promise.all(groupUsers).then(async groupUsers => {
-            console.log('____________________UnfilteredUsers', groupUsers)
             // Cause of the check in the usermailsList, email !== ctx.user?.email must return undefined
             const filteredGroupUsers = ctx.user
                 ? [ctx.user, ...groupUsers.filter(user => user !== undefined)]

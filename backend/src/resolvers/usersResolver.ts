@@ -1,10 +1,7 @@
 import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
-// import { Not } from 'typeorm'
 import { GraphQLError } from 'graphql'
-// import { validate } from 'class-validator'
 import {
     User,
-    // NewUserInput,
     UserWithoutPassword,
     InputRegister,
     InputLogin,
@@ -20,26 +17,10 @@ import { MyContext } from '..'
 import Cookies from 'cookies'
 import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
-// import { getUsersByGroup } from './usersToGroupsResolver'
 
 export async function findUserByEmail(email: string) {
     return await User.findOneBy({ email })
 }
-
-// async function createUser({ pseudo, email, password }: InputRegister) {
-//     // Générer un identifiant d'avatar aléatoire entre 1 et 31
-//     const randomAvatarId = Math.floor(Math.random() * 31) + 1
-
-//     // Récupérer l'avatar correspondant à l'ID aléatoire
-//     const avatar = await Avatar.findOne({ where: { id: randomAvatarId } })
-
-//     // Vérifier si l'avatar correspondant à l'ID existe
-//     if (!avatar) {
-//         throw new Error(`Avatar with ID ${randomAvatarId} not found`)
-//     }
-
-//     return await User.create({ pseudo, email, password, avatar }).save()
-// }
 
 export async function createUser({
     pseudo,
@@ -81,18 +62,6 @@ class UsersResolver {
         return user
     }
 
-    // @Query(() => [User])
-    // async getUsersByGroup(@Arg('group_id') group_id: number) {
-
-    //     const UsersGroup = await getUsersByGroup(group_id);
-
-    //     const userId =
-
-    //         console.log("ICIIIIIIIIIIIIIIIIIIIIIII", UsersGroup);
-
-    //     return
-    // }
-
     @Mutation(() => UserWithoutPassword)
     async registrationWithToken(@Arg('data') data: InputRegistrationWithToken) {
         const user = await User.findOne({ where: { token: data.token } })
@@ -113,18 +82,6 @@ class UsersResolver {
     @Mutation(() => UserWithoutPassword)
     async register(@Arg('data') data: InputRegister) {
         const { pseudo, email, password, avatar } = data
-
-        // const randomAvatarId = Math.floor(Math.random() * 31) + 1
-        // const randomAvatar = await Avatar.findOne({
-        //     where: { id: randomAvatarId },
-        // })
-
-        // const newUser = await User.create({
-        //     pseudo,
-        //     email,
-        //     password,
-        //     avatar: avatar !== undefined ? avatar : randomAvatar,
-        // }).save()
 
         const newUser = await createUser({ pseudo, email, password, avatar })
 

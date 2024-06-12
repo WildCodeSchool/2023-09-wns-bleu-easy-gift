@@ -1,12 +1,9 @@
 import { Query, Resolver } from 'type-graphql'
-// import { Discussion, NewDiscussionInput } from '../entities/discussion'
 import { Discussion } from '../entities/discussion'
 import { User } from '../entities/user'
 import { Group } from '../entities/group'
-// import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 
-// async function createDiscussion(data: NewDiscussionInput) {
 async function createDiscussion({
     name,
     groupId,
@@ -16,17 +13,6 @@ async function createDiscussion({
     groupId: number
     participantUsers: User[]
 }) {
-    // const newDiscussion = new Discussion()
-    // Object.assign(newDiscussion, data)
-
-    // const { id } = await newDiscussion.save()
-    // return Discussion.findOne({
-    //     where: { id },
-    //     relations: { users: true },
-    // })
-
-    // const group = await Group.findOneBy({ id: groupId })
-
     const newDiscussion = await Discussion.create({ name })
 
     const group = await Group.findOne({ where: { id: groupId } })
@@ -40,8 +26,6 @@ async function createDiscussion({
     newDiscussion.save()
 }
 
-// async function createUserToDiscussion({}) {}
-
 export async function createGroupDiscussions({
     groupUsers,
     groupId,
@@ -50,7 +34,6 @@ export async function createGroupDiscussions({
     groupId: number
 }) {
     groupUsers.forEach(currentUser => {
-        // creer une discussion
         const participantUsers = groupUsers.filter(
             user => user.id !== currentUser.id,
         )
@@ -60,17 +43,6 @@ export async function createGroupDiscussions({
             groupId,
             participantUsers,
         })
-
-        // const data = {
-        //     name: currentUser.pseudo,
-        //     group: groupId,
-        //     participantUsers,
-        // }
-        // createDiscussion(data)
-
-        // participantsIds.forEach(user => {
-
-        // })
     })
 }
 
@@ -78,7 +50,6 @@ export async function createGroupDiscussions({
 class DiscussionResolver {
     @Query(() => [Discussion])
     async getDiscusions() {
-        // return Discussion.find()
         return await Discussion.find({
             relations: ['group', 'messages', 'users'],
         })
