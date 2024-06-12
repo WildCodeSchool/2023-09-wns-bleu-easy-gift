@@ -34,5 +34,5 @@ jobs:
           file: "Dockerfile.production"
           tags: ${{inputs.image_name}}
           #tags: crazygift2024/crazygift-client:dev
-          cache-from: type=gha
+          # cache-from: type=gha
           #cache-to: type=gha,mode=max

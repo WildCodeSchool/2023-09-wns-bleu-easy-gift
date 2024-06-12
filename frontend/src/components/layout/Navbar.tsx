@@ -4,13 +4,19 @@ import Link from "next/link";
 import Logout from "../Logout";
 import { checkUserConnected } from "@/utils/checkConnection";
 import { maxWidthScreen } from "@/constants/styles";
+import { useRouter } from "next/router";
 
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const isConnected = checkUserConnected();
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const closeMenu = () => setMenuOpen(false);
+
+  const handleLogoClick = () => {
+    router.push("/");
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -34,13 +40,9 @@ export default function Navbar() {
           </svg>
         </button>
 
-        <div className="space-y-1 flex justify-center items-center">
+        <div className="space-y-1 flex justify-center items-center hover:cursor-pointer" onClick={handleLogoClick}>
           <img src="/images/logo/logo-easy-gift-tablet.png" alt="Logo d'easy-gift" className="mr-2" />
-          <div>
-            <Link href="/">
-              <h1 className="font-rubik text-2xl text-primaryBlue font-bold">Easy Gift</h1>
-            </Link>
-          </div>
+          <h1 className="font-rubik text-2xl text-primaryBlue font-bold">Easy Gift</h1>
         </div>
 
         {/* Links for Larger Screens */}

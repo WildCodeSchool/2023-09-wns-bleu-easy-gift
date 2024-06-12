@@ -6,6 +6,7 @@ import {
     User,
     // NewUserInput,
     UserWithoutPassword,
+    UserWithoutPasswordAvatar,
     InputRegister,
     InputLogin,
     ResponseMessage,
@@ -101,17 +102,10 @@ class UsersResolver {
     async register(@Arg('data') data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
-        // const randomAvatarId = Math.floor(Math.random() * 31) + 1
-        // const randomAvatar = await Avatar.findOne({
-        //     where: { id: randomAvatarId },
-        // })
-
-        // const newUser = await User.create({
-        //     pseudo,
-        //     email,
-        //     password,
-        //     avatar: avatar !== undefined ? avatar : randomAvatar,
-        // }).save()
+        const user = await findUserByEmail(email)
+        if (user) {
+            throw new GraphQLError('Cet utilisateur existe déjà')
+        }
 
         const newUser = await createUser({ pseudo, email, password, avatar })
 
@@ -162,7 +156,9 @@ class UsersResolver {
     @Query(() => UserInfos)
     async getUserInfos(@Ctx() ctx: MyContext) {
         if (!ctx.user) {
-            throw new GraphQLError("No JWT, t'es crazy (gift)")
+            throw new GraphQLError(
+                'Merci de vous identifier pour accéder à cette page',
+            )
         }
         const userData = await User.findOne({
             where: { email: ctx.user.email },
@@ -223,7 +219,7 @@ class UsersResolver {
             pseudo: user.pseudo,
         }
     }
-    @Mutation(() => UserWithoutPassword)
+    @Mutation(() => UserWithoutPasswordAvatar)
     async updateAvatar(
         @Arg('data') data: InputUpdateAvatar,
         @Ctx() ctx: MyContext,
