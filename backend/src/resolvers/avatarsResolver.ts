@@ -9,6 +9,13 @@ class AvatarsResolver {
             where: { type: 'profil' },
         })
     }
+
+    @Query(() => [Avatar])
+    async groupAvatars() {
+        return await Avatar.find({
+            where: { type: 'generic' },
+        })
+    }
 }
 
 export default AvatarsResolver
