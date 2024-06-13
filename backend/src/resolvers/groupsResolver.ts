@@ -171,6 +171,24 @@ class GroupsResolver {
 
         return newGroup
     }
+
+    @Authorized()
+    @Mutation(() => Group)
+    async updateGroupAvatar(
+        @Arg('group_id') group_id: number,
+        @Arg('avatar_id') avatar_id: number,
+    ) {
+        const group = await Group.findOne({ where: { id: group_id } })
+        if (!group) throw new GraphQLError('Group not found')
+
+        const avatar = await Avatar.findOne({ where: { id: avatar_id } })
+        if (!avatar) throw new GraphQLError('Avatar not found')
+
+        group.avatar = avatar
+        await group.save()
+
+        return group
+    }
 }
 
 export default GroupsResolver
