@@ -1,18 +1,21 @@
-import { Query, Resolver } from 'type-graphql'
+import { PubSubEngine, Query, Resolver, Root, Subscription } from 'type-graphql'
 import { Discussion } from '../entities/discussion'
 import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 
-async function createDiscussion({
-    name,
-    groupId,
-    participantUsers,
-}: {
-    name: string
-    groupId: number
-    participantUsers: User[]
-}) {
+async function createDiscussion(
+    {
+        name,
+        groupId,
+        participantUsers,
+    }: {
+        name: string
+        groupId: number
+        participantUsers: User[]
+    },
+    pubsub: PubSubEngine,
+) {
     const newDiscussion = await Discussion.create({ name })
 
     const group = await Group.findOne({ where: { id: groupId } })
@@ -24,25 +27,35 @@ async function createDiscussion({
     newDiscussion.users = participantUsers
 
     newDiscussion.save()
+    console.log('NEW_DISCUSSION&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', newDiscussion)
+
+    pubsub.publish('NEW_DISCUSSION', newDiscussion)
 }
 
-export async function createGroupDiscussions({
-    groupUsers,
-    groupId,
-}: {
-    groupUsers: User[]
-    groupId: number
-}) {
+export async function createGroupDiscussions(
+    {
+        groupUsers,
+        groupId,
+    }: {
+        groupUsers: User[]
+        groupId: number
+    },
+    pubsub: PubSubEngine,
+) {
     groupUsers.forEach(currentUser => {
         const participantUsers = groupUsers.filter(
             user => user.id !== currentUser.id,
         )
+        console.log('Creating discussion for user:', currentUser.pseudo)
 
-        createDiscussion({
-            name: currentUser.pseudo,
-            groupId,
-            participantUsers,
-        })
+        createDiscussion(
+            {
+                name: currentUser.pseudo,
+                groupId,
+                participantUsers,
+            },
+            pubsub,
+        )
     })
 }
 
@@ -53,6 +66,12 @@ class DiscussionResolver {
         return await Discussion.find({
             relations: ['group', 'messages', 'users'],
         })
+    }
+    @Subscription(() => Discussion, {
+        topics: 'NEW_DISCUSSION',
+    })
+    newDiscussion(@Root() discussion: Discussion): Discussion {
+        return discussion
     }
 }
 

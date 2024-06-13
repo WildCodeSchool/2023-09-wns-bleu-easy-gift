@@ -115,8 +115,10 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
+  getDiscusions: Array<Discussion>;
   getUserByToken: User;
   getUserInfos: UserInfos;
+  getUsersByGroup: Array<Group>;
   groups: Array<Group>;
   login: ResponseMessage;
   logout: ResponseMessage;
@@ -133,6 +135,11 @@ export type QueryGetUserByTokenArgs = {
 };
 
 
+export type QueryGetUsersByGroupArgs = {
+  id: Scalars['Float'];
+};
+
+
 export type QueryLoginArgs = {
   infos: InputLogin;
 };
@@ -141,6 +148,11 @@ export type ResponseMessage = {
   __typename?: 'ResponseMessage';
   message: Scalars['String'];
   success: Scalars['Boolean'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  newDiscussion: Discussion;
 };
 
 export type User = {
@@ -159,6 +171,7 @@ export type User = {
 export type UserInfos = {
   __typename?: 'UserInfos';
   avatar?: Maybe<Avatar>;
+  discussions: Array<Discussion>;
   email: Scalars['String'];
   id: Scalars['String'];
   pseudo: Scalars['String'];
@@ -200,6 +213,11 @@ export type AddNewGroupMutationVariables = Exact<{
 
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, name: string } } };
+
+export type OnNewDiscussionSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnNewDiscussionSubscription = { __typename?: 'Subscription', newDiscussion: { __typename?: 'Discussion', id: number, name: string } };
 
 export type ProfilAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -339,6 +357,36 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
+export const OnNewDiscussionDocument = gql`
+    subscription OnNewDiscussion {
+  newDiscussion {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useOnNewDiscussionSubscription__
+ *
+ * To run a query within a React component, call `useOnNewDiscussionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnNewDiscussionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnNewDiscussionSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnNewDiscussionSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnNewDiscussionSubscription, OnNewDiscussionSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnNewDiscussionSubscription, OnNewDiscussionSubscriptionVariables>(OnNewDiscussionDocument, options);
+      }
+export type OnNewDiscussionSubscriptionHookResult = ReturnType<typeof useOnNewDiscussionSubscription>;
+export type OnNewDiscussionSubscriptionResult = Apollo.SubscriptionResult<OnNewDiscussionSubscription>;
 export const ProfilAvatarsDocument = gql`
     query ProfilAvatars {
   profilAvatars {

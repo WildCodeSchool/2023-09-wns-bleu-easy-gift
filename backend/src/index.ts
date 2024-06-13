@@ -13,6 +13,10 @@ import Cookies from 'cookies'
 import { jwtVerify } from 'jose'
 import { User } from './entities/user'
 import { findUserByEmail } from './resolvers/usersResolver'
+import { PubSub } from 'graphql-subscriptions'
+import { WebSocketServer } from 'ws'
+import { useServer } from 'graphql-ws/lib/use/ws'
+import { PubSubEngine } from 'graphql-subscriptions'
 
 dotenv.config()
 
@@ -20,6 +24,7 @@ export interface MyContext {
     req: express.Request
     res: express.Response
     user: User | null
+    pubsub: PubSubEngine
 }
 
 export interface Payload {
@@ -30,6 +35,8 @@ const port = 4001
 
 const app = express()
 const httpServer = http.createServer(app)
+
+export const pubsub = new PubSub()
 
 schema.then(async schema => {
     await db.initialize()
@@ -70,11 +77,15 @@ schema.then(async schema => {
                         console.log('Error during JWT verification, ', error)
                     }
                 }
-                return { req, res, user }
+                return { req, res, user, pubsub }
             },
         }),
     )
-
+    const wsServer = new WebSocketServer({
+        server: httpServer,
+        path: '/graphql',
+    })
+    useServer({ schema, context: { pubsub } }, wsServer)
     // const { url } = await startStandaloneServer(server, { listen: { port } })
 
     await new Promise<void>(resolve => httpServer.listen({ port }, resolve))

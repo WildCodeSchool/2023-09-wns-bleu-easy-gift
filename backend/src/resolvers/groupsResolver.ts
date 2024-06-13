@@ -1,4 +1,12 @@
-import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
+import {
+    Resolver,
+    Query,
+    Arg,
+    Mutation,
+    Ctx,
+    Authorized,
+    PubSubEngine,
+} from 'type-graphql'
 import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
@@ -163,10 +171,13 @@ class GroupsResolver {
                 ? [ctx.user, ...groupUsers.filter(user => user !== undefined)]
                 : groupUsers.filter(user => user !== undefined)
 
-            createGroupDiscussions({
-                groupUsers: filteredGroupUsers as User[],
-                groupId: newGroup.id,
-            })
+            createGroupDiscussions(
+                {
+                    groupUsers: filteredGroupUsers as User[],
+                    groupId: newGroup.id,
+                },
+                ctx.pubsub,
+            )
         })
 
         return newGroup

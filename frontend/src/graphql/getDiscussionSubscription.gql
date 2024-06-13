@@ -1,0 +1,6 @@
+subscription OnNewDiscussion {
+  newDiscussion {
+    id
+    name
+  }
+}
