@@ -20,7 +20,10 @@ import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
 
 export async function findUserByEmail(email: string) {
-    return await User.findOneBy({ email })
+    return await User.findOne({
+        where: { email },
+        relations: ['avatar', 'userToGroups.user', 'userToGroups.group'],
+    })
 }
 
 export async function createUser({
