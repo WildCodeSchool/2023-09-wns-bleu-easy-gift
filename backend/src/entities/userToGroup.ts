@@ -3,8 +3,8 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
-    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm'
@@ -39,10 +39,14 @@ export class UserToGroup extends BaseEntity {
     @UpdateDateColumn()
     public modified_at: string
 
+    @Field(() => User)
     @ManyToOne(() => User, user => user.userToGroups)
+    @JoinColumn({ name: 'user_id' })
     public user: User
 
+    @Field(() => Group)
     @ManyToOne(() => Group, group => group.userToGroups)
+    @JoinColumn({ name: 'group_id' })
     public group: Group
 }
 

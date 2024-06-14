@@ -10,6 +10,7 @@ import mailer from '../mailer'
 import { Avatar } from '../entities/avatar'
 import { createGroupDiscussions } from './discussionsResolver'
 import { User } from '../entities/user'
+import { In } from 'typeorm'
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
@@ -35,7 +36,7 @@ async function createUserToGroup({
 class GroupsResolver {
     @Query(() => [Group])
     async groups() {
-        return Group.find({ relations: ['avatar'] })
+        return Group.find({ relations: ['avatar', 'userToGroups.user'] })
     }
 
     @Query(() => [Group])
@@ -44,26 +45,19 @@ class GroupsResolver {
             throw new GraphQLError(
                 'Il faut être connecté pour voir tes groupes',
             )
+        console.log('___________', ctx.user.userToGroups)
+        const userGroupsIds =
+            ctx.user.userToGroups.map(value => value.group_id) || undefined
 
-        // SELECT * FROM group WHERE id IN ([1, 2, 3])
-        // SELECT * FROM group WHERE id IN (SELECT group_id FROM user_to_group WHERE user_id = ctx.user.id)
-
-        const groupIds = (
-            await UserToGroup.findBy({ user_id: ctx.user.id })
-        ).map(utg => utg.group_id)
-
-        // WORKING well but not returning the avatars
-        // const ctxUserGroups = await Group.findBy({
-        //     id: In(groupIds),
-        // })
-
-        // ENABLE TO GET AVATAR
-        const ctxUserGroups = await Group.createQueryBuilder('group')
-            .leftJoinAndSelect('group.avatar', 'avatar')
-            .whereInIds(groupIds)
-            .getMany()
-
-        return ctxUserGroups
+        if (!userGroupsIds) {
+            throw new GraphQLError('Group not found')
+        }
+        return Group.find({
+            where: {
+                id: In(userGroupsIds),
+            },
+            relations: ['avatar', 'userToGroups.user.avatar'],
+        })
     }
 
     @Query(() => [Group])
