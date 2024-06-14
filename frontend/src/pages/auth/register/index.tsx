@@ -16,6 +16,7 @@ function Register() {
     const formData = new FormData(e.currentTarget);
 
     const data = Object.fromEntries(formData);
+    console.log("data register", data);
     register({
       variables: {
         data: {
