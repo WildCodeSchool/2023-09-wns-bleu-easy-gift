@@ -9,6 +9,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -65,9 +66,9 @@ export class User extends BaseEntity {
     @Field(() => Avatar, { nullable: true })
     avatar: Avatar | null
 
-    @ManyToMany(() => Discussion, discussion => discussion.users)
-    @Field(() => [Discussion])
-    discussions: Discussion[]
+    // @ManyToMany(() => Discussion, discussion => discussion.users)
+    // @Field(() => [Discussion])
+    // discussions: Discussion[]
 
     @OneToMany(() => Message, message => message.user)
     messages: Message[]
@@ -157,8 +158,8 @@ export class UserInfos {
     @Field(() => Avatar, { nullable: true })
     avatar?: Avatar | null
 
-    @Field(() => [Discussion])
-    discussions: Discussion[]
+    // @Field(() => [Discussion])
+    // discussions: Discussion[]
 }
 
 @InputType()

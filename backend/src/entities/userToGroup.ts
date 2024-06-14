@@ -44,7 +44,8 @@ export class UserToGroup extends BaseEntity {
     @JoinColumn({ name: 'user_id' })
     public user: User
 
-    @Field(() => Group)
+    //group ne sera pas exposé dans graphQL sur la table de jointure
+    // @Field(() => Group)
     @ManyToOne(() => Group, group => group.userToGroups)
     @JoinColumn({ name: 'group_id' })
     public group: Group

@@ -14,16 +14,13 @@ async function createDiscussion({
     participantUsers: User[]
 }) {
     const newDiscussion = await Discussion.create({ name })
-
     const group = await Group.findOne({ where: { id: groupId } })
 
     if (!group) throw new GraphQLError(`Can't find group `)
 
     newDiscussion.group = group
-
     newDiscussion.users = participantUsers
-
-    newDiscussion.save()
+    return newDiscussion.save()
 }
 
 export async function createGroupDiscussions({
@@ -33,17 +30,19 @@ export async function createGroupDiscussions({
     groupUsers: User[]
     groupId: number
 }) {
-    groupUsers.forEach(currentUser => {
-        const participantUsers = groupUsers.filter(
-            user => user.id !== currentUser.id,
-        )
+    await Promise.all(
+        groupUsers.map(async currentUser => {
+            const participantUsers = groupUsers.filter(
+                user => user.id !== currentUser.id,
+            )
 
-        createDiscussion({
-            name: currentUser.pseudo,
-            groupId,
-            participantUsers,
-        })
-    })
+            return await createDiscussion({
+                name: currentUser.pseudo,
+                groupId,
+                participantUsers,
+            })
+        }),
+    )
 }
 
 @Resolver(Discussion)
