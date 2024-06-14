@@ -20,7 +20,10 @@ import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
 
 export async function findUserByEmail(email: string) {
-    return await User.findOneBy({ email })
+    return await User.findOne({
+        where: { email },
+        relations: ['avatar', 'userToGroups.user', 'userToGroups.group'],
+    })
 }
 
 export async function createUser({
@@ -144,7 +147,7 @@ class UsersResolver {
         }
         const userData = await User.findOne({
             where: { email: ctx.user.email },
-            relations: ['avatar', 'discussions'],
+            relations: ['avatar'],
         })
 
         if (!userData) throw new GraphQLError('Cannot find user')
@@ -154,7 +157,7 @@ class UsersResolver {
             pseudo: userData.pseudo,
             email: userData.email,
             avatar: userData.avatar,
-            discussions: userData.discussions,
+            // discussions: userData.discussions,
         }
     }
 
