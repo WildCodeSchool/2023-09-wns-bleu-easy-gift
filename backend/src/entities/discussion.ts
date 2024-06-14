@@ -40,17 +40,15 @@ export class Discussion extends BaseEntity {
         onDelete: 'CASCADE',
     })
     @Field(() => Group)
-    group: Group
+    group?: Group
 
     @OneToMany(() => Message, m => m.discussion)
-    messages: Message[]
+    messages?: Message[]
 
+    @ManyToMany(() => User)
     @JoinTable()
-    @ManyToMany(() => User, u => u.discussions, {
-        cascade: true,
-    })
     @Field(() => [User])
-    users: User[]
+    users?: User[]
 }
 
 @InputType()

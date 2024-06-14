@@ -147,7 +147,7 @@ class UsersResolver {
         }
         const userData = await User.findOne({
             where: { email: ctx.user.email },
-            relations: ['avatar', 'discussions'],
+            relations: ['avatar'],
         })
 
         if (!userData) throw new GraphQLError('Cannot find user')
@@ -157,7 +157,7 @@ class UsersResolver {
             pseudo: userData.pseudo,
             email: userData.email,
             avatar: userData.avatar,
-            discussions: userData.discussions,
+            // discussions: userData.discussions,
         }
     }
 
