@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { useRouter } from "next/router";
 import { checkUserConnected } from "@/utils/checkConnection";
-import { useEffect, useState } from "react";
 import { useUserGroupsQuery } from "@/graphql/generated/schema";
 
 export default function Home() {
@@ -18,6 +17,7 @@ export default function Home() {
     loading: groupsLoading,
     error: groupsError,
   } = isConnected ? useUserGroupsQuery() : { data: null, loading: false, error: null };
+
   const groups = groupsData?.userGroups;
 
   const handleButtonClick = () => {
@@ -90,11 +90,17 @@ export default function Home() {
         <h2 className="w-4/5 text-3xl text-primaryRed mb-8  sm:text-center md:mb-10 md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl">
           Tes groupes
         </h2>
-        <p className="w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 ">
-          Créé un groupe de ton choix, et échange avec tes amis sur des idées de cadeau !
-        </p>
-        <MyGroups />
+        <span className="w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 ">
+          <p>
+            {" "}
+            {!isConnected || (isConnected && groups && groups?.length < 1 && "Une fois que tu auras créé ou rejoint un groupe, retrouve-le ici !")}
+          </p>
+        </span>
+        <MyGroups groups={groups} isConnected={isConnected} groupsLoading={groupsLoading} groupsError={groupsError} />
       </section>
     </>
   );
 }
+
+// Envie de partager une idée de cadeau avec tes amis ?
+// Retrouve ici les groupes que tu as créé ou rejoint.

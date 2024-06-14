@@ -17,7 +17,6 @@ function Login() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as InputLogin;
-    console.log("data login", data);
     if (data.email && data.password) {
       await login({
         variables: { infos: { email: data.email, password: data.password } },

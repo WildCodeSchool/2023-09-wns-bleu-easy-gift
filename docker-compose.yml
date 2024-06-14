@@ -1,6 +1,10 @@
 services:
   db:
     image: postgres:15
+    # a supprimer en dessous
+    ports:
+      - 5432:5432
+    # a supprimer au dessus
     environment:
       - POSTGRES_PASSWORD=postgres
 
