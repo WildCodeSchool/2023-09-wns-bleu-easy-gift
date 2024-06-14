@@ -45,7 +45,6 @@ class GroupsResolver {
             throw new GraphQLError(
                 'Il faut être connecté pour voir tes groupes',
             )
-        console.log('___________', ctx.user.userToGroups)
         const userGroupsIds =
             ctx.user.userToGroups.map(value => value.group_id) || undefined
 
@@ -148,7 +147,6 @@ class GroupsResolver {
 
                 return newUser
             } catch (error) {
-                console.log('______________ Error sending mail', error)
                 throw new GraphQLError("Erreur d'envoi de mail")
             }
         })

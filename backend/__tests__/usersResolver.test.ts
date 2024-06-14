@@ -22,10 +22,20 @@ describe('user resolver', () => {
         console.log(res)
         expect(res).toMatchInlineSnapshot(`
             {
-              "data": null,
-              "errors": [
-                [GraphQLError: Property "discussions" was not found in "User". Make sure your query is correct.],
-              ],
+              "data": {
+                "users": [
+                  {
+                    "email": "john@gmail.com",
+                    "id": 1,
+                    "pseudo": "John",
+                  },
+                  {
+                    "email": "jane@gmail.com",
+                    "id": 2,
+                    "pseudo": "Jane",
+                  },
+                ],
+              },
             }
         `)
 
