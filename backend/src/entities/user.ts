@@ -72,6 +72,7 @@ export class User extends BaseEntity {
     @OneToMany(() => Message, message => message.user)
     messages: Message[]
 
+    @Field(() => [UserToGroup])
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.user)
     public userToGroups: UserToGroup[]
 
