@@ -32,7 +32,7 @@ export default function Profile() {
 
   return (
     <>
-      <section className="mb-10 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-10/12  2xl:mb-40 md:max-w-2xl lg:max-w-4xl xl:max-w-[900px]">
+      <section className="mb-10 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-10/12  2xl:mb-40 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]">
         <div>
           <h2 className="mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">
             Informations personnelles
