@@ -1,6 +1,9 @@
 import ModalModifyAvatar from "@/components/profil/modalModifyAvatar";
 import ModalModifyDetails from "@/components/profil/modalModifyDetails";
-import { useUserGroupsQuery, useGetUserInfosQuery } from "../../graphql/generated/schema";
+import {
+  useUserGroupsQuery,
+  useGetUserInfosQuery,
+} from "../../graphql/generated/schema";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
@@ -8,8 +11,16 @@ import { useState } from "react";
 export default function Profile() {
   const [isModalAvatarOpen, setIsModalAvatarOpen] = useState(false);
   const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false);
-  const { data: groupsData, loading: groupsLoading, error: groupsError } = useUserGroupsQuery();
-  const { data: userData, loading: userLoading, error: userError } = useGetUserInfosQuery();
+  const {
+    data: groupsData,
+    loading: groupsLoading,
+    error: groupsError,
+  } = useUserGroupsQuery();
+  const {
+    data: userData,
+    loading: userLoading,
+    error: userError,
+  } = useGetUserInfosQuery();
 
   const user = userData?.getUserInfos;
   // const groups = groupsData?.userGroups;
@@ -23,10 +34,17 @@ export default function Profile() {
     <>
       <section className="mb-10 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-10/12  2xl:mb-40 md:max-w-2xl lg:max-w-4xl xl:max-w-[900px]">
         <div>
-          <h2 className="mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">Informations personnelles</h2>
-          <p className="text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">Gère les informations de ton compte Easy Gift.</p>
+          <h2 className="mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">
+            Informations personnelles
+          </h2>
+          <p className="text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
+            Gère les informations de ton compte Easy Gift.
+          </p>
           <div className="mb-3 2xl:mb-7 flex justify-end">
-            <div className="relative w-24 h-24 lg:w-28 lg:h-28 2xl:w-32 2xl:h-32" onClick={() => setIsModalAvatarOpen(!isModalAvatarOpen)}>
+            <div
+              className="relative w-24 h-24 lg:w-28 lg:h-28 2xl:w-32 2xl:h-32"
+              onClick={() => setIsModalAvatarOpen(!isModalAvatarOpen)}
+            >
               <img
                 src={user?.avatar?.url}
                 className="absolute inset-0 w-24 h-24 lg:w-28 lg:h-28 2xl:w-32 2xl:h-32 rounded-full mr-2 border-solid border-4 border-primaryRed"
@@ -55,7 +73,10 @@ export default function Profile() {
                 Modifier
               </a>
             </div>
-            <Button className="mt-10" onClick={() => setIsModalDetailsOpen(!isModalDetailsOpen)}>
+            <Button
+              className="mt-10"
+              onClick={() => setIsModalDetailsOpen(!isModalDetailsOpen)}
+            >
               Modifier mes informations
             </Button>
           </div>
@@ -76,10 +97,18 @@ export default function Profile() {
       </section>
 
       {isModalAvatarOpen && (
-        <ModalModifyAvatar isOpen={isModalAvatarOpen} handleClose={() => setIsModalAvatarOpen(!isModalAvatarOpen)} avatarId={avatarId} />
+        <ModalModifyAvatar
+          isOpen={isModalAvatarOpen}
+          handleClose={() => setIsModalAvatarOpen(!isModalAvatarOpen)}
+          avatarId={avatarId}
+        />
       )}
       {isModalDetailsOpen && user && (
-        <ModalModifyDetails isOpen={isModalDetailsOpen} handleClose={() => setIsModalDetailsOpen(!isModalDetailsOpen)} user={user} />
+        <ModalModifyDetails
+          isOpen={isModalDetailsOpen}
+          handleClose={() => setIsModalDetailsOpen(!isModalDetailsOpen)}
+          user={user}
+        />
       )}
     </>
   );
