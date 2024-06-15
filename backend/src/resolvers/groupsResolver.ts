@@ -60,6 +60,9 @@ class GroupsResolver {
                 'userToGroups.user.avatar',
                 'userToGroups.group',
             ],
+            order: {
+                created_at: 'DESC',
+            },
         })
     }
 
