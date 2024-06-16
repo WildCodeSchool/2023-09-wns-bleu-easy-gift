@@ -18,8 +18,8 @@ export default function Profile() {
         </h2>
 
         {data?.userGroups?.length === 0 ? (
-          <div className="flex justify-between mt-6 w-9/12">
-            <p className="text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
+          <div className="flex flex-col items-center mt-6">
+            <p className="text-md  mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
               Crée ton premier groupe et invite tes amis !
             </p>
             <Button>
