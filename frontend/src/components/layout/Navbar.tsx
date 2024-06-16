@@ -105,11 +105,11 @@ export default function Navbar() {
           <Link href="/mon-profil" onClick={closeMenu}>
             Mon profil
           </Link>
-          <Link href="#" onClick={closeMenu}>
+          <Link href="/mesGroupes" onClick={closeMenu}>
             Mes groupes
           </Link>
           <Link href="#" onClick={closeMenu}>
-            Mes discussions Ò{" "}
+            Mes discussions
           </Link>
           {!isConnected && (
             <>

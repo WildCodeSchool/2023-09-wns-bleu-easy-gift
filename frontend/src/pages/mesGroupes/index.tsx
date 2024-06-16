@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useUserGroupsQuery } from "../../graphql/generated/schema";
 import GroupCard from "@/components/GroupCard";
 
@@ -15,14 +16,30 @@ export default function Profile() {
         <h2 className="mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">
           Mes groupes
         </h2>
-        <p className="text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
-          Accède à tes groupes Easy Gift.
-        </p>
-        <div className="flex flex-wrap gap-6 justify-center">
-          {data?.userGroups?.map((group) => (
-            <GroupCard key={group.id} group={group} />
-          ))}
-        </div>
+
+        {data?.userGroups?.length === 0 ? (
+          <div className="flex justify-between mt-6 w-9/12">
+            <p className="text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
+              Crée ton premier groupe et invite tes amis !
+            </p>
+            <Button>
+              <a type="button" href="/creating-groups">
+                Créer un groupe
+              </a>
+            </Button>
+          </div>
+        ) : (
+          <>
+            <p className="text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
+              Accède à tes groupes Easy Gift.
+            </p>
+            <div className="flex flex-wrap gap-6 justify-center">
+              {data?.userGroups?.map((group) => (
+                <GroupCard key={group.id} group={group} />
+              ))}
+            </div>
+          </>
+        )}
       </section>
     </>
   );
