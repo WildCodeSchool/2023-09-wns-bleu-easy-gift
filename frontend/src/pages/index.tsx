@@ -7,18 +7,41 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { useRouter } from "next/router";
 import { checkUserConnected } from "@/utils/checkConnection";
 import { useUserGroupsQuery } from "@/graphql/generated/schema";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-  const isConnected = checkUserConnected();
+  const [isConnected, setIsConnected] = useState(checkUserConnected());
+
+  useEffect(() => {
+    const handleUserChange = () => {
+      setIsConnected(checkUserConnected());
+    };
+
+    window.addEventListener("userChange", handleUserChange);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("userChange", handleUserChange);
+    };
+  }, []);
 
   const {
     data: groupsData,
     loading: groupsLoading,
     error: groupsError,
-  } = isConnected ? useUserGroupsQuery() : { data: null, loading: false, error: null };
+    refetch: refetchGroups,
+  } = useUserGroupsQuery({
+    skip: !isConnected,
+  });
 
   const groups = groupsData?.userGroups;
+
+  useEffect(() => {
+    if (isConnected) {
+      refetchGroups();
+    }
+  }, [isConnected, refetchGroups]);
 
   const handleButtonClick = () => {
     if (isConnected) {
@@ -92,8 +115,7 @@ export default function Home() {
         </h2>
         <span className="w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 ">
           <p>
-            {" "}
-            {!isConnected || (isConnected && groups && groups?.length < 1 && "Une fois que tu auras créé ou rejoint un groupe, retrouve-le ici !")}
+            {(!isConnected || (isConnected && groups && groups?.length < 1)) && "Une fois que tu auras créé ou rejoint un groupe, retrouve-le ici !"}
           </p>
         </span>
         <MyGroups groups={groups} isConnected={isConnected} groupsLoading={groupsLoading} groupsError={groupsError} />
