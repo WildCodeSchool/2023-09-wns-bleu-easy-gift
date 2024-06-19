@@ -1,6 +1,9 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
+import {Button} from "@/components/ui/button";
+import Link from "next/link";
+import Logout from "@/components/Logout";
 
 interface Avatar {
   __typename?: "Avatar";
@@ -51,26 +54,26 @@ export default function MyGroup({ group }: GroupComponentProps) {
         />
         <CardTitle className="font-bold text-xl mb-2">{group.name}</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <div>Membres du groupe ({group.userToGroups.length})</div>
+      <CardContent className="flex flex-col gap-4" onClick={handleToggle}>
+        <div>Membres du groupe</div>
         <div
           className={`flex ${
             displayedUsers.length > 4 ? "place-items-end" : "items-center"
           }`}
         >
-          <div
-            className="flex flex-wrap w-full overflow-hidden gap-4"
-            onClick={handleToggle}
-          >
+          <div className="flex -space-x-4 rtl:space-x-reverse">
             {displayedUsers.map((user) => (
               <img
                 key={user.user.id}
                 src={user.user.avatar.url}
-                className="w-10 h-10 rounded-full border-solid border-4 border-primaryRed "
+                className="w-10 h-10 rounded-full border-solid border-2 border-primaryRed transition ease-in-out hover:-translate-y-1 hover:scale-120 duration-300"
                 alt="Avatar of the user"
                 title={user.user.pseudo}
               />
             ))}
+            {!showAll && (
+            <a className="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800">+{group.userToGroups.length-4}</a>
+            )}
           </div>
           <div>
             <div
