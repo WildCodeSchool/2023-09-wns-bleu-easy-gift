@@ -1,9 +1,8 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import Logout from "@/components/Logout";
+
 
 interface Avatar {
   __typename?: "Avatar";
@@ -35,14 +34,13 @@ interface GroupComponentProps {
   group: Group;
 }
 export default function MyGroup({ group }: GroupComponentProps) {
-  const router = useRouter();
   const [showAll, setShowAll] = useState(false);
   const handleToggle = () => {
     setShowAll(!showAll);
   };
   const displayedUsers = showAll
     ? group.userToGroups
-    : group.userToGroups.slice(0, 4);
+    : group.userToGroups.slice(0, 7);
 
   return (
     <Card className="w-80 shadow-lg hover:scale-105 shadow-slate-300 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400 justify-between">
@@ -57,43 +55,37 @@ export default function MyGroup({ group }: GroupComponentProps) {
       <CardContent className="flex flex-col gap-4" onClick={handleToggle}>
         <div>Membres du groupe</div>
         <div
-          className={`flex ${
-            displayedUsers.length > 4 ? "place-items-end" : "items-center"
-          }`}
+          className={`flex justify-center`}
         >
-          <div className="flex -space-x-4 rtl:space-x-reverse">
+          {/*<div className="flex -space-x-3">*/}
+            <div className={`flex ${
+                displayedUsers.length>7 ? "flex-wrap gap-2 justify-start items-center" : " -space-x-3"
+            }`}>
             {displayedUsers.map((user) => (
-              <img
-                key={user.user.id}
-                src={user.user.avatar.url}
-                className="w-10 h-10 rounded-full border-solid border-2 border-primaryRed transition ease-in-out hover:-translate-y-1 hover:scale-120 duration-300"
-                alt="Avatar of the user"
-                title={user.user.pseudo}
-              />
+                <div className="group cursor-pointer relative">
+                  <img
+                  key={user.user.id}
+                  src={user.user.avatar.url}
+                  className="w-10 h-10 rounded-full border-solid border-2 border-primaryRed transition ease-in-out hover:-translate-y-1 hover:scale-120 duration-300"
+                  alt="Avatar of the user"
+                  title={user.user.pseudo}
+                  />
+                  <div className="opacity-0 w-28 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 bottom-full left-1/2 transform -translate-x-1/2 mb-2 pointer-events-none">
+                    {user.user.pseudo}
+                  <svg className="absolute text-black h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255" ><polygon className="fill-current" points="0,0 127.5,127.5 255,0"/></svg>
+                  </div>
+                </div>
             ))}
-            {!showAll && (
-            <a className="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800">+{group.userToGroups.length-4}</a>
+            {(!showAll && group.userToGroups.length>7) && (
+            <a className="flex z-10 items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800">+{group.userToGroups.length-7}</a>
             )}
           </div>
-          <div>
-            <div
-              role="button"
-              id="Accéder au groupe"
-              onClick={() => router.push("/")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="currentColor"
-                className="bi bi-arrow-right-square-fill text-primaryBlue"
-                viewBox="0 0 16 16"
-              >
-                <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1" />
-              </svg>
-            </div>
-          </div>
         </div>
+          <div className="flex justify-end">
+            <Button className="shadow-md">
+              <Link href="/">Consulter</Link>
+            </Button>
+          </div>
       </CardContent>
     </Card>
   );
