@@ -43,23 +43,23 @@ export default function MyGroup({ group }: GroupComponentProps) {
     : group.userToGroups.slice(0, 7);
 
   return (
-    <Card className="w-80 shadow-lg hover:scale-105 shadow-slate-300 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400 justify-between">
-      <CardHeader className="bg-white shadow-sm h-350 rounded-t-lg">
+    <Card className="w-80 hover:scale-105 shadow-slate-300 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400 justify-between">
+      <CardHeader className="bg-white shadow-sm h-350 rounded-t-lg pb-4">
         <img
           src={group.avatar.url}
           alt={group.avatar.name}
-          className="w-full h-full object-cover rounded-t-lg mb-4"
+          className="w-full h-full object-cover rounded-t-lg mb-3"
         />
-        <CardTitle className="font-bold text-xl mb-2">{group.name}</CardTitle>
+        <CardTitle className="font-bold text-xl">{group.name}</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4" onClick={handleToggle}>
+      <CardContent className="flex flex-col gap-4 justify-evenly pt-3" onClick={handleToggle}>
         <div>Membres du groupe</div>
         <div
           className={`flex justify-center`}
         >
           {/*<div className="flex -space-x-3">*/}
             <div className={`flex ${
-                displayedUsers.length>7 ? "flex-wrap gap-2 justify-start items-center" : " -space-x-3"
+                displayedUsers.length>7 ? "flex-wrap gap-2" : " -space-x-3"
             }`}>
             {displayedUsers.map((user) => (
                 <div className="group cursor-pointer relative">
