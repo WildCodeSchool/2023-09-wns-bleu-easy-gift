@@ -43,21 +43,20 @@ export default function MyGroup({ group }: GroupComponentProps) {
     : group.userToGroups.slice(0, 7);
 
   return (
-    <Card className="w-80 hover:scale-105 shadow-slate-300 transition-transform duration-300 ease-in-out flex-grow md:max-w-[318px] md:shadow-slate-400 justify-between">
-      <CardHeader className="bg-white shadow-sm h-350 rounded-t-lg pb-4">
+    <div className="rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out md:max-w-[318px]">
+      <div className="flex flex-col p-5 shadow-sm rounded-t-lg gap-3">
         <img
           src={group.avatar.url}
           alt={group.avatar.name}
-          className="w-full h-full object-cover rounded-t-lg mb-3"
+          className="rounded-t-lg"
         />
-        <CardTitle className="font-bold text-xl">{group.name}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4 justify-evenly pt-3" onClick={handleToggle}>
+        <div className="font-bold text-xl">Groupe {group.name}</div>
+      </div>
+      <div className="flex flex-col justify-evenly p-5 gap-4 " onClick={handleToggle}>
         <div>Membres du groupe</div>
         <div
           className={`flex justify-center`}
         >
-          {/*<div className="flex -space-x-3">*/}
             <div className={`flex ${
                 displayedUsers.length>7 ? "flex-wrap gap-2" : " -space-x-3"
             }`}>
@@ -86,7 +85,7 @@ export default function MyGroup({ group }: GroupComponentProps) {
               <Link href="/">Consulter</Link>
             </Button>
           </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
