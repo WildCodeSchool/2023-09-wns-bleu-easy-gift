@@ -38,6 +38,7 @@ export type Group = {
   __typename?: 'Group';
   avatar: Avatar;
   created_at: Scalars['String'];
+  event_date?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   modified_at: Scalars['String'];
   name: Scalars['String'];
@@ -114,6 +115,7 @@ export type MutationUpdateUserArgs = {
 
 export type NewGroupInput = {
   emailUsers: Array<Scalars['String']>;
+  event_date: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -216,7 +218,7 @@ export type AddNewGroupMutationVariables = Exact<{
 }>;
 
 
-export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, name: string } } };
+export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
 
 export type ProfilAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -323,6 +325,7 @@ export const AddNewGroupDocument = gql`
   addNewGroup(data: $data) {
     id
     name
+    event_date
     avatar {
       id
       name

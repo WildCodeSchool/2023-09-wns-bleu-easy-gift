@@ -17,13 +17,14 @@ const iconTrash = {
 
 export default function CreatingGroups() {
   const [email, setEmail] = useState<string>("");
+  const [event_date, setEvent_Date] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [emails, setEmails] = useState<string[]>([]);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
 
   const [addNewGroup, { error }] = useAddNewGroupMutation({
     onCompleted: () => {
-      router.push("/mesGroupes");
+      router.push("/groupes");
     },
   });
   const router = useRouter();
@@ -45,6 +46,9 @@ export default function CreatingGroups() {
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEvent_Date(e.target.value);
+  };
   const handleRemoveEmail = (emailToRemove: string) => {
     setEmails(emails.filter((email) => email !== emailToRemove));
   };
@@ -54,6 +58,7 @@ export default function CreatingGroups() {
       variables: {
         data: {
           name: name as string,
+          event_date: event_date as string,
           emailUsers: emails as string[],
         },
       },
@@ -79,6 +84,16 @@ export default function CreatingGroups() {
             placeholder="name"
             value={name}
             onChange={handleNameChange}
+            className="w-full p-2 border rounded"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block mb-2 font-bold">Date de l'évenement</label>
+          <Input
+            type="date"
+            placeholder="date"
+            value={event_date}
+            onChange={handleDateChange}
             className="w-full p-2 border rounded"
           />
         </div>
