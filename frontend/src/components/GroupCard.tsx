@@ -1,4 +1,3 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import React, { useState } from "react";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
@@ -42,7 +41,6 @@ export default function MyGroup({ group }: GroupComponentProps) {
   const displayedUsers = showAll
     ? group.userToGroups
     : group.userToGroups.slice(0, 7);
-
   return (
     <div className="rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out md:max-w-[318px]">
       <div className="flex flex-col p-5 shadow-sm rounded-t-lg gap-3">
@@ -63,9 +61,8 @@ export default function MyGroup({ group }: GroupComponentProps) {
                 displayedUsers.length>7 ? "flex-wrap gap-2" : " -space-x-3"
             }`}>
             {displayedUsers.map((user) => (
-                <div className="group cursor-pointer relative" onClick={handleToggle}>
+                <div className="group cursor-pointer relative" onClick={handleToggle} key={user.user.id}>
                   <img
-                  key={user.user.id}
                   src={user.user.avatar.url}
                   className="w-10 h-10 rounded-full border-solid border-2 border-primaryRed transition ease-in-out hover:-translate-y-1 hover:scale-120 duration-300"
                   alt="Avatar of the user"

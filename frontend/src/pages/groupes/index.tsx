@@ -5,7 +5,6 @@ import GroupCard from "@/components/GroupCard";
 export default function Profile() {
   const { data, loading, error } = useUserGroupsQuery({fetchPolicy: 'cache-and-network'});
   const today = new Date().toLocaleDateString();
-  console.log(data);
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Erreur : {error.message}</h1>;
