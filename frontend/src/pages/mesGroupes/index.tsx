@@ -3,7 +3,7 @@ import { useUserGroupsQuery } from "../../graphql/generated/schema";
 import GroupCard from "@/components/GroupCard";
 
 export default function Profile() {
-  const { data, loading, error } = useUserGroupsQuery();
+  const { data, loading, error } = useUserGroupsQuery({fetchPolicy: 'cache-and-network'});
 
   console.log(data);
 

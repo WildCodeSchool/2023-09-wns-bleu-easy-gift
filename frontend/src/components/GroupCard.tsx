@@ -52,7 +52,7 @@ export default function MyGroup({ group }: GroupComponentProps) {
         />
         <div className="font-bold text-xl">Groupe {group.name}</div>
       </div>
-      <div className="flex flex-col justify-evenly p-5 gap-4 " onClick={handleToggle}>
+      <div className="flex flex-col justify-evenly p-5 gap-4">
         <div>Membres du groupe</div>
         <div
           className={`flex justify-center`}
@@ -61,7 +61,7 @@ export default function MyGroup({ group }: GroupComponentProps) {
                 displayedUsers.length>7 ? "flex-wrap gap-2" : " -space-x-3"
             }`}>
             {displayedUsers.map((user) => (
-                <div className="group cursor-pointer relative">
+                <div className="group cursor-pointer relative" onClick={handleToggle}>
                   <img
                   key={user.user.id}
                   src={user.user.avatar.url}
