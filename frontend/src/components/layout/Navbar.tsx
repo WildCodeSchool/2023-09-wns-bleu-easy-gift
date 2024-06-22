@@ -68,7 +68,7 @@ export default function Navbar() {
 
         {/* Links for Larger Screens */}
         <div className={`hidden md:flex md:flex-row gap-4`}>
-          <Link href="/mesGroupes" className="font-semibold">
+          <Link href="/groupes" className="font-semibold">
             Mes groupes
           </Link>
           <Link href="#" className="font-semibold">
@@ -105,7 +105,7 @@ export default function Navbar() {
           <Link href="/mon-profil" onClick={closeMenu}>
             Mon profil
           </Link>
-          <Link href="/mesGroupes" onClick={closeMenu}>
+          <Link href="/groupes" onClick={closeMenu}>
             Mes groupes
           </Link>
           <Link href="#" onClick={closeMenu}>
