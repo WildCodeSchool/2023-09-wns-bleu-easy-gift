@@ -27,6 +27,7 @@ interface Group {
   __typename?: "Group";
   id: number;
   name: string;
+  event_date: string;
   avatar: Avatar;
   userToGroups: UserToGroup[];
 }
@@ -51,6 +52,7 @@ export default function MyGroup({ group }: GroupComponentProps) {
           className="rounded-t-lg"
         />
         <div className="font-bold text-xl">Groupe {group.name}</div>
+        <div>Date de l'évenement : {new Date(group.event_date).toLocaleDateString()}</div>
       </div>
       <div className="flex flex-col justify-evenly p-5 gap-4">
         <div>Membres du groupe</div>

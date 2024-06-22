@@ -4,7 +4,7 @@ import GroupCard from "@/components/GroupCard";
 
 export default function Profile() {
   const { data, loading, error } = useUserGroupsQuery({fetchPolicy: 'cache-and-network'});
-
+  const today = new Date().toLocaleDateString();
   console.log(data);
 
   if (loading) return <h1>Loading...</h1>;
@@ -41,6 +41,7 @@ export default function Profile() {
             </div>
             <div className="flex flex-wrap gap-6 justify-center">
               {data?.userGroups?.map((group) => (
+                  new Date(group.event_date).toLocaleDateString() > today &&
                 <GroupCard key={group.id} group={group} />
               ))}
             </div>

@@ -2,6 +2,7 @@ query UserGroups {
   userGroups {
     id
     name
+    event_date
     avatar {
       id
       name
