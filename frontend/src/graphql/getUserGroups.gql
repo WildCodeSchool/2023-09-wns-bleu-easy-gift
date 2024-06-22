@@ -4,8 +4,20 @@ query UserGroups {
     name
     avatar {
       id
+      name
       url
       name
+    }
+    userToGroups {
+      user {
+        id
+        pseudo
+        avatar {
+          id
+          name
+          url
+        }
+      }
     }
   }
 }

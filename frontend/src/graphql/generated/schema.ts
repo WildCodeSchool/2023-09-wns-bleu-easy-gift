@@ -233,7 +233,7 @@ export type GetUserByTokenQuery = { __typename?: 'Query', getUserByToken: { __ty
 export type UserGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, url: string, name: string } }> };
+export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, name: string, url: string }, userToGroups: Array<{ __typename?: 'UserToGroup', user: { __typename?: 'User', id: number, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, name: string, url: string } | null } }> }> };
 
 export type GetUserInfosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -435,8 +435,20 @@ export const UserGroupsDocument = gql`
     name
     avatar {
       id
+      name
       url
       name
+    }
+    userToGroups {
+      user {
+        id
+        pseudo
+        avatar {
+          id
+          name
+          url
+        }
+      }
     }
   }
 }
