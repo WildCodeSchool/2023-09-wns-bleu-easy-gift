@@ -55,7 +55,7 @@ export default function MyGroup({ group }: GroupComponentProps) {
       <div className="flex flex-col justify-evenly p-5 gap-4">
         <div>Membres du groupe</div>
         <div
-          className={`flex justify-center`}
+          className={`flex justify-start`}
         >
             <div className={`flex ${
                 displayedUsers.length>7 ? "flex-wrap gap-2" : " -space-x-3"

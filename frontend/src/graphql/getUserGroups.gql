@@ -3,6 +3,7 @@ query UserGroups {
     id
     name
     event_date
+    created_at
     avatar {
       id
       name

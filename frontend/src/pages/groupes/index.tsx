@@ -4,7 +4,7 @@ import GroupCard from "@/components/GroupCard";
 
 export default function Profile() {
   const { data, loading, error } = useUserGroupsQuery({fetchPolicy: 'cache-and-network'});
-  const today = new Date().toLocaleDateString();
+  const today = new Date();
 
   if (loading) return <h1>Loading...</h1>;
   if (error) return <h1>Erreur : {error.message}</h1>;
@@ -13,7 +13,7 @@ export default function Profile() {
     <>
       <section className="flex flex-col gap-6 pb-6 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]">
         <h2 className="text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">
-          Mes groupes
+          Mes groupes ({data?.userGroups?.length})
         </h2>
         {data?.userGroups?.length === 0 ? (
           <div className="flex flex-col items-center mt-6">
@@ -38,11 +38,14 @@ export default function Profile() {
                 </a>
               </Button>
             </div>
-            <div className="flex flex-wrap gap-6 justify-center">
-              {data?.userGroups?.map((group) => (
-                  new Date(group.event_date).toLocaleDateString() > today &&
-                <GroupCard key={group.id} group={group} />
-              ))}
+            <div className="flex flex-wrap gap-6 justify-center xl:justify-between">
+              {data?.userGroups?.map((group) => {
+                const eventDate = new Date(group.event_date);
+                if (eventDate > today) {
+                  return <GroupCard key={group.id} group={group} />;
+                }
+                return null;
+              })}
             </div>
           </>
         )}
