@@ -2,6 +2,7 @@ mutation AddNewGroup($data: NewGroupInput!) {
   addNewGroup(data: $data) {
     id
     name
+    event_date
     avatar {
       id
       name
