@@ -1,4 +1,4 @@
-import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
+import {Resolver, Query, Arg, Mutation, Ctx, Authorized, Int} from 'type-graphql'
 import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
@@ -37,6 +37,16 @@ class GroupsResolver {
     @Query(() => [Group])
     async groups() {
         return Group.find({ relations: ['avatar', 'userToGroups.user'] })
+    }
+
+    @Query(() => Group)
+    async getGroupById(@Arg("groupId", () => Int) id: number) {
+        const group = await Group.findOne({
+            where: { id },
+            relations: ['userToGroups', 'userToGroups.user'],
+        });
+        if (!group) throw new GraphQLError('Group not found');
+        return group;
     }
 
     @Query(() => [Group])
