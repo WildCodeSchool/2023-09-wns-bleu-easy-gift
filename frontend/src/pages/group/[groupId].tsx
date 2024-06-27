@@ -6,27 +6,28 @@ import { useRouter } from "next/router";
 // import { TrashIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 import {
-    useDeleteAdMutation,
-    useGetAdByIdQuery,
-    useProfileQuery,
+    useGetGroupByIdQuery,
 } from "@/graphql/generated/schema";
 
 export default function GroupDetails() {
     const router = useRouter();
     // const [deleteAd] = useDeleteAdMutation();
-    // const { adId } = router.query;
-    // const { data } = useGetAdByIdQuery({
-    //     variables: { adId: typeof adId === "string" ? parseInt(adId, 10) : 0 },
-    //     skip: typeof adId === "undefined",
-    // });
+    const { groupId } = router.query;
+    const { data, loading, error } = useGetGroupByIdQuery({
+        variables: {groupId: typeof groupId === "string" ? parseInt(groupId, 10) : 0 },
+        skip: typeof groupId === "undefined",
+    });
 
-    // const ad = data?.getAdById;
+    const group = data?.getGroupById;
+    console.log(group)
     //
     // const { data: currentUser } = useProfileQuery();
     //
     // const canEdit =
     //     currentUser?.profile.role === "admin" ||
     //     currentUser?.profile.id === ad?.owner.id;
+    if (loading) return <h1>Loading...</h1>;
+    if (error) return <h1>Erreur : {error.message}</h1>;
 
     return (
         // <Layout title={ad?.title ? ad.title + " - TGC" : "The Good Corner"}>

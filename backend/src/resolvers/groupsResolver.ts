@@ -43,7 +43,7 @@ class GroupsResolver {
     async getGroupById(@Arg("groupId", () => Int) id: number) {
         const group = await Group.findOne({
             where: { id },
-            relations: ['userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
+            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
         });
         if (!group) throw new GraphQLError('Group not found');
         return group;
