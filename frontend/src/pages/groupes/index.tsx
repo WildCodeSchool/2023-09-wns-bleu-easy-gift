@@ -42,7 +42,7 @@ export default function Profile() {
               {data?.userGroups?.map((group) => {
                 const eventDate = new Date(group.event_date);
                 if (eventDate > today) {
-                  return <GroupCard key={group.id} group={group} />;
+                  return <GroupCard key={group.id} group={group} link={`/group/${group.id}`}/>;
                 }
                 return null;
               })}

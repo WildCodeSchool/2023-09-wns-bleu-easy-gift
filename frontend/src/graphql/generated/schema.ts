@@ -126,6 +126,7 @@ export type ObjectId = {
 export type Query = {
   __typename?: 'Query';
   getDiscusions: Array<Discussion>;
+  getGroupById: Group;
   getUserByToken: User;
   getUserInfos: UserInfos;
   getUsersByGroup: Array<Group>;
@@ -138,6 +139,11 @@ export type Query = {
   userGroups: Array<Group>;
   users: Array<User>;
   usersToGroups: Array<UserToGroup>;
+};
+
+
+export type QueryGetGroupByIdArgs = {
+  groupId: Scalars['Int'];
 };
 
 
@@ -220,6 +226,13 @@ export type AddNewGroupMutationVariables = Exact<{
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
 
+export type GetGroupByIdQueryVariables = Exact<{
+  groupId: Scalars['Int'];
+}>;
+
+
+export type GetGroupByIdQuery = { __typename?: 'Query', getGroupById: { __typename?: 'Group', id: number, name: string, created_at: string, event_date?: string | null, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, user_id: number, group_id: number, user: { __typename?: 'User', email: string, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string } | null } }>, avatar: { __typename?: 'Avatar', id: number, url: string } } };
+
 export type ProfilAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -235,7 +248,7 @@ export type GetUserByTokenQuery = { __typename?: 'Query', getUserByToken: { __ty
 export type UserGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string, url: string }, userToGroups: Array<{ __typename?: 'UserToGroup', user: { __typename?: 'User', id: number, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, name: string, url: string } | null } }> }> };
+export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, event_date?: string | null, created_at: string, avatar: { __typename?: 'Avatar', id: number, name: string, url: string }, userToGroups: Array<{ __typename?: 'UserToGroup', user: { __typename?: 'User', id: number, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, name: string, url: string } | null } }> }> };
 
 export type GetUserInfosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -359,6 +372,61 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
+export const GetGroupByIdDocument = gql`
+    query GetGroupById($groupId: Int!) {
+  getGroupById(groupId: $groupId) {
+    id
+    name
+    created_at
+    event_date
+    userToGroups {
+      is_admin
+      user_id
+      group_id
+      user {
+        avatar {
+          id
+          url
+        }
+        email
+        pseudo
+      }
+    }
+    avatar {
+      id
+      url
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetGroupByIdQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByIdQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useGetGroupByIdQuery(baseOptions: Apollo.QueryHookOptions<GetGroupByIdQuery, GetGroupByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
+      }
+export function useGetGroupByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByIdQuery, GetGroupByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
+        }
+export type GetGroupByIdQueryHookResult = ReturnType<typeof useGetGroupByIdQuery>;
+export type GetGroupByIdLazyQueryHookResult = ReturnType<typeof useGetGroupByIdLazyQuery>;
+export type GetGroupByIdQueryResult = Apollo.QueryResult<GetGroupByIdQuery, GetGroupByIdQueryVariables>;
 export const ProfilAvatarsDocument = gql`
     query ProfilAvatars {
   profilAvatars {
@@ -437,6 +505,7 @@ export const UserGroupsDocument = gql`
     id
     name
     event_date
+    created_at
     avatar {
       id
       name

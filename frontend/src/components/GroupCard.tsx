@@ -32,8 +32,9 @@ interface Group {
 }
 interface GroupComponentProps {
   group: Group;
+  link: string;
 }
-export default function MyGroup({ group }: GroupComponentProps) {
+export default function MyGroup({ group, link }: GroupComponentProps) {
   const [showAll, setShowAll] = useState(false);
   const handleToggle = () => {
     setShowAll(!showAll);
@@ -81,7 +82,7 @@ export default function MyGroup({ group }: GroupComponentProps) {
         </div>
           <div className="flex justify-end">
             <Button className="shadow-md">
-              <Link href="/">Consulter</Link>
+              <Link href={link}>Consulter</Link>
             </Button>
           </div>
       </div>
