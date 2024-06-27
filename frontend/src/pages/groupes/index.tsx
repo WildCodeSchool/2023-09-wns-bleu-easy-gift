@@ -10,7 +10,6 @@ export default function Profile() {
   if (error) return <h1>Erreur : {error.message}</h1>;
 
   return (
-    <>
       <section className="flex flex-col gap-6 pb-6 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]">
         <h2 className="text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">
           Mes groupes ({data?.userGroups?.length})
@@ -50,6 +49,5 @@ export default function Profile() {
           </>
         )}
       </section>
-    </>
   );
 }

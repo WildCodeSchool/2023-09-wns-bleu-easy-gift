@@ -1,5 +1,5 @@
 // import Layout from "@/components/Layout";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 // import { UserCircleIcon } from "@heroicons/react/outline";
 // import { LocationMarkerIcon } from "@heroicons/react/outline";
 // import { PencilIcon } from "@heroicons/react/outline";
@@ -8,13 +8,16 @@ import Link from "next/link";
 import {
     useGetGroupByIdQuery,
 } from "@/graphql/generated/schema";
+import {Button} from "@/components/ui/button";
+import GroupCard from "@/components/GroupCard";
+import {Separator} from "@/components/ui/separator";
 
 export default function GroupDetails() {
     const router = useRouter();
     // const [deleteAd] = useDeleteAdMutation();
-    const { groupId } = router.query;
-    const { data, loading, error } = useGetGroupByIdQuery({
-        variables: {groupId: typeof groupId === "string" ? parseInt(groupId, 10) : 0 },
+    const {groupId} = router.query;
+    const {data, loading, error} = useGetGroupByIdQuery({
+        variables: {groupId: typeof groupId === "string" ? parseInt(groupId, 10) : 0},
         skip: typeof groupId === "undefined",
     });
 
@@ -28,78 +31,28 @@ export default function GroupDetails() {
     //     currentUser?.profile.id === ad?.owner.id;
     if (loading) return <h1>Loading...</h1>;
     if (error) return <h1>Erreur : {error.message}</h1>;
-
+const createdAt = new Date(group?.created_at).toLocaleDateString() | null
     return (
-        // <Layout title={ad?.title ? ad.title + " - TGC" : "The Good Corner"}>
-        //     <div className="pt-12 pb-12">
-        //         <div className="p-6 bg-white shadow-lg rounded-2xl">
-        //             {typeof ad === "undefined" ? (
-        //                 "Chargement..."
-        //             ) : (
-        //                 <div className="">
-        //                     <div className="flex justify-between items-center">
-        //                         <h1 className="text-3xl">{ad.title}</h1>
-        //                         <p className="text-2xl">{ad.price} €</p>
-        //                     </div>
-        //
-        //                     <img src={ad.picture} alt={ad.title} className="mt-6 mb-6" />
-        //                     <p className="mt-6 mb-6">{ad.description}</p>
-        //                     <div className="flex justify-between mb-2">
-        //                         <div className="flex items-center mt-3">
-        //                             {ad.owner.avatar ? (
-        //                                 <img
-        //                                     className="rounded-full h-8 w-8 mr-2"
-        //                                     src={ad.owner.avatar}
-        //                                     alt={ad.owner.nickname}
-        //                                 />
-        //                             ) : (
-        //                                 <UserCircleIcon width={24} height={24} className="mr-2" />
-        //                             )}
-        //
-        //                             {ad.owner.nickname}
-        //                         </div>
-        //
-        //                         <div className="flex items-center mt-2 ">
-        //                             <LocationMarkerIcon width={24} height={24} className="mr-2" />{" "}
-        //                             {ad.location}
-        //                         </div>
-        //                     </div>
-        //
-        //                     {canEdit && (
-        //                         <div className="flex justify-between border-t pt-2 items-center ">
-        //                             <Link
-        //                                 href={`/editAd/${ad.id}`}
-        //                                 className="flex items-center mt-3 cursor-pointer"
-        //                                 data-testid="editAdBtn"
-        //                             >
-        //                                 <PencilIcon width={24} height={24} className="mr-2" />
-        //                                 Editer l'annonce
-        //                             </Link>
-        //
-        //                             <div
-        //                                 className="flex items-center mt-3 cursor-pointer"
-        //                                 data-testid="deleteAdBtn"
-        //                                 onClick={() => {
-        //                                     if (
-        //                                         confirm(
-        //                                             "Êtes-vous certain.e de vouloir supprimer cette annonce ?"
-        //                                         )
-        //                                     )
-        //                                         deleteAd({ variables: { adId: ad.id } })
-        //                                             .then(() => router.push("/"))
-        //                                             .catch(console.error);
-        //                                 }}
-        //                             >
-        //                                 <TrashIcon width={24} height={24} className="mr-2" />
-        //                                 Supprimer l'annonce
-        //                             </div>
-        //                         </div>
-        //                     )}
-        //                 </div>
-        //             )}
-        //         </div>
-        //     </div>
-        // </Layout>
-        <div>Hello World</div>
+        <section
+            className="flex flex-col gap-6 pb-6 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]">
+            <h2 className="text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">
+                Group ({group?.name})
+            </h2>
+            <p className="text-md 2xl:text-xl">
+                Gère les informations de ton groupe Easy Gift.
+            </p>
+            <div className="grid-cols-2">
+                <div className="flex items-center h-9 md:h-11 lg:h-12 2xl:h-14">
+                    <p className="text-base font-semibold w-32">Nom</p>
+                    <p className="text-base">{group?.name}</p>
+                </div>
+                <div className="flex items-center h-9 md:h-11 lg:h-12 2xl:h-14">
+                    <p className="text-base font-semibold w-32">Créer le</p>
+                    <p className="text-base">{createdAt}</p>
+                </div>
+                <Separator/>
+            </div>
+
+        </section>
     );
 }
