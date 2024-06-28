@@ -1,21 +1,12 @@
-// import Layout from "@/components/Layout";
 import {useRouter} from "next/router";
-// import { UserCircleIcon } from "@heroicons/react/outline";
-// import { LocationMarkerIcon } from "@heroicons/react/outline";
-// import { PencilIcon } from "@heroicons/react/outline";
-// import { TrashIcon } from "@heroicons/react/outline";
-import Link from "next/link";
 import {
     useGetGroupByIdQuery,
 } from "@/graphql/generated/schema";
-import {Button} from "@/components/ui/button";
-import GroupCard from "@/components/GroupCard";
 import {Separator} from "@/components/ui/separator";
 import React from "react";
 
 export default function GroupDetails() {
     const router = useRouter();
-    // const [deleteAd] = useDeleteAdMutation();
     const {groupId} = router.query;
     const {data, loading, error} = useGetGroupByIdQuery({
         variables: {groupId: typeof groupId === "string" ? parseInt(groupId, 10) : 0},
@@ -23,13 +14,7 @@ export default function GroupDetails() {
     });
 
     const group = data?.getGroupById;
-    console.log(group)
-    //
-    // const { data: currentUser } = useProfileQuery();
-    //
-    // const canEdit =
-    //     currentUser?.profile.role === "admin" ||
-    //     currentUser?.profile.id === ad?.owner.id;
+
     if (loading) return <h1>Loading...</h1>;
     if (error) return <h1>Erreur : {error.message}</h1>;
 
@@ -49,7 +34,6 @@ export default function GroupDetails() {
                             className="flex flex-col gap-8 items-center sm:items-start sm:flex-row sm:gap-16 sm:justify-between">
                             <div className="shrink sm:w-1/2 sm:max-w-lg">
                                 <div>
-
                                     <div className="text-2xl font-medium">
                                         Avatar du groupe
                                     </div>
@@ -59,7 +43,6 @@ export default function GroupDetails() {
                                 </div>
                             </div>
                             <div>
-
                                 <div
                                     className="relative w-24 h-24 lg:w-28 lg:h-28 2xl:w-32 2xl:h-32"
                                 >
@@ -74,9 +57,7 @@ export default function GroupDetails() {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
 
                     <div className="bg-white flex flex-col gap-10 p-8 sm:rounded-xl shadow-2xl">
@@ -93,7 +74,6 @@ export default function GroupDetails() {
                                 </div>
                             </div>
                             <div className="shrink sm:w-1/2 sm:max-w-lg">
-
                                 <div className="grid-cols-2">
                                     <div className="flex items-center h-9 md:h-11 lg:h-12 2xl:h-14">
                                         <p className="text-base font-semibold w-32">Nom</p>
@@ -111,9 +91,7 @@ export default function GroupDetails() {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
 
                     <div className="bg-white flex flex-col gap-10 p-8 sm:rounded-xl shadow-2xl">
@@ -130,7 +108,6 @@ export default function GroupDetails() {
                                 </div>
                             </div>
                             <div className="shrink sm:w-1/2 sm:max-w-lg">
-
                                 {group?.userToGroups.map((group) => {
                                     return (
                                         <div className="flex items-center gap-2">
@@ -163,9 +140,7 @@ export default function GroupDetails() {
                                     )
                                 })}
                             </div>
-
                         </div>
-
                     </div>
                 </div>
             </div>
