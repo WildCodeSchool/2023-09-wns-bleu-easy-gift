@@ -25,14 +25,14 @@ describe('user resolver', () => {
               "data": {
                 "users": [
                   {
-                    "email": "jane@gmail.com",
-                    "id": 2,
-                    "pseudo": "Jane",
-                  },
-                  {
                     "email": "john@gmail.com",
                     "id": 1,
                     "pseudo": "John",
+                  },
+                  {
+                    "email": "jane@gmail.com",
+                    "id": 2,
+                    "pseudo": "Jane",
                   },
                 ],
               },

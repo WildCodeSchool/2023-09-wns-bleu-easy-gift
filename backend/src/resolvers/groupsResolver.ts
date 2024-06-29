@@ -45,7 +45,6 @@ class GroupsResolver {
             throw new GraphQLError(
                 'Il faut être connecté pour voir tes groupes',
             )
-        console.log('___________', ctx.user.userToGroups)
         const userGroupsIds =
             ctx.user.userToGroups.map(value => value.group_id) || undefined
 
@@ -56,7 +55,11 @@ class GroupsResolver {
             where: {
                 id: In(userGroupsIds),
             },
-            relations: ['avatar', 'userToGroups.user.avatar'],
+            relations: [
+                'avatar',
+                'userToGroups.user.avatar',
+                'userToGroups.group',
+            ],
         })
     }
 
@@ -109,55 +112,52 @@ class GroupsResolver {
             is_admin: true,
         })
 
-        const groupUsers = emailUsers.map(email => {
-            return (async () => {
-                if (email === ctx.user?.email) return
+        const groupUsers = emailUsers.map(async email => {
+            if (email === ctx.user?.email) return
 
-                const isUser = await findUserByEmail(email)
-                if (isUser) {
-                    await createUserToGroup({
-                        group_id: newGroup.id,
-                        user_id: isUser.id,
-                        is_admin: false,
-                    })
-                    return isUser
-                }
-
-                const pseudo = email.split('@')[0]
-
-                const password = 'Test@1234' // TODO
-
-                const newUser = await createUser({ pseudo, email, password })
-
+            const isUser = await findUserByEmail(email)
+            if (isUser) {
                 await createUserToGroup({
                     group_id: newGroup.id,
-                    user_id: newUser.id,
+                    user_id: isUser.id,
                     is_admin: false,
                 })
+                return isUser
+            }
 
-                try {
-                    await mailer.sendMail({
-                        subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
-                        to: email,
-                        from: 'crazygift24@gmail.com',
-                        text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
-                    })
+            const pseudo = email.split('@')[0]
 
-                    return newUser
-                } catch (error) {
-                    console.log('______________ Error sending mail', error)
-                    throw new GraphQLError("Erreur d'envoi de mail")
-                }
-            })()
+            const password = 'Test@1234' // TODO
+
+            const newUser = await createUser({ pseudo, email, password })
+
+            await createUserToGroup({
+                group_id: newGroup.id,
+                user_id: newUser.id,
+                is_admin: false,
+            })
+
+            try {
+                await mailer.sendMail({
+                    subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                    to: email,
+                    from: 'crazygift24@gmail.com',
+                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                })
+
+                return newUser
+            } catch (error) {
+                throw new GraphQLError("Erreur d'envoi de mail")
+            }
         })
 
-        Promise.all(groupUsers).then(async groupUsers => {
+        await Promise.all(groupUsers).then(async groupUsers => {
             // Cause of the check in the usermailsList, email !== ctx.user?.email must return undefined
             const filteredGroupUsers = ctx.user
                 ? [ctx.user, ...groupUsers.filter(user => user !== undefined)]
                 : groupUsers.filter(user => user !== undefined)
 
-            createGroupDiscussions({
+            await createGroupDiscussions({
                 groupUsers: filteredGroupUsers as User[],
                 groupId: newGroup.id,
             })

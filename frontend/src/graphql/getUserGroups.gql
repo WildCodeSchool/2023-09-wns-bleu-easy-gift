@@ -5,6 +5,7 @@ query UserGroups {
     avatar {
       id
       url
+      name
     }
   }
 }

@@ -41,6 +41,7 @@ export type Group = {
   id: Scalars['Int'];
   modified_at: Scalars['String'];
   name: Scalars['String'];
+  userToGroups: Array<UserToGroup>;
 };
 
 export type InputLogin = {
@@ -76,6 +77,7 @@ export type Mutation = {
   register: UserWithoutPassword;
   registrationWithToken: UserWithoutPassword;
   updateAvatar: UserWithoutPasswordAvatar;
+  updateGroupAvatar: Group;
   updateUser: UserWithoutPassword;
 };
 
@@ -100,6 +102,12 @@ export type MutationUpdateAvatarArgs = {
 };
 
 
+export type MutationUpdateGroupAvatarArgs = {
+  avatar_id: Scalars['Float'];
+  group_id: Scalars['Float'];
+};
+
+
 export type MutationUpdateUserArgs = {
   data: InputUpdateUser;
 };
@@ -115,8 +123,11 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
+  getDiscusions: Array<Discussion>;
   getUserByToken: User;
   getUserInfos: UserInfos;
+  getUsersByGroup: Array<Group>;
+  groupAvatars: Array<Avatar>;
   groups: Array<Group>;
   login: ResponseMessage;
   logout: ResponseMessage;
@@ -130,6 +141,11 @@ export type Query = {
 
 export type QueryGetUserByTokenArgs = {
   token: Scalars['String'];
+};
+
+
+export type QueryGetUsersByGroupArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -148,11 +164,11 @@ export type User = {
   avatar?: Maybe<Avatar>;
   birthday?: Maybe<Scalars['DateTimeISO']>;
   created_at: Scalars['String'];
-  discussions: Array<Discussion>;
   email: Scalars['String'];
   id: Scalars['Int'];
   modified_at: Scalars['String'];
   pseudo: Scalars['String'];
+  userToGroups: Array<UserToGroup>;
   validated_email?: Maybe<Scalars['DateTimeISO']>;
 };
 
@@ -171,6 +187,7 @@ export type UserToGroup = {
   id: Scalars['Int'];
   is_admin: Scalars['Boolean'];
   modified_at: Scalars['String'];
+  user: User;
   user_id: Scalars['Float'];
 };
 
@@ -216,7 +233,7 @@ export type GetUserByTokenQuery = { __typename?: 'Query', getUserByToken: { __ty
 export type UserGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, url: string } }> };
+export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, url: string, name: string } }> };
 
 export type GetUserInfosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -419,6 +436,7 @@ export const UserGroupsDocument = gql`
     avatar {
       id
       url
+      name
     }
   }
 }

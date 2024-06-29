@@ -11,7 +11,7 @@ export async function getUsersByGroup(group_id: number) {
 class UsersToGroupsResolver {
     @Query(() => [UserToGroup])
     async usersToGroups() {
-        return UserToGroup.find()
+        return UserToGroup.find({ relations: ['user', 'group'] })
     }
 }
 
