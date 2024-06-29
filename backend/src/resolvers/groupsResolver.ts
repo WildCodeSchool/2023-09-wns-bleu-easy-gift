@@ -10,6 +10,7 @@ import mailer from '../mailer'
 import { Avatar } from '../entities/avatar'
 import { createGroupDiscussions } from './discussionsResolver'
 import { User } from '../entities/user'
+import { In } from 'typeorm'
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
@@ -35,7 +36,7 @@ async function createUserToGroup({
 class GroupsResolver {
     @Query(() => [Group])
     async groups() {
-        return Group.find({ relations: ['avatar'] })
+        return Group.find({ relations: ['avatar', 'userToGroups.user'] })
     }
 
     @Query(() => [Group])
@@ -44,26 +45,22 @@ class GroupsResolver {
             throw new GraphQLError(
                 'Il faut être connecté pour voir tes groupes',
             )
+        const userGroupsIds =
+            ctx.user.userToGroups.map(value => value.group_id) || undefined
 
-        // SELECT * FROM group WHERE id IN ([1, 2, 3])
-        // SELECT * FROM group WHERE id IN (SELECT group_id FROM user_to_group WHERE user_id = ctx.user.id)
-
-        const groupIds = (
-            await UserToGroup.findBy({ user_id: ctx.user.id })
-        ).map(utg => utg.group_id)
-
-        // WORKING well but not returning the avatars
-        // const ctxUserGroups = await Group.findBy({
-        //     id: In(groupIds),
-        // })
-
-        // ENABLE TO GET AVATAR
-        const ctxUserGroups = await Group.createQueryBuilder('group')
-            .leftJoinAndSelect('group.avatar', 'avatar')
-            .whereInIds(groupIds)
-            .getMany()
-
-        return ctxUserGroups
+        if (!userGroupsIds) {
+            throw new GraphQLError('Group not found')
+        }
+        return Group.find({
+            where: {
+                id: In(userGroupsIds),
+            },
+            relations: [
+                'avatar',
+                'userToGroups.user.avatar',
+                'userToGroups.group',
+            ],
+        })
     }
 
     @Query(() => [Group])
@@ -115,61 +112,76 @@ class GroupsResolver {
             is_admin: true,
         })
 
-        const groupUsers = emailUsers.map(email => {
-            return (async () => {
-                if (email === ctx.user?.email) return
+        const groupUsers = emailUsers.map(async email => {
+            if (email === ctx.user?.email) return
 
-                const isUser = await findUserByEmail(email)
-                if (isUser) {
-                    await createUserToGroup({
-                        group_id: newGroup.id,
-                        user_id: isUser.id,
-                        is_admin: false,
-                    })
-                    return isUser
-                }
-
-                const pseudo = email.split('@')[0]
-
-                const password = 'Test@1234' // TODO
-
-                const newUser = await createUser({ pseudo, email, password })
-
+            const isUser = await findUserByEmail(email)
+            if (isUser) {
                 await createUserToGroup({
                     group_id: newGroup.id,
-                    user_id: newUser.id,
+                    user_id: isUser.id,
                     is_admin: false,
                 })
+                return isUser
+            }
 
-                try {
-                    await mailer.sendMail({
-                        subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
-                        to: email,
-                        from: 'crazygift24@gmail.com',
-                        text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
-                    })
+            const pseudo = email.split('@')[0]
 
-                    return newUser
-                } catch (error) {
-                    console.log('______________ Error sending mail', error)
-                    throw new GraphQLError("Erreur d'envoi de mail")
-                }
-            })()
+            const password = 'Test@1234' // TODO
+
+            const newUser = await createUser({ pseudo, email, password })
+
+            await createUserToGroup({
+                group_id: newGroup.id,
+                user_id: newUser.id,
+                is_admin: false,
+            })
+
+            try {
+                await mailer.sendMail({
+                    subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                    to: email,
+                    from: 'crazygift24@gmail.com',
+                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                })
+
+                return newUser
+            } catch (error) {
+                throw new GraphQLError("Erreur d'envoi de mail")
+            }
         })
 
-        Promise.all(groupUsers).then(async groupUsers => {
+        await Promise.all(groupUsers).then(async groupUsers => {
             // Cause of the check in the usermailsList, email !== ctx.user?.email must return undefined
             const filteredGroupUsers = ctx.user
                 ? [ctx.user, ...groupUsers.filter(user => user !== undefined)]
                 : groupUsers.filter(user => user !== undefined)
 
-            createGroupDiscussions({
+            await createGroupDiscussions({
                 groupUsers: filteredGroupUsers as User[],
                 groupId: newGroup.id,
             })
         })
 
         return newGroup
+    }
+
+    @Authorized()
+    @Mutation(() => Group)
+    async updateGroupAvatar(
+        @Arg('group_id') group_id: number,
+        @Arg('avatar_id') avatar_id: number,
+    ) {
+        const group = await Group.findOne({ where: { id: group_id } })
+        if (!group) throw new GraphQLError('Group not found')
+
+        const avatar = await Avatar.findOne({ where: { id: avatar_id } })
+        if (!avatar) throw new GraphQLError('Avatar not found')
+
+        group.avatar = avatar
+        await group.save()
+
+        return group
     }
 }
 

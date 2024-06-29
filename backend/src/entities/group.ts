@@ -46,11 +46,9 @@ export class Group extends BaseEntity {
     @Field(() => Avatar)
     avatar: Avatar
 
+    @Field(() => [UserToGroup])
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.group)
     public userToGroups: UserToGroup[]
-
-    // @Field(() => [User])
-    // users?: User[]
 }
 
 @InputType()

@@ -51,10 +51,7 @@ export default function Navbar() {
             Mes groupes
           </Link>
           <Link href="#" className="font-semibold">
-            Mes chats
-          </Link>
-          <Link href="#" className="font-semibold">
-            Test Sur Staging
+            Mes discussions
           </Link>
           <Link href="/mon-profil" className="font-semibold">
             Mon profil
@@ -81,10 +78,7 @@ export default function Navbar() {
             Mes groupes
           </Link>
           <Link href="#" onClick={closeMenu}>
-            Mes chats
-          </Link>
-          <Link href="#" onClick={closeMenu}>
-            Link 3
+            Mes discussions Ò{" "}
           </Link>
           {!isConnected && (
             <>
