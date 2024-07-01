@@ -1,4 +1,5 @@
 import {UserToGroup} from "@/graphql/generated/schema";
+import { Badge } from "@/components/ui/badge"
 
 
 interface UserComponentProps {
@@ -28,11 +29,11 @@ export default function ProfileCard({user}: UserComponentProps) {
                     </div>
                 </div>
             </div>
+            <div className="mt-2 mr-3">
             {(user.is_admin) && (
-                <div className="mr-5 mt-3">
-                    Admin
-                </div>
-            )}
+                <Badge variant="outline">Admin</Badge>
+                )}
+            </div>
         </div>
     );
 }

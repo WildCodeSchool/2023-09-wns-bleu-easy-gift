@@ -3,11 +3,17 @@ import {
     useGetGroupByIdQuery,
 } from "@/graphql/generated/schema";
 import {Separator} from "@/components/ui/separator";
-import React from "react";
+import React, {useState} from "react";
 import ProfileCard from "@/components/ProfileCard";
+import {Button} from "@/components/ui/button";
+import ModalModifyDetails from "@/components/profil/modalModifyDetails";
+
+
 
 export default function GroupDetails() {
     const router = useRouter();
+    const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false);
+
     const {groupId} = router.query;
     const {data, loading, error} = useGetGroupByIdQuery({
         variables: {groupId: typeof groupId === "string" ? parseInt(groupId, 10) : 0},
@@ -90,6 +96,14 @@ export default function GroupDetails() {
                                         <p className="text-base font-semibold w-32">Date de l'évenement</p>
                                         <p className="text-base">{group?.event_date}</p>
                                     </div>
+                                    <div className="flex sm:justify-end">
+                                    <Button
+                                        className="mt-10"
+                                        onClick={() => setIsModalDetailsOpen(!isModalDetailsOpen)}
+                                    >
+                                        Modifier mes informations
+                                    </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -104,14 +118,14 @@ export default function GroupDetails() {
                                         Membres du groups
                                     </div>
                                     <div className="text-sm text-black/60">
-                                        Voici la liste des membre de votre groupe
+                                        Voici la liste des membres de votre groupe
                                     </div>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-3 shrink items-center sm:w-1/2 sm:max-w-lg">
                                 {group?.userToGroups.map((group) => {
                                     return (
-                                        <ProfileCard user={group}/>
+                                        <ProfileCard key={group.user_id} user={group}/>
                                     )
                                 })}
                             </div>
@@ -119,6 +133,13 @@ export default function GroupDetails() {
                     </div>
                 </div>
             </div>
+            {isModalDetailsOpen && user && (
+                <ModalModifyDetails
+                    isOpen={isModalDetailsOpen}
+                    handleClose={() => setIsModalDetailsOpen(!isModalDetailsOpen)}
+                    user={user}
+                />
+            )}
         </div>
     );
 }
