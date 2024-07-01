@@ -83,17 +83,17 @@ export default function GroupDetails() {
                             <div className="shrink sm:w-1/2 sm:max-w-lg">
                                 <div className="grid-cols-2">
                                     <div className="flex items-center h-9 md:h-11 lg:h-12 2xl:h-14">
-                                        <p className="text-base font-semibold w-32">Nom</p>
+                                        <p className="text-base font-semibold w-44">Nom</p>
                                         <p className="text-base">{group?.name}</p>
                                     </div>
                                     <Separator/>
                                     <div className="flex items-center h-9 md:h-11 lg:h-12 2xl:h-14">
-                                        <p className="text-base font-semibold w-32">Créer le</p>
+                                        <p className="text-base font-semibold w-44">Créer le</p>
                                         {/*<p className="text-base">{createdAt}</p>*/}
                                     </div>
                                     <Separator/>
                                     <div className="flex items-center h-9 md:h-11 lg:h-12 2xl:h-14">
-                                        <p className="text-base font-semibold w-32">Date de l'évenement</p>
+                                        <p className="text-base font-semibold w-44">Date de l'évenement</p>
                                         <p className="text-base">{group?.event_date}</p>
                                     </div>
                                     <div className="flex sm:justify-end">
