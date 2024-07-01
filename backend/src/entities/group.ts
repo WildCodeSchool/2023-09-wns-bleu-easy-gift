@@ -46,6 +46,10 @@ export class Group extends BaseEntity {
     @Field(() => Avatar)
     avatar: Avatar
 
+    @Field( { nullable: true })
+    @Column({ default: null })
+    event_date?: string
+
     @Field(() => [UserToGroup])
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.group)
     public userToGroups: UserToGroup[]
@@ -61,4 +65,7 @@ export class NewGroupInput {
 
     @Field(() => [String])
     emailUsers: string[]
+
+    @Field()
+    event_date: string
 }

@@ -1,4 +1,4 @@
-import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
+import {Resolver, Query, Arg, Mutation, Ctx, Authorized, Int} from 'type-graphql'
 import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
@@ -16,8 +16,8 @@ export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
 }
 
-async function createGroup(name: string) {
-    return await Group.create({ name }).save()
+async function createGroup(name: string,event_date: string) {
+    return await Group.create({ name,event_date }).save()
 }
 
 async function createUserToGroup({
@@ -37,6 +37,16 @@ class GroupsResolver {
     @Query(() => [Group])
     async groups() {
         return Group.find({ relations: ['avatar', 'userToGroups.user'] })
+    }
+
+    @Query(() => Group)
+    async getGroupById(@Arg("groupId", () => Int) id: number) {
+        const group = await Group.findOne({
+            where: { id },
+            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
+        });
+        if (!group) throw new GraphQLError('Group not found');
+        return group;
     }
 
     @Query(() => [Group])
@@ -60,6 +70,9 @@ class GroupsResolver {
                 'userToGroups.user.avatar',
                 'userToGroups.group',
             ],
+            order: {
+                created_at: 'DESC',
+            },
         })
     }
 
@@ -85,7 +98,7 @@ class GroupsResolver {
     @Authorized()
     @Mutation(() => Group)
     async addNewGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
-        const { name, emailUsers } = data
+        const { name, emailUsers,event_date } = data
         const group = await findGroupByName(name)
 
         const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
@@ -97,7 +110,7 @@ class GroupsResolver {
                 `Group already exist, fait pas trop le malin.`,
             )
         }
-        const newGroup = await createGroup(name)
+        const newGroup = await createGroup(name,event_date)
 
         if (randomGroupAvatar) {
             newGroup.avatar = randomGroupAvatar
