@@ -7,18 +7,20 @@ import React, {useState} from "react";
 import ProfileCard from "@/components/ProfileCard";
 import {Button} from "@/components/ui/button";
 import ModalModifyDetails from "@/components/profil/modalModifyDetails";
+import ModalUpdateGroup from "@/components/group/modalUpdateGroup";
+import { createPortal } from 'react-dom';
+import ModalContent from "@/components/group/modalContent";
 
 
 
 export default function GroupDetails() {
     const router = useRouter();
-    const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false);
-
     const {groupId} = router.query;
     const {data, loading, error} = useGetGroupByIdQuery({
         variables: {groupId: typeof groupId === "string" ? parseInt(groupId, 10) : 0},
         skip: typeof groupId === "undefined",
     });
+    const [showModal, setShowModal] = useState(false);
 
     const group = data?.getGroupById;
 
@@ -98,11 +100,18 @@ export default function GroupDetails() {
                                     </div>
                                     <div className="flex sm:justify-end">
                                     <Button
-                                        className="mt-10"
-                                        onClick={() => setIsModalDetailsOpen(!isModalDetailsOpen)}
+                                        className="bg-blue-500 text-white px-4 py-2 rounded mt-10"
+                                        onClick={() => setShowModal(true)}
                                     >
                                         Modifier mes informations
                                     </Button>
+                                        {showModal && createPortal(
+                                            <div
+                                                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                            <ModalUpdateGroup onClose={() => setShowModal(false)} />
+                                            </div>,
+                                            document.body
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -133,13 +142,6 @@ export default function GroupDetails() {
                     </div>
                 </div>
             </div>
-            {isModalDetailsOpen && user && (
-                <ModalModifyDetails
-                    isOpen={isModalDetailsOpen}
-                    handleClose={() => setIsModalDetailsOpen(!isModalDetailsOpen)}
-                    user={user}
-                />
-            )}
         </div>
     );
 }
