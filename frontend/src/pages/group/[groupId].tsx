@@ -6,7 +6,9 @@ import {Separator} from "@/components/ui/separator";
 import React, {useState} from "react";
 import ProfileCard from "@/components/ProfileCard";
 import ModalUpdateGroup from "@/components/group/modalUpdateGroup";
-import ModalButton from "@/components/ModalButton";
+import {Button} from "@/components/ui/button";
+import { createPortal } from 'react-dom';
+
 
 
 export default function GroupDetails() {
@@ -14,6 +16,7 @@ export default function GroupDetails() {
     const {groupId} = router.query;
     const {data, loading, error} = useGetGroupByIdQuery({
         variables: {groupId: typeof groupId === "string" ? parseInt(groupId, 10) : 0},
+        fetchPolicy: "no-cache",
         skip: typeof groupId === "undefined",
     });
     const [showModal, setShowModal] = useState(false);
@@ -95,20 +98,19 @@ export default function GroupDetails() {
                                         <p className="text-base">{group?.event_date}</p>
                                     </div>
                                     <div className="flex sm:justify-end">
-                                        {/*<Button*/}
-                                        {/*    className="bg-blue-500 text-white px-4 py-2 rounded mt-10"*/}
-                                        {/*    onClick={() => setShowModal(true)}*/}
-                                        {/*>*/}
-                                        {/*    Modifier mes informations*/}
-                                        {/*</Button>*/}
-                                        {/*{showModal && createPortal(*/}
-                                        {/*    <div*/}
-                                        {/*        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">*/}
-                                        {/*        <ModalUpdateGroup onClose={() => setShowModal(false)}/>*/}
-                                        {/*    </div>,*/}
-                                        {/*    document.body*/}
-                                        {/*)}*/}
-                                        <ModalButton buttonText={"Modifier mes informations"} ModalComponent={ModalUpdateGroup}/>
+                                        <Button
+                                            className="bg-blue-500 text-white px-4 py-2 rounded mt-10"
+                                            onClick={() => setShowModal(true)}
+                                        >
+                                            Modifier mes informations
+                                        </Button>
+                                        {showModal && createPortal(
+                                            <div
+                                                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                                <ModalUpdateGroup onClose={() => setShowModal(false)} group={group}/>
+                                            </div>,
+                                            document.body
+                                        )}
                                     </div>
                                 </div>
                             </div>
