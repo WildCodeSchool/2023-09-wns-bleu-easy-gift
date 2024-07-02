@@ -69,3 +69,13 @@ export class NewGroupInput {
     @Field()
     event_date: string
 }
+
+@InputType()
+export class UpdateGroupInput {
+    @Field({ nullable: true })
+    name?: string;
+
+    @Field({ nullable: true })
+    event_date?: string;
+
+}

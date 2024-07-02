@@ -5,9 +5,7 @@ import { Badge } from "@/components/ui/badge"
 interface UserComponentProps {
     user: UserToGroup;
 }
-
 export default function ProfileCard({user}: UserComponentProps) {
-
     return (
         <div
             className="flex justify-between w-full border rounded-2xl transition ease-in-out hover:-translate-y-1 hover:scale-120 duration-300">
