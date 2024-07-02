@@ -16,7 +16,7 @@ export default function Profile() {
         </h2>
         {data?.userGroups?.length === 0 ? (
           <div className="flex flex-col items-center mt-6">
-            <p className="text-md  mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
+            <p className="text-md mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl">
               Crée ton premier groupe et invite tes amis !
             </p>
             <Button>
@@ -37,7 +37,7 @@ export default function Profile() {
                 </a>
               </Button>
             </div>
-            <div className="flex flex-wrap gap-6 justify-center xl:justify-between">
+            <div className={`flex flex-wrap gap-6 justify-center ${data?.userGroups.length > 2 ? 'justify-evenly' : 'xl:justify-between'}`}>
               {data?.userGroups?.map((group) => {
                 const eventDate = new Date(group.event_date);
                 if (eventDate > today) {

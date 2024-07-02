@@ -78,6 +78,7 @@ export type Mutation = {
   register: UserWithoutPassword;
   registrationWithToken: UserWithoutPassword;
   updateAvatar: UserWithoutPasswordAvatar;
+  updateGroup: Group;
   updateGroupAvatar: Group;
   updateUser: UserWithoutPassword;
 };
@@ -100,6 +101,12 @@ export type MutationRegistrationWithTokenArgs = {
 
 export type MutationUpdateAvatarArgs = {
   data: InputUpdateAvatar;
+};
+
+
+export type MutationUpdateGroupArgs = {
+  data: UpdateGroupInput;
+  groupId: Scalars['Float'];
 };
 
 
@@ -167,6 +174,11 @@ export type ResponseMessage = {
   success: Scalars['Boolean'];
 };
 
+export type UpdateGroupInput = {
+  event_date?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   avatar?: Maybe<Avatar>;
@@ -218,6 +230,14 @@ export type UpdateAvatarMutationVariables = Exact<{
 
 
 export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: { __typename?: 'UserWithoutPasswordAvatar', email: string, pseudo: string, avatar: { __typename?: 'Avatar', url: string, id: number, name: string } } };
+
+export type UpdateGroupMutationVariables = Exact<{
+  data: UpdateGroupInput;
+  groupId: Scalars['Float'];
+}>;
+
+
+export type UpdateGroupMutation = { __typename?: 'Mutation', updateGroup: { __typename?: 'Group', created_at: string, event_date?: string | null, id: number, name: string, avatar: { __typename?: 'Avatar', id: number, url: string }, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, group_id: number, user_id: number, user: { __typename?: 'User', birthday?: any | null, email: string, id: number, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string } | null } }> } };
 
 export type AddNewGroupMutationVariables = Exact<{
   data: NewGroupInput;
@@ -333,6 +353,62 @@ export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
 export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
 export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
+export const UpdateGroupDocument = gql`
+    mutation UpdateGroup($data: UpdateGroupInput!, $groupId: Float!) {
+  updateGroup(data: $data, groupId: $groupId) {
+    avatar {
+      id
+      url
+    }
+    created_at
+    event_date
+    id
+    name
+    userToGroups {
+      is_admin
+      group_id
+      user_id
+      user {
+        avatar {
+          id
+          url
+        }
+        birthday
+        email
+        id
+        pseudo
+      }
+    }
+  }
+}
+    `;
+export type UpdateGroupMutationFn = Apollo.MutationFunction<UpdateGroupMutation, UpdateGroupMutationVariables>;
+
+/**
+ * __useUpdateGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupMutation, { data, loading, error }] = useUpdateGroupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupMutation, UpdateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(UpdateGroupDocument, options);
+      }
+export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
+export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
+export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
 export const AddNewGroupDocument = gql`
     mutation AddNewGroup($data: NewGroupInput!) {
   addNewGroup(data: $data) {
