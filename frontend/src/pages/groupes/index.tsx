@@ -52,7 +52,7 @@ export default function Profile() {
                             className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Tous les groupes</span>
                     </label>
                     <div
-                        className={`flex flex-wrap gap-6 justify-center ${data?.userGroups.length > 2 ? 'justify-evenly' : 'xl:justify-between'}`}>
+                        className={`flex flex-wrap gap-6 justify-center lg:justify-evenly ${data?.userGroups.length > 2 ? 'justify-between' : 'xl:justify-evenly'}`}>
                         {data?.userGroups?.map((group) => {
 
                             const eventDate = new Date(group.event_date);
