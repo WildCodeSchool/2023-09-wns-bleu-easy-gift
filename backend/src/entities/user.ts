@@ -103,6 +103,9 @@ export class InputRegister {
 
     @Field(() => ObjectId, { nullable: true })
     avatar?: Avatar | null
+
+    @Field({ nullable: true })
+    birthday?: string
 }
 
 @ObjectType()

@@ -1,8 +1,10 @@
 import db from './db'
-import { User } from './entities/user'
-import { Avatar } from './entities/avatar'
-import { clearDB } from '../src/db'
+import {User} from './entities/user'
+import {Avatar} from './entities/avatar'
+import {clearDB} from '../src/db'
 import initAvatars from './initAvatars'
+import {fakerFR as faker} from '@faker-js/faker';
+import {groupFactory} from "./utils/groupFactory";
 
 export async function main() {
     await db.initialize()
@@ -22,7 +24,7 @@ export async function main() {
     for (const [pseudo, avatarId] of Object.entries(avatarIds)) {
         // Récupérez l'avatar correspondant à l'ID spécifié
 
-        const avatar = await Avatar.findOne({ where: { id: avatarId } })
+        const avatar = await Avatar.findOne({where: {id: avatarId}})
         // Vérifiez si l'avatar correspondant à l'ID existe
         if (!avatar) {
             console.error(`Avatar with ID ${avatarId} not found`)
@@ -38,6 +40,21 @@ export async function main() {
         })
 
         await user.save()
+    }
+    //on récupère la liste des users fraichement crées
+    const users = await User.find();
+    for (const user of users) {
+        //on détermine le nombre de groupe à creer pour chaque users
+        const numberOfGroups = faker.number.int({min: 5, max: 15})
+
+        Array.from({length: numberOfGroups}).forEach(() => {
+            //pour chaque groupe on détermine le nombre de users qui le composeront
+            const numberOfGroupUser = faker.number.int({min: 2, max: 15})
+            try {
+                groupFactory(user, numberOfGroupUser)
+            } catch {
+            }
+        })
     }
 }
 
