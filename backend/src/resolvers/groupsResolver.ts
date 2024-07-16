@@ -16,8 +16,8 @@ export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
 }
 
-async function createGroup(name: string) {
-    return await Group.create({ name }).save()
+async function createGroup(name: string,event_date: string) {
+    return await Group.create({ name,event_date }).save()
 }
 
 async function createUserToGroup({
@@ -88,7 +88,7 @@ class GroupsResolver {
     @Authorized()
     @Mutation(() => Group)
     async addNewGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
-        const { name, emailUsers } = data
+        const { name, emailUsers,event_date } = data
         const group = await findGroupByName(name)
 
         const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
@@ -100,7 +100,7 @@ class GroupsResolver {
                 `Group already exist, fait pas trop le malin.`,
             )
         }
-        const newGroup = await createGroup(name)
+        const newGroup = await createGroup(name,event_date)
 
         if (randomGroupAvatar) {
             newGroup.avatar = randomGroupAvatar

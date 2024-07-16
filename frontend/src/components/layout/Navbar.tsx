@@ -11,6 +11,7 @@ export default function Navbar() {
   const isConnected = checkUserConnected();
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const currentPath = router.pathname;
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -68,13 +69,13 @@ export default function Navbar() {
 
         {/* Links for Larger Screens */}
         <div className={`hidden md:flex md:flex-row gap-4`}>
-          <Link href="/groupes" className="font-semibold">
+          <Link href="/groupes" className={`font-semibold ${currentPath === '/groupes' ? 'underline' : ''}`}>
             Mes groupes
           </Link>
-          <Link href="#" className="font-semibold">
+          <Link href="#" className={`font-semibold ${currentPath === '#' ? 'underline' : ''}`}>
             Mes discussions
           </Link>
-          <Link href="/mon-profil" className="font-semibold">
+          <Link href="/mon-profil" className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}>
             Mon profil
           </Link>
         </div>
