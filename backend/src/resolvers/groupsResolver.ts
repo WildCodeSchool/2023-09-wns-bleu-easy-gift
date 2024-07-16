@@ -1,6 +1,6 @@
-import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
+import {Resolver, Query, Arg, Mutation, Ctx, Authorized, Int} from 'type-graphql'
 import { GraphQLError } from 'graphql'
-import { Group, NewGroupInput } from '../entities/group'
+import {Group, NewGroupInput, UpdateGroupInput} from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
 import { MyContext } from '..'
 import { createUser, findUserByEmail } from './usersResolver'
@@ -37,6 +37,16 @@ class GroupsResolver {
     @Query(() => [Group])
     async groups() {
         return Group.find({ relations: ['avatar', 'userToGroups.user'] })
+    }
+
+    @Query(() => Group)
+    async getGroupById(@Arg("groupId", () => Int) id: number) {
+        const group = await Group.findOne({
+            where: { id },
+            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
+        });
+        if (!group) throw new GraphQLError('Group not found');
+        return group;
     }
 
     @Query(() => [Group])
@@ -185,6 +195,34 @@ class GroupsResolver {
         await group.save()
 
         return group
+    }
+    @Mutation(() => Group)
+    async updateGroup(
+        @Arg("groupId") id: number,
+        @Arg("data", { validate: true }) data: UpdateGroupInput,
+        @Ctx() ctx: MyContext
+    ) {
+        const user = ctx.user || undefined
+        if (typeof user === "undefined") throw new GraphQLError("Connect toi pour editer le groupe")
+        const groupToUpdate = await Group.findOne({
+            where: { id },
+            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
+        });
+
+        if (!groupToUpdate)throw new GraphQLError("Le groupe n'existe pas");
+
+        const groupAdmin = groupToUpdate.userToGroups
+            .filter(user=>user.is_admin)
+            .map((user)=>user.user_id);
+
+        if (!groupAdmin.includes(user?.id)) throw new GraphQLError("Tu dois être un administrateur du groupe")
+
+        Object.assign(groupToUpdate, data);
+        await groupToUpdate.save();
+        return Group.findOne({
+            where: { id },
+            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
+        });
     }
 }
 
