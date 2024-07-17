@@ -6,6 +6,7 @@ import ProfileCard from "@/components/ProfileCard";
 import ModalUpdateGroup from "@/components/group/modalUpdateGroup";
 import { Button } from "@/components/ui/button";
 import { createPortal } from "react-dom";
+import ModalModifyAvatar from "@/components/profil/modalModifyAvatar";
 
 export default function GroupDetails() {
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function GroupDetails() {
     skip: typeof groupId === "undefined",
   });
   const [showModal, setShowModal] = useState(false);
+  const [isModalAvatarOpen, setIsModalAvatarOpen] = useState(false);
 
   const group = data?.getGroupById;
 
@@ -26,18 +28,17 @@ export default function GroupDetails() {
     <div>
       <div className="flex flex-col justify-between align-center text-left mb-5">
         <div className="flex flex-col gap-3 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]">
-          <h2 className="text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">Group ({group?.name})</h2>
+          <h2 className="text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue">Groupe "{group?.name}"</h2>
           <p className="text-md 2xl:text-xl">Gère les informations de ton groupe Easy Gift.</p>
           <div className="bg-white flex flex-col gap-10 p-8 sm:rounded-xl shadow-2xl">
             <div className="flex flex-col gap-8 items-center sm:items-start sm:flex-row sm:gap-16 sm:justify-between">
               <div className="shrink sm:w-1/2 sm:max-w-lg">
                 <div>
                   <div className="text-2xl font-medium">Avatar du groupe</div>
-                  <div className="text-sm text-black/60">Ceci est votre avatar</div>
                 </div>
               </div>
               <div>
-                <div className="relative w-24 h-24 lg:w-28 lg:h-28 2xl:w-32 2xl:h-32">
+                <div className="relative w-24 h-24 lg:w-28 lg:h-28 2xl:w-32 2xl:h-32" onClick={() => setIsModalAvatarOpen(!isModalAvatarOpen)}>
                   <img
                     src={group?.avatar?.url}
                     className="absolute inset-0 w-24 h-24 lg:w-28 lg:h-28 2xl:w-32 2xl:h-32 rounded-full mr-2 border-solid border-4 border-primaryRed"
@@ -109,6 +110,15 @@ export default function GroupDetails() {
           </div>
         </div>
       </div>
+      {isModalAvatarOpen && (
+        <ModalModifyAvatar
+          isOpen={isModalAvatarOpen}
+          handleClose={() => setIsModalAvatarOpen(!isModalAvatarOpen)}
+          avatarId={group?.avatar.id}
+          type="group"
+          groupId={group?.id}
+        />
+      )}
     </div>
   );
 }
