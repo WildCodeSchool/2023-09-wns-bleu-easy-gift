@@ -2,8 +2,8 @@
 
 const MenuDiscussions = () => {
   return (
-    <nav className="bg-slate-200 w-full h-135 pt-10 flex flex-col justify-evenly md:w-5/12 md:h-full md:justify-between">
-      <div className="w-4/5 mx-auto h-36 flex flex-wrap justify-between items-center">
+    <nav className="bg-slate-200 w-full flex-shrink-0 h-[100vh] pt-5 pb-6 flex flex-grow flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-full md:justify-between md:overflow-y-auto">
+      <div className="w-4/5 mx-auto h-32 flex flex-wrap justify-between items-center md:min-h-40">
         <div className="basis-5/6 flex justify-start items-center h-14">
           <img src="/images/avatar/group_xmas8.png" alt="" className="w-14 h-14 rounded-sm" />
           <h1 className="text-4xl md:text-5xl 2xl::text-6xl font-bold text-primaryBlue inline-block
@@ -37,7 +37,7 @@ const MenuDiscussions = () => {
           <input type="search" className="w-full h-full rounded-3xl shadow-lg pl-9 outline-slate-200 outline-2 outline" placeholder="Pour trouver tes copains... c'est ici" />
         </div>
       </div>
-      <ul className="w-4/5 h-96 mx-auto overflow-y-auto flex flex-col justify-evenly  max-w-96 pt-3 md:h-auto md:min-h-130">
+      <ul className="w-4/5 max-h-[60vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 pt-3 md:h-auto md:min-h-auto md:max-h-72 md:flex-grow">
         <li className="w-full h-16 rounded-full bg-red400 shadow-md pl-4 pr-6 py-2 mb-8 md:mb-12">
           <a className="h-full flex items-center justify-start" href="/">
             <div className="relative mr-3 w-12 h-12">
@@ -159,8 +159,8 @@ const MenuDiscussions = () => {
           </a>
         </li>
       </ul>
-      <div className="w-4/5 h-12 mx-auto self-start mt-8">
-        <div className="flex justify-end content-end">
+      <div className="w-4/5 mx-auto self-start flex flex-grow justify-end items-start">
+        <div className="flex justify-end mt-4">
           <img src="" alt="" />
           <p className="text-2xl font-bold text-red400">Quitter Nöel</p>
           <button type="button" className="ml-4">

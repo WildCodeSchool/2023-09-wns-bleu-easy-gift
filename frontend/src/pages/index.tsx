@@ -71,7 +71,7 @@ export default function Home() {
           </Button>
         </div>
       </section>
-      <section className="mb-28 mx-auto min-h-175 h-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-170 lg:pt-20 lg:pb-16 lg:flex-wrap lg:flex-row lg:mb-32 lg:content-center lg:justify-around lg:min-h-140 2xl:pt-0 xl:pb-0 2xl:items-start 2xl:justify-center 2xl:mb-20 2xl:content-end 2xl:min-h-150 2xl:flex-row">
+      <section className="mb-28 mx-auto min-h-175 h-full w-full bg-slate-200 flex flex-col justify-center items-center sm:min-h-160 md:min-h-170 lg:pt-20 lg:pb-16 lg:flex-wrap lg:flex-row lg:mb-32 lg:content-center lg:justify-around lg:min-h-140 2xl:pt-0 xl:pb-0 2xl:items-start 2xl:justify-center 2xl:mb-20 2xl:content-end 2xl:min-h-150 2xl:flex-row">
         <h2 className="w-4/5 text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl lg:w-full lg:mb-14 font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-28">
           Crée ton groupe
         </h2>

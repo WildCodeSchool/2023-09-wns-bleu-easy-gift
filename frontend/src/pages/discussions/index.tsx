@@ -4,7 +4,7 @@ import EspaceDiscussion from "@/components/discussions/espace-discussion";
 const DiscussionsPage = () => {
   return (
     <>
-      <section className="h-full flex md:min-h-160">
+      <section className="w-full h-[92vh] flex flex-col overflow-y-auto md:h-full md:flex md:flex-row">
         <MenuDiscussions />
         <EspaceDiscussion />
       </section>
