@@ -72,7 +72,7 @@ export default function Navbar() {
           <Link href="/groupes" className={`font-semibold ${currentPath === '/groupes' ? 'underline' : ''}`}>
             Mes groupes
           </Link>
-          <Link href="#" className={`font-semibold ${currentPath === '#' ? 'underline' : ''}`}>
+          <Link href="/discussions" className={`font-semibold ${currentPath === '/discussions' ? 'underline' : ''}`}>
             Mes discussions
           </Link>
           <Link href="/mon-profil" className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}>
@@ -83,9 +83,8 @@ export default function Navbar() {
         {/* Side Drawer for Mobile Screens */}
         <div
           ref={menuRef}
-          className={`absolute left-0 top-0 w-[75%] h-110 bg-bgPrimary shadow-lg transform ${
-            isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          } transition-transform duration-300 ease-in-out flex flex-col gap-4 p-4 md:hidden`}
+          className={`absolute left-0 top-0 w-[75%] h-110 bg-bgPrimary shadow-lg transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-300 ease-in-out flex flex-col gap-4 p-4 md:hidden`}
         >
           {/* Close Button */}
           <button onClick={() => setMenuOpen(false)} className="self-end">
