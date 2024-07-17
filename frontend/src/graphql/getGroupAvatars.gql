@@ -1,8 +1,8 @@
 query groupAvatars {
-  groupAvatars {
-    id
-    name
-    type
-    url
-  }
+    groupAvatars {
+        id
+        name
+        type
+        url
+    }
 }
