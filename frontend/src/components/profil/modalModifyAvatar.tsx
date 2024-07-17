@@ -1,13 +1,32 @@
 import { Button } from "../ui/button";
-import { Avatar, useProfilAvatarsQuery, useUpdateAvatarMutation } from "../../graphql/generated/schema";
+import {
+  Avatar,
+  useGroupAvatarsQuery,
+  useProfilAvatarsQuery,
+  useUpdateAvatarMutation,
+  useUpdateGroupAvatarMutation,
+  UpdateAvatarMutationVariables,
+  UpdateGroupAvatarMutationVariables,
+} from "../../graphql/generated/schema";
 import { useState, useEffect, useRef, CSSProperties } from "react";
 import clsx from "clsx";
 
-export default function ModalModifyAvatar({ isOpen, handleClose, avatarId }: { isOpen: boolean; handleClose: () => void; avatarId?: number }) {
+type ModalModifyAvatarProps = {
+  isOpen: boolean;
+  handleClose: () => void;
+  avatarId?: number;
+  type: "profil" | "group"; // Utilisation d'une union de chaînes pour type
+  groupId?: number;
+};
+
+export default function ModalModifyAvatar({ isOpen, handleClose, avatarId, type, groupId }: ModalModifyAvatarProps) {
   const [avatars, setAvatars] = useState<Avatar[]>([]);
   const [modalScroll, setModalScroll] = useState(false);
   const modalContentRef = useRef<HTMLDivElement>(null);
-  const [avatar, setAvatarId] = useState(avatarId);
+  const [avatar, setAvatarId] = useState<number | undefined>(avatarId);
+
+  const [updateAvatarMutation] = useUpdateAvatarMutation();
+  const [updateGroupAvatarMutation] = useUpdateGroupAvatarMutation();
 
   //to adjust the scroll of the modal
   const handleResize = () => {
@@ -32,30 +51,40 @@ export default function ModalModifyAvatar({ isOpen, handleClose, avatarId }: { i
     };
   }, [isOpen]);
 
-  const onConfirm = () => {
+  const onConfirm = async () => {
     try {
-      updateAvatarMutation({ variables: { data: { avatarId: avatar! } } });
+      if (type === "profil") {
+        await updateAvatarMutation({ variables: { data: { avatarId: avatar! } } });
+      } else if (type === "group" && groupId !== undefined) {
+        const variables: UpdateGroupAvatarMutationVariables = { groupId, avatarId: avatar! };
+        await updateGroupAvatarMutation({ variables });
+      }
       handleClose();
       window.location.reload();
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Error updating avatar:", error);
     }
   };
 
   //end of inmport code scroll modal
 
-  const { data, loading, error } = useProfilAvatarsQuery();
+  const { data: profilData, loading: profilLoading, error: profilError } = useProfilAvatarsQuery();
+  const { data: groupData, loading: groupLoading, error: groupError } = useGroupAvatarsQuery();
 
   useEffect(() => {
-    if (data?.profilAvatars) {
-      setAvatars(data.profilAvatars as Avatar[]);
+    if (type === "profil") {
+      if (profilData?.profilAvatars) {
+        setAvatars(profilData.profilAvatars as Avatar[]);
+      }
+    } else if (type === "group") {
+      if (groupData?.groupAvatars) {
+        setAvatars(groupData.groupAvatars as Avatar[]);
+      }
     }
-  }, [data]);
+  }, [groupData, profilData, type]);
 
-  const [updateAvatarMutation, { loading: updating, error: updateError }] = useUpdateAvatarMutation();
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading avatars</div>;
+  if (profilLoading || groupLoading) return <div>Loading...</div>;
+  if (profilError || groupError) return <div>Error loading avatars</div>;
 
   const modalStyles: CSSProperties = {
     position: "absolute",

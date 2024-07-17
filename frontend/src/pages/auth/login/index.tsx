@@ -31,7 +31,9 @@ function Login() {
         <Input data-testid="login-password" id="password" type="password" name="password" placeholder="Indiquez votre mot de passe" />
         <Button type="submit">{"Se connecter"}</Button>
         <Button variant={"link"}>
-          <Link href={"/auth/register"}>Voulez vous creer un compte ?</Link>
+          <Link href={"/auth/register"} className="text-blue-600 visited:text-purple-600">
+            Pas encore de compte ?
+          </Link>
         </Button>
       </form>
     </div>

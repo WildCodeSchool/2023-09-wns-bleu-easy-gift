@@ -52,6 +52,7 @@ export type InputLogin = {
 
 export type InputRegister = {
   avatar?: InputMaybe<ObjectId>;
+  birthday?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   password: Scalars['String'];
   pseudo?: InputMaybe<Scalars['String']>;
@@ -246,6 +247,11 @@ export type AddNewGroupMutationVariables = Exact<{
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
 
+export type GroupAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GroupAvatarsQuery = { __typename?: 'Query', groupAvatars: Array<{ __typename?: 'Avatar', id: number, name: string, type: string, url: string }> };
+
 export type GetGroupByIdQueryVariables = Exact<{
   groupId: Scalars['Int'];
 }>;
@@ -305,6 +311,14 @@ export type RegisterWithTokenMutationVariables = Exact<{
 
 
 export type RegisterWithTokenMutation = { __typename?: 'Mutation', registrationWithToken: { __typename?: 'UserWithoutPassword', email: string, pseudo: string } };
+
+export type UpdateGroupAvatarMutationVariables = Exact<{
+  avatarId: Scalars['Float'];
+  groupId: Scalars['Float'];
+}>;
+
+
+export type UpdateGroupAvatarMutation = { __typename?: 'Mutation', updateGroupAvatar: { __typename?: 'Group', id: number, name: string, created_at: string, modified_at: string, event_date?: string | null, avatar: { __typename?: 'Avatar', name: string, type: string, url: string } } };
 
 export type UpdateUserMutationVariables = Exact<{
   data: InputUpdateUser;
@@ -448,6 +462,43 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
+export const GroupAvatarsDocument = gql`
+    query groupAvatars {
+  groupAvatars {
+    id
+    name
+    type
+    url
+  }
+}
+    `;
+
+/**
+ * __useGroupAvatarsQuery__
+ *
+ * To run a query within a React component, call `useGroupAvatarsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupAvatarsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupAvatarsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGroupAvatarsQuery(baseOptions?: Apollo.QueryHookOptions<GroupAvatarsQuery, GroupAvatarsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
+      }
+export function useGroupAvatarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GroupAvatarsQuery, GroupAvatarsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
+        }
+export type GroupAvatarsQueryHookResult = ReturnType<typeof useGroupAvatarsQuery>;
+export type GroupAvatarsLazyQueryHookResult = ReturnType<typeof useGroupAvatarsLazyQuery>;
+export type GroupAvatarsQueryResult = Apollo.QueryResult<GroupAvatarsQuery, GroupAvatarsQueryVariables>;
 export const GetGroupByIdDocument = gql`
     query GetGroupById($groupId: Int!) {
   getGroupById(groupId: $groupId) {
@@ -848,6 +899,49 @@ export function useRegisterWithTokenMutation(baseOptions?: Apollo.MutationHookOp
 export type RegisterWithTokenMutationHookResult = ReturnType<typeof useRegisterWithTokenMutation>;
 export type RegisterWithTokenMutationResult = Apollo.MutationResult<RegisterWithTokenMutation>;
 export type RegisterWithTokenMutationOptions = Apollo.BaseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>;
+export const UpdateGroupAvatarDocument = gql`
+    mutation UpdateGroupAvatar($avatarId: Float!, $groupId: Float!) {
+  updateGroupAvatar(avatar_id: $avatarId, group_id: $groupId) {
+    id
+    name
+    created_at
+    modified_at
+    avatar {
+      name
+      type
+      url
+    }
+    event_date
+  }
+}
+    `;
+export type UpdateGroupAvatarMutationFn = Apollo.MutationFunction<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>;
+
+/**
+ * __useUpdateGroupAvatarMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupAvatarMutation, { data, loading, error }] = useUpdateGroupAvatarMutation({
+ *   variables: {
+ *      avatarId: // value for 'avatarId'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useUpdateGroupAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>(UpdateGroupAvatarDocument, options);
+      }
+export type UpdateGroupAvatarMutationHookResult = ReturnType<typeof useUpdateGroupAvatarMutation>;
+export type UpdateGroupAvatarMutationResult = Apollo.MutationResult<UpdateGroupAvatarMutation>;
+export type UpdateGroupAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($data: InputUpdateUser!) {
   updateUser(data: $data) {
