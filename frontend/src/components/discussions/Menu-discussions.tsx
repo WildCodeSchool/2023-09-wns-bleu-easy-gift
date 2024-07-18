@@ -1,12 +1,82 @@
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { use } from "react";
+import { useGetGroupByIdQuery } from "@/graphql/generated/schema";
 
 const MenuDiscussions = () => {
-  const router = useRouter();
-  const { data, loading, error } = useGetUsersByGroupQuery({
-    variables: ,
-    fetchPolicy: "no-cache",
+  /* const router = useRouter();
+  const groupId = Number(router.query.groupId)
+  const { data, loading, error } = useGetGroupByIdQuery({
+    variables: { groupId },
   });
+
+  if (loading) return <div>Chargement...</div>;
+  if (error) return <div>Oups, une erreur est survenue</div>;
+  if (!data || !data.getGroupById) {
+    return <div>Groupe introuvable</div>;
+  }
+  const group = data.getGroupById;
+  */
+
+  const group = {
+    "id": 1,
+    "name": "chat",
+    "userToGroups": [
+      {
+        "user": {
+          "pseudo": "Pierre",
+          "avatar": {
+            "url": "https://ucarecdn.com/bb05bd7d-e0cc-49b1-867b-36aa9ff245f2/-/preview/1000x1000/"
+          },
+          "id": 1
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Dorothée",
+          "avatar": {
+            "url": "https://ucarecdn.com/74347f17-c04e-4e57-aafd-fc518ebd332e/-/preview/1000x1000/"
+          },
+          "id": 8
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Alliaume",
+          "avatar": {
+            "url": "https://ucarecdn.com/4efb4fd3-382c-4734-86ae-23eb62594036/-/preview/1000x1000/"
+          },
+          "id": 7
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Guilhemine",
+          "avatar": {
+            "url": "https://ucarecdn.com/f3546ab4-0edd-4470-90b9-f604c84266e1/-/preview/1000x1000/"
+          },
+          "id": 9
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Cyriaque",
+          "avatar": {
+            "url": "https://ucarecdn.com/beb1818b-3726-4a90-9db0-563b8a2671c1/-/preview/1000x1000/"
+          },
+          "id": 11
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Chilpéric",
+          "avatar": {
+            "url": "https://ucarecdn.com/9dab743e-7860-4603-850f-64e5c344ae1a/-/preview/1000x1000/"
+          },
+          "id": 10
+        }
+      }
+    ]
+  }
 
   return (
     <nav className="bg-slate-200 w-full h-full pt-5 pb-6 flex  flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start">
@@ -34,126 +104,32 @@ const MenuDiscussions = () => {
         </div>
       </div>
       <ul className="w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow lg:max-h-[45rem]">
-        <li className="w-full h-16 rounded-full bg-red400 shadow-md pl-4 pr-6 py-2 mb-4 md:mb-12">
-          <a className="h-full flex items-center justify-start" href="/">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-red500"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4 max-w-96">
-              <h2 className="text-xl text-white">Jerem</h2>
-              <p className=" truncate text-sm text-white font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
-        <li className="w-full h-16 rounded-full bg-blue200 focus:border-2 focus:border-primaryBlue border-solid pl-4 pr-6 py-2 mb-4">
-          <a className="h-full flex items-center justify-start" href="/">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4">
-              <h2 className="text-xl text-primaryBlue font-semibold">Aurel</h2>
-              <p className=" truncate text-sm text-primaryBlue font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
-        <li className="w-full h-16 rounded-full bg-blue200 focus:border-2 focus:border-primaryBlue  pl-4 pr-6 py-2 mb-4">
-          <a className="h-full flex items-center justify-start">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12  rounded-full mr-2 border-solid border-4 border-primaryBlue"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4">
-              <h2 className="text-xl text-primaryBlue font-semibold">Léopold</h2>
-              <p className=" truncate text-sm text-primaryBlue font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
-        <li className="w-full h-16 rounded-full bg-blue200 focus:border-2 focus:border-primaryBlue pl-4 pr-6 py-2 mb-4">
-          <a className="h-full flex items-center justify-start">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12  rounded-full mr-2 border-solid border-4 border-primaryBlue"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4">
-              <h2 className="text-xl text-primaryBlue font-semibold">Olga</h2>
-              <p className=" truncate text-sm text-primaryBlue font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
-        <li className="w-full h-16 rounded-full bg-blue200 focus:border-2 focus:border-primaryBlue pl-4 pr-6 py-2 mb-4">
-          <a className="h-full flex items-center justify-start">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4">
-              <h2 className="text-xl text-primaryBlue font-semibold">Morgane</h2>
-              <p className=" truncate text-sm text-primaryBlue font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
-        <li className="w-full h-16 rounded-full bg-blue200 focus:border-2 focus:border-primaryBlue pl-4 pr-6 py-2 mb-4">
-          <a className="h-full flex items-center justify-start">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4">
-              <h2 className="text-xl text-primaryBlue font-semibold">Other</h2>
-              <p className=" truncate text-sm text-primaryBlue font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
-        <li className="w-full h-16 rounded-full bg-blue200 focus:border-2 focus:border-primaryBlue pl-4 pr-6 py-2 mb-4">
-          <a className="h-full flex items-center justify-start">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4">
-              <h2 className="text-xl text-primaryBlue font-semibold">Other</h2>
-              <p className=" truncate text-sm text-primaryBlue font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
-        <li className="w-full h-16 rounded-full bg-blue200 focus:border-2 focus:border-primaryBlue pl-4 pr-6 py-2 mb-4">
-          <a className="h-full flex items-center justify-start">
-            <div className="relative mr-3 w-12 h-12">
-              <img
-                src="/images/avatar/profil_girafe.png"
-                className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue"
-                alt="Avatar of the user"
-              />
-            </div>
-            <div className="self-start flex flex-wrap w-3/4">
-              <h2 className="text-xl text-primaryBlue font-semibold">Other</h2>
-              <p className=" truncate text-sm text-primaryBlue font-semibold w-min">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            </div>
-          </a>
-        </li>
+        {group.userToGroups.map((userToGroup, index) => (
+          <li
+            className={`w-full h-16 rounded-full ${index === 0 ? "bg-red400 shadow-md border-red500 md:mb-12" : "bg-blue200 focus:border-2 focus:border-primaryBlue"
+              } pl-4 pr-6 py-2 mb-4`}
+            key={userToGroup.user.id}
+          >
+            <a className="h-full flex items-center justify-start" href="/">
+              <div className="relative mr-3 w-12 h-12">
+                <img
+                  src={index === 0 ? "/images/avatar/profil_girafe.png" : userToGroup.user.avatar?.url}
+                  className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0 ? "border-red500" : "border-primaryBlue"
+                    }`}
+                  alt="Avatar of the user"
+                />
+              </div>
+              <div className="self-start flex flex-wrap w-3/4">
+                <h2 className={`text-xl ${index === 0 ? "text-white" : "text-primaryBlue font-semibold"}`}>
+                  {userToGroup.user.pseudo}
+                </h2>
+                <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+              </div>
+            </a>
+          </li>
+        ))}
       </ul>
       <div className="w-4/5 mx-auto self-start flex flex-grow justify-end items-start shadow-[1px_-7px_8px_-8px_theme(colors.slate.400)] md:shadow-none">
         <div className="flex justify-end mt-4 lg:self-end">
@@ -174,3 +150,4 @@ const MenuDiscussions = () => {
 }
 
 export default MenuDiscussions;
+
