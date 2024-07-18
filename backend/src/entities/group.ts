@@ -10,7 +10,14 @@ import {
 } from 'typeorm'
 import { Avatar } from './avatar'
 import { ObjectType, Field, Int, InputType } from 'type-graphql'
-import { Length } from 'class-validator'
+import {
+    ArrayMinSize,
+    ArrayNotEmpty,
+    IsArray,
+    IsDateString,
+    IsEmail,
+    Length,
+} from 'class-validator'
 import { Discussion } from './discussion'
 import { UserToGroup } from './userToGroup'
 
@@ -23,9 +30,6 @@ export class Group extends BaseEntity {
 
     @Field()
     @Column({ length: 30 })
-    @Length(3, 30, {
-        message: 'Le nom du groupe doit contenir entre 3 and 30 caractères',
-    })
     name: string
 
     @Field()
@@ -64,17 +68,40 @@ export class NewGroupInput {
     name: string
 
     @Field(() => [String])
+    @IsArray({ message: 'emailUsers doit être un tableau' })
+    @ArrayNotEmpty({ message: 'emailUsers ne doit pas être vide' })
+    @ArrayMinSize(2, {
+        message: 'Le tableau emailUsers doit contenir au moins un email',
+    })
+    @IsEmail(
+        {},
+        {
+            each: true,
+            message: 'Chaque élément de emailUsers doit être un email valide',
+        }
+    )
     emailUsers: string[]
 
     @Field()
+    @IsDateString(
+        {},
+        { message: 'event_date doit être une date valide au format string' }
+    )
     event_date: string
 }
 
 @InputType()
 export class UpdateGroupInput {
     @Field({ nullable: true })
+    @Length(5, 50, {
+        message: 'Le nom du groupe doit contenir entre 5 et 50 caractères',
+    })
     name?: string
 
     @Field({ nullable: true })
+    @IsDateString(
+        {},
+        { message: 'event_date doit être une date valide au format string' }
+    )
     event_date?: string
 }
