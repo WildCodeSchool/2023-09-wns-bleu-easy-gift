@@ -20,7 +20,10 @@ import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
 
 export async function findUserByEmail(email: string) {
-    return await User.findOneBy({ email })
+    return await User.findOne({
+        where: { email },
+        relations: ['avatar', 'userToGroups.user', 'userToGroups.group'],
+    })
 }
 
 export async function createUser({
@@ -104,7 +107,7 @@ class UsersResolver {
 
         const isPasswordValid = await argon2.verify(
             user.password,
-            infos.password,
+            infos.password
         )
         const responseMessage = new ResponseMessage()
         if (isPasswordValid) {
@@ -139,12 +142,12 @@ class UsersResolver {
     async getUserInfos(@Ctx() ctx: MyContext) {
         if (!ctx.user) {
             throw new GraphQLError(
-                'Merci de vous identifier pour accéder à cette page',
+                'Merci de vous identifier pour accéder à cette page'
             )
         }
         const userData = await User.findOne({
             where: { email: ctx.user.email },
-            relations: ['avatar', 'discussions'],
+            relations: ['avatar'],
         })
 
         if (!userData) throw new GraphQLError('Cannot find user')
@@ -154,7 +157,7 @@ class UsersResolver {
             pseudo: userData.pseudo,
             email: userData.email,
             avatar: userData.avatar,
-            discussions: userData.discussions,
+            // discussions: userData.discussions,
         }
     }
 
@@ -175,7 +178,7 @@ class UsersResolver {
     @Mutation(() => UserWithoutPassword)
     async updateUser(
         @Arg('data') data: InputUpdateUser,
-        @Ctx() ctx: MyContext,
+        @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {
             throw new GraphQLError("L'utilisateur n'est pas authentifié")
@@ -205,7 +208,7 @@ class UsersResolver {
     @Mutation(() => UserWithoutPasswordAvatar)
     async updateAvatar(
         @Arg('data') data: InputUpdateAvatar,
-        @Ctx() ctx: MyContext,
+        @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {
             throw new GraphQLError("L'utilisateur n'est pas authentifié")

@@ -1,0 +1,27 @@
+mutation UpdateGroup($data: UpdateGroupInput!, $groupId: Float!) {
+    updateGroup(data: $data, groupId: $groupId) {
+        avatar {
+            id
+            url
+        }
+        created_at
+        event_date
+        id
+        name
+        userToGroups {
+            is_admin
+            group_id
+            user_id
+            user {
+                avatar {
+                    id
+                    url
+                }
+                birthday
+                email
+                id
+                pseudo
+            }
+        }
+    }
+}

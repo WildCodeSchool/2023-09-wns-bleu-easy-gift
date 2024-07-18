@@ -9,6 +9,7 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    JoinTable,
     ManyToMany,
     ManyToOne,
     OneToMany,
@@ -65,13 +66,14 @@ export class User extends BaseEntity {
     @Field(() => Avatar, { nullable: true })
     avatar: Avatar | null
 
-    @ManyToMany(() => Discussion, discussion => discussion.users)
-    @Field(() => [Discussion])
-    discussions: Discussion[]
+    // @ManyToMany(() => Discussion, discussion => discussion.users)
+    // @Field(() => [Discussion])
+    // discussions: Discussion[]
 
     @OneToMany(() => Message, message => message.user)
     messages: Message[]
 
+    @Field(() => [UserToGroup])
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.user)
     public userToGroups: UserToGroup[]
 
@@ -101,6 +103,9 @@ export class InputRegister {
 
     @Field(() => ObjectId, { nullable: true })
     avatar?: Avatar | null
+
+    @Field({ nullable: true })
+    birthday?: string
 }
 
 @ObjectType()
@@ -156,8 +161,8 @@ export class UserInfos {
     @Field(() => Avatar, { nullable: true })
     avatar?: Avatar | null
 
-    @Field(() => [Discussion])
-    discussions: Discussion[]
+    // @Field(() => [Discussion])
+    // discussions: Discussion[]
 }
 
 @InputType()

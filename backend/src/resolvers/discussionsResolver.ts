@@ -22,17 +22,14 @@ async function createDiscussion({
 }) {
     // pubsub: PubSubEngine,
     const newDiscussion = await Discussion.create({ name })
-
     const group = await Group.findOne({ where: { id: groupId } })
 
     if (!group) throw new GraphQLError(`Can't find group `)
 
     newDiscussion.group = group
-
     newDiscussion.users = participantUsers
 
-    newDiscussion.save()
-    console.log('NEW_DISCUSSION&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', newDiscussion)
+    return newDiscussion.save()
 
     // pubsub.publish('NEW_DISCUSSION', newDiscussion)
 }
@@ -44,20 +41,33 @@ export async function createGroupDiscussions({
     groupUsers: User[]
     groupId: number
 }) {
-    groupUsers.forEach(currentUser => {
-        const participantUsers = groupUsers.filter(
-            user => user.id !== currentUser.id,
-        )
-        console.log('Creating discussion for user:', currentUser.pseudo)
+    await Promise.all(
+        groupUsers.map(async currentUser => {
+            const participantUsers = groupUsers.filter(
+                user => user.id !== currentUser.id
+            )
 
-        createDiscussion(
-            {
+            return await createDiscussion({
                 name: currentUser.pseudo,
                 groupId,
                 participantUsers,
-            },
-        )
-    })
+            })
+            // groupUsers.forEach(currentUser => {
+            //     const participantUsers = groupUsers.filter(
+            //         user => user.id !== currentUser.id,
+            //     )
+            //     console.log('Creating discussion for user:', currentUser.pseudo)
+
+            //     createDiscussion(
+            //         {
+            //             name: currentUser.pseudo,
+            //             groupId,
+            //             participantUsers,
+            //         },
+            //     )
+            // }
+        })
+    )
 }
 
 @Resolver(Discussion)

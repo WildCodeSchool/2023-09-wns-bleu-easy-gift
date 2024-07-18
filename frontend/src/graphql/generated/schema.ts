@@ -38,9 +38,11 @@ export type Group = {
   __typename?: 'Group';
   avatar: Avatar;
   created_at: Scalars['String'];
+  event_date?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   modified_at: Scalars['String'];
   name: Scalars['String'];
+  userToGroups: Array<UserToGroup>;
 };
 
 export type InputLogin = {
@@ -50,6 +52,7 @@ export type InputLogin = {
 
 export type InputRegister = {
   avatar?: InputMaybe<ObjectId>;
+  birthday?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   password: Scalars['String'];
   pseudo?: InputMaybe<Scalars['String']>;
@@ -87,6 +90,8 @@ export type Mutation = {
   register: UserWithoutPassword;
   registrationWithToken: UserWithoutPassword;
   updateAvatar: UserWithoutPasswordAvatar;
+  updateGroup: Group;
+  updateGroupAvatar: Group;
   updateUser: UserWithoutPassword;
 };
 
@@ -118,12 +123,25 @@ export type MutationUpdateAvatarArgs = {
 };
 
 
+export type MutationUpdateGroupArgs = {
+  data: UpdateGroupInput;
+  groupId: Scalars['Float'];
+};
+
+
+export type MutationUpdateGroupAvatarArgs = {
+  avatar_id: Scalars['Float'];
+  group_id: Scalars['Float'];
+};
+
+
 export type MutationUpdateUserArgs = {
   data: InputUpdateUser;
 };
 
 export type NewGroupInput = {
   emailUsers: Array<Scalars['String']>;
+  event_date: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -134,10 +152,12 @@ export type ObjectId = {
 export type Query = {
   __typename?: 'Query';
   getDiscusions: Array<Discussion>;
+  getGroupById: Group;
   getMessagesByDisscution: Array<Message>;
   getUserByToken: User;
   getUserInfos: UserInfos;
   getUsersByGroup: Array<Group>;
+  groupAvatars: Array<Avatar>;
   groups: Array<Group>;
   login: ResponseMessage;
   logout: ResponseMessage;
@@ -146,6 +166,11 @@ export type Query = {
   userGroups: Array<Group>;
   users: Array<User>;
   usersToGroups: Array<UserToGroup>;
+};
+
+
+export type QueryGetGroupByIdArgs = {
+  groupId: Scalars['Int'];
 };
 
 
@@ -180,23 +205,27 @@ export type Subscription = {
   newMessage: Message;
 };
 
+export type UpdateGroupInput = {
+  event_date?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   avatar?: Maybe<Avatar>;
   birthday?: Maybe<Scalars['DateTimeISO']>;
   created_at: Scalars['String'];
-  discussions: Array<Discussion>;
   email: Scalars['String'];
   id: Scalars['Int'];
   modified_at: Scalars['String'];
   pseudo: Scalars['String'];
+  userToGroups: Array<UserToGroup>;
   validated_email?: Maybe<Scalars['DateTimeISO']>;
 };
 
 export type UserInfos = {
   __typename?: 'UserInfos';
   avatar?: Maybe<Avatar>;
-  discussions: Array<Discussion>;
   email: Scalars['String'];
   id: Scalars['String'];
   pseudo: Scalars['String'];
@@ -209,6 +238,7 @@ export type UserToGroup = {
   id: Scalars['Int'];
   is_admin: Scalars['Boolean'];
   modified_at: Scalars['String'];
+  user: User;
   user_id: Scalars['Float'];
 };
 
@@ -232,12 +262,20 @@ export type UpdateAvatarMutationVariables = Exact<{
 
 export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: { __typename?: 'UserWithoutPasswordAvatar', email: string, pseudo: string, avatar: { __typename?: 'Avatar', url: string, id: number, name: string } } };
 
+export type UpdateGroupMutationVariables = Exact<{
+  data: UpdateGroupInput;
+  groupId: Scalars['Float'];
+}>;
+
+
+export type UpdateGroupMutation = { __typename?: 'Mutation', updateGroup: { __typename?: 'Group', created_at: string, event_date?: string | null, id: number, name: string, avatar: { __typename?: 'Avatar', id: number, url: string }, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, group_id: number, user_id: number, user: { __typename?: 'User', birthday?: any | null, email: string, id: number, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string } | null } }> } };
+
 export type AddNewGroupMutationVariables = Exact<{
   data: NewGroupInput;
 }>;
 
 
-export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, name: string } } };
+export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
 
 export type AddNewMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -252,6 +290,18 @@ export type CreateMessageMutationVariables = Exact<{
 
 
 export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number, name: string } } };
+
+export type GroupAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GroupAvatarsQuery = { __typename?: 'Query', groupAvatars: Array<{ __typename?: 'Avatar', id: number, name: string, type: string, url: string }> };
+
+export type GetGroupByIdQueryVariables = Exact<{
+  groupId: Scalars['Int'];
+}>;
+
+
+export type GetGroupByIdQuery = { __typename?: 'Query', getGroupById: { __typename?: 'Group', id: number, name: string, created_at: string, event_date?: string | null, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, user_id: number, group_id: number, user: { __typename?: 'User', email: string, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string } | null } }>, avatar: { __typename?: 'Avatar', id: number, url: string } } };
 
 export type GetMessagesByDisscutionQueryVariables = Exact<{
   discussionId: Scalars['Float'];
@@ -275,7 +325,7 @@ export type GetUserByTokenQuery = { __typename?: 'Query', getUserByToken: { __ty
 export type UserGroupsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, url: string } }> };
+export type UserGroupsQuery = { __typename?: 'Query', userGroups: Array<{ __typename?: 'Group', id: number, name: string, event_date?: string | null, created_at: string, avatar: { __typename?: 'Avatar', id: number, name: string, url: string }, userToGroups: Array<{ __typename?: 'UserToGroup', user: { __typename?: 'User', id: number, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, name: string, url: string } | null } }> }> };
 
 export type GetUserInfosQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -312,6 +362,14 @@ export type RegisterWithTokenMutationVariables = Exact<{
 
 
 export type RegisterWithTokenMutation = { __typename?: 'Mutation', registrationWithToken: { __typename?: 'UserWithoutPassword', email: string, pseudo: string } };
+
+export type UpdateGroupAvatarMutationVariables = Exact<{
+  avatarId: Scalars['Float'];
+  groupId: Scalars['Float'];
+}>;
+
+
+export type UpdateGroupAvatarMutation = { __typename?: 'Mutation', updateGroupAvatar: { __typename?: 'Group', id: number, name: string, created_at: string, modified_at: string, event_date?: string | null, avatar: { __typename?: 'Avatar', name: string, type: string, url: string } } };
 
 export type UpdateUserMutationVariables = Exact<{
   data: InputUpdateUser;
@@ -360,11 +418,68 @@ export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
 export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
 export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
+export const UpdateGroupDocument = gql`
+    mutation UpdateGroup($data: UpdateGroupInput!, $groupId: Float!) {
+  updateGroup(data: $data, groupId: $groupId) {
+    avatar {
+      id
+      url
+    }
+    created_at
+    event_date
+    id
+    name
+    userToGroups {
+      is_admin
+      group_id
+      user_id
+      user {
+        avatar {
+          id
+          url
+        }
+        birthday
+        email
+        id
+        pseudo
+      }
+    }
+  }
+}
+    `;
+export type UpdateGroupMutationFn = Apollo.MutationFunction<UpdateGroupMutation, UpdateGroupMutationVariables>;
+
+/**
+ * __useUpdateGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupMutation, { data, loading, error }] = useUpdateGroupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupMutation, UpdateGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(UpdateGroupDocument, options);
+      }
+export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
+export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
+export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
 export const AddNewGroupDocument = gql`
     mutation AddNewGroup($data: NewGroupInput!) {
   addNewGroup(data: $data) {
     id
     name
+    event_date
     avatar {
       id
       name
@@ -480,6 +595,98 @@ export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
+export const GroupAvatarsDocument = gql`
+    query groupAvatars {
+  groupAvatars {
+    id
+    name
+    type
+    url
+  }
+}
+    `;
+
+/**
+ * __useGroupAvatarsQuery__
+ *
+ * To run a query within a React component, call `useGroupAvatarsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupAvatarsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupAvatarsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGroupAvatarsQuery(baseOptions?: Apollo.QueryHookOptions<GroupAvatarsQuery, GroupAvatarsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
+      }
+export function useGroupAvatarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GroupAvatarsQuery, GroupAvatarsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
+        }
+export type GroupAvatarsQueryHookResult = ReturnType<typeof useGroupAvatarsQuery>;
+export type GroupAvatarsLazyQueryHookResult = ReturnType<typeof useGroupAvatarsLazyQuery>;
+export type GroupAvatarsQueryResult = Apollo.QueryResult<GroupAvatarsQuery, GroupAvatarsQueryVariables>;
+export const GetGroupByIdDocument = gql`
+    query GetGroupById($groupId: Int!) {
+  getGroupById(groupId: $groupId) {
+    id
+    name
+    created_at
+    event_date
+    userToGroups {
+      is_admin
+      user_id
+      group_id
+      user {
+        avatar {
+          id
+          url
+        }
+        email
+        pseudo
+      }
+    }
+    avatar {
+      id
+      url
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetGroupByIdQuery__
+ *
+ * To run a query within a React component, call `useGetGroupByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGroupByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGroupByIdQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useGetGroupByIdQuery(baseOptions: Apollo.QueryHookOptions<GetGroupByIdQuery, GetGroupByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
+      }
+export function useGetGroupByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByIdQuery, GetGroupByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
+        }
+export type GetGroupByIdQueryHookResult = ReturnType<typeof useGetGroupByIdQuery>;
+export type GetGroupByIdLazyQueryHookResult = ReturnType<typeof useGetGroupByIdLazyQuery>;
+export type GetGroupByIdQueryResult = Apollo.QueryResult<GetGroupByIdQuery, GetGroupByIdQueryVariables>;
 export const GetMessagesByDisscutionDocument = gql`
     query getMessagesByDisscution($discussionId: Float!) {
   getMessagesByDisscution(discussionId: $discussionId) {
@@ -599,9 +806,24 @@ export const UserGroupsDocument = gql`
   userGroups {
     id
     name
+    event_date
+    created_at
     avatar {
       id
+      name
       url
+      name
+    }
+    userToGroups {
+      user {
+        id
+        pseudo
+        avatar {
+          id
+          name
+          url
+        }
+      }
     }
   }
 }
@@ -852,6 +1074,49 @@ export function useRegisterWithTokenMutation(baseOptions?: Apollo.MutationHookOp
 export type RegisterWithTokenMutationHookResult = ReturnType<typeof useRegisterWithTokenMutation>;
 export type RegisterWithTokenMutationResult = Apollo.MutationResult<RegisterWithTokenMutation>;
 export type RegisterWithTokenMutationOptions = Apollo.BaseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>;
+export const UpdateGroupAvatarDocument = gql`
+    mutation UpdateGroupAvatar($avatarId: Float!, $groupId: Float!) {
+  updateGroupAvatar(avatar_id: $avatarId, group_id: $groupId) {
+    id
+    name
+    created_at
+    modified_at
+    avatar {
+      name
+      type
+      url
+    }
+    event_date
+  }
+}
+    `;
+export type UpdateGroupAvatarMutationFn = Apollo.MutationFunction<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>;
+
+/**
+ * __useUpdateGroupAvatarMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupAvatarMutation, { data, loading, error }] = useUpdateGroupAvatarMutation({
+ *   variables: {
+ *      avatarId: // value for 'avatarId'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useUpdateGroupAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>(UpdateGroupAvatarDocument, options);
+      }
+export type UpdateGroupAvatarMutationHookResult = ReturnType<typeof useUpdateGroupAvatarMutation>;
+export type UpdateGroupAvatarMutationResult = Apollo.MutationResult<UpdateGroupAvatarMutation>;
+export type UpdateGroupAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>;
 export const UpdateUserDocument = gql`
     mutation UpdateUser($data: InputUpdateUser!) {
   updateUser(data: $data) {

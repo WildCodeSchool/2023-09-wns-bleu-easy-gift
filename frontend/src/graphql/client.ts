@@ -4,7 +4,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { createClient } from 'graphql-ws';
 require('dotenv').config();
 
-const devApiUrl = process.env.NEXT_PUBLIC_APOLLO_URI;
+const devApiUrl = process.env.NEXT_PUBLIC_APOLLO_URI
 
 // const wsUrl = devApiUrl
 //   ? devApiUrl.replace(/^http/, 'ws') + '/subscriptions'
@@ -52,4 +52,4 @@ const client = new ApolloClient({
   },
 });
 
-export default client;
+export default client

@@ -20,5 +20,5 @@ export default nodemailer.createTransport(
                   user: process.env.SMTP_USER as string | undefined,
                   pass: process.env.SMTP_PASSWORD as string | undefined,
               },
-          },
+          }
 )

@@ -1,1 +1,1 @@
-export const maxWidthScreen = "1400px";
+export const maxWidthScreen = '1400px'

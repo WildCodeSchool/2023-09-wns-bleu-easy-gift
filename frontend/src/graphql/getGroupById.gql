@@ -1,0 +1,25 @@
+query GetGroupById($groupId: Int!) {
+    getGroupById(groupId: $groupId) {
+        id
+        name
+        created_at
+        event_date
+        userToGroups {
+            is_admin
+            user_id
+            group_id
+            user {
+                avatar {
+                    id
+                    url
+                }
+                email
+                pseudo
+            }
+        }
+        avatar {
+            id
+            url
+        }
+    }
+}
