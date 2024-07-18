@@ -1,0 +1,14 @@
+mutation UpdateGroupAvatar($avatarId: Float!, $groupId: Float!) {
+  updateGroupAvatar(avatar_id: $avatarId, group_id: $groupId) {
+    id
+    name
+    created_at
+    modified_at
+    avatar {
+      name
+      type
+      url
+    }
+    event_date
+  }
+}

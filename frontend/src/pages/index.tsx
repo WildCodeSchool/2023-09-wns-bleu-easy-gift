@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { checkUserConnected } from "@/utils/checkConnection";
 import { useUserGroupsQuery } from "@/graphql/generated/schema";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
@@ -67,7 +68,7 @@ export default function Home() {
             C'est fun, c'est facile,... c'est cadeau !🎉
           </p>
           <Button className="text-base h-9 rounded-md px-3 shadow-lg shadow-slate-400 md:h-11 md:text-lg md:px-8 2xl:h-14 2xl:px-10 2xl:text-2xl">
-            rejoins les Easy Gifteurs
+            {isConnected ? <Link href="/creating-groups">Je créé un groupe</Link> : <Link href="/auth/login">Je me lance</Link>}
           </Button>
         </div>
       </section>
@@ -90,7 +91,7 @@ export default function Home() {
             onClick={handleButtonClick}
             className="text-base h-9 mb-28 rounded-md px-3 shadow-lg shadow-slate-400 md:h-11 md:text-lg md:px-8 lg:mb-8 2xl:h-14 2xl:px-10 2xl:text-2xl"
           >
-            Essaie gratuitement
+            {isConnected ? <Link href="/creating-groups">C'est parti !</Link> : <Link href="/auth/login">Ca m'intéresse</Link>}
           </Button>
         </article>
         <Carousel className="max-w-96 max-h-140 sm:max-w-xl lg:mb-28 lg:ml-16 lg:mr-16 2xl:h-[576px] lg:order-2">

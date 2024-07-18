@@ -33,52 +33,33 @@ export default function Navbar() {
 
   return (
     <nav className="w-full h-16 sticky top-0 shadow-lg z-10 bg-bgPrimary">
-      <div
-        className={`max-w-[${maxWidthScreen}] h-full flex justify-between items-center gap-2 mx-auto px-10 2xl:px-[350px]`}
-      >
+      <div className={`max-w-[${maxWidthScreen}] h-full flex justify-between items-center gap-2 mx-auto px-10 2xl:px-[350px]`}>
         {/* Burger Icon for Mobile Screens */}
         <button onClick={() => setMenuOpen(!isMenuOpen)} className="md:hidden">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
-        <div
-          className="space-y-1 flex justify-center items-center hover:cursor-pointer"
-          onClick={handleLogoClick}
-        >
-          <img
-            src="/images/logo/logo-easy-gift-tablet.png"
-            alt="Logo d'easy-gift"
-            className="mr-2"
-          />
-          <h1 className="font-rubik text-2xl text-primaryBlue font-bold">
-            Easy Gift
-          </h1>
+        <div className="space-y-1 flex justify-center items-center hover:cursor-pointer" onClick={handleLogoClick}>
+          <img src="/images/logo/logo-easy-gift-tablet.png" alt="Logo d'easy-gift" className="mr-2" />
+          <h1 className="font-rubik text-2xl text-primaryBlue font-bold">Easy Gift</h1>
         </div>
 
         {/* Links for Larger Screens */}
-        <div className={`hidden md:flex md:flex-row gap-4`}>
-          <Link href="/groupes" className={`font-semibold ${currentPath === '/groupes' ? 'underline' : ''}`}>
-            Mes groupes
-          </Link>
-          <Link href="#" className={`font-semibold ${currentPath === '#' ? 'underline' : ''}`}>
-            Mes discussions
-          </Link>
-          <Link href="/mon-profil" className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}>
-            Mon profil
-          </Link>
-        </div>
+        {isConnected && (
+          <div className={`hidden md:flex md:flex-row gap-4`}>
+            <Link href="/groupes" className={`font-semibold ${currentPath === "/groupes" ? "underline" : ""}`}>
+              Mes groupes
+            </Link>
+            <Link href="#" className={`font-semibold ${currentPath === "#" ? "underline" : ""}`}>
+              Mes discussions
+            </Link>
+            <Link href="/mon-profil" className={`font-semibold ${currentPath === "/mon-profil" ? "underline" : ""}`}>
+              Mon profil
+            </Link>
+          </div>
+        )}
 
         {/* Side Drawer for Mobile Screens */}
         <div
@@ -89,29 +70,23 @@ export default function Navbar() {
         >
           {/* Close Button */}
           <button onClick={() => setMenuOpen(false)} className="self-end">
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <Link href="/mon-profil" onClick={closeMenu}>
-            Mon profil
-          </Link>
-          <Link href="/groupes" onClick={closeMenu}>
-            Mes groupes
-          </Link>
-          <Link href="#" onClick={closeMenu}>
-            Mes discussions
-          </Link>
+          {isConnected && (
+            <>
+              <Link href="/mon-profil" onClick={closeMenu}>
+                Mon profil
+              </Link>
+              <Link href="/groupes" onClick={closeMenu}>
+                Mes groupes
+              </Link>
+              <Link href="#" onClick={closeMenu}>
+                Mes discussions
+              </Link>
+            </>
+          )}
           {!isConnected && (
             <>
               <Button className="shadow-md">
@@ -120,8 +95,8 @@ export default function Navbar() {
                 </Link>
               </Button>
               <Button className="shadow-md">
-                <Link onClick={closeMenu} href="/auth/login">
-                  Sign up
+                <Link onClick={closeMenu} href="/auth/register">
+                  Register
                 </Link>
               </Button>
             </>
@@ -137,7 +112,7 @@ export default function Navbar() {
                 <Link href="/auth/login">Login</Link>
               </Button>
               <Button className="shadow-md">
-                <Link href="/auth/login">Sign up</Link>
+                <Link href="/auth/register">Register</Link>
               </Button>
             </>
           )}
