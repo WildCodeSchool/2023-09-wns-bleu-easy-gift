@@ -1,8 +1,8 @@
 import React from 'react';
 
-const EspaceDiscussion = () => {
+const EspaceDiscussion = ({ isMenuHidden }: { isMenuHidden: boolean }) => {
   return (
-    <div className='hidden md:w-7/12 md:flex md:justify-center md:items-center'>
+    <div className={`hidden md:w-7/12 md:flex md:flex-grow md:justify-center md:items-center transition-all duration-1000 ease-in-out ${isMenuHidden ? 'w-full' : 'w-7/12'}`}>
       <div>
         <img src="" alt="" />
         <p>Noël</p>
@@ -19,3 +19,4 @@ const EspaceDiscussion = () => {
 };
 
 export default EspaceDiscussion;
+
