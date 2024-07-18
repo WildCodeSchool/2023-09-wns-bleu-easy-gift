@@ -27,36 +27,45 @@ function Login() {
         }
     }
     return (
-        <div className='flex flex-col  justify-center  items-center w-full h-full '>
+        <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
+            <h2 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+                Connexion
+            </h2>
             <form
                 className='flex flex-col items-center gap-2'
                 onSubmit={handleSubmit}
             >
-                <Input
-                    data-testid='login-email'
-                    id='email'
-                    type='email'
-                    name='email'
-                    placeholder='Indiquez votre email'
-                />
-                <Input
-                    data-testid='login-password'
-                    id='password'
-                    type='password'
-                    name='password'
-                    placeholder='Indiquez votre mot de passe'
-                />
-                <Button type='submit'>{'Se connecter'}</Button>
+                <label className='mb-3'>
+                    Email
+                    <Input
+                        data-testid='login-email'
+                        id='email'
+                        type='email'
+                        name='email'
+                        // placeholder='exemple@gmail.com'
+                    />
+                </label>
+                <label>
+                    Mot de passe
+                    <Input
+                        data-testid='login-password'
+                        id='password'
+                        type='password'
+                        name='password'
+                        // placeholder='MonMotDePasse'
+                    />
+                </label>
+                <Button type='submit' className='mt-6'>
+                    {'Se connecter'}
+                </Button>
                 <Button variant={'link'}>
-                    <Link
-                        href={'/auth/register'}
-                        className='text-blue-600 visited:text-purple-600'
-                    >
+                    <Link href={'/auth/register'} className='text-blue-600'>
                         Pas encore de compte ?
                     </Link>
                 </Button>
             </form>
-        </div>
+            {/* </div> */}
+        </section>
     )
 }
 
