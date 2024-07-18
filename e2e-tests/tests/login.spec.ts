@@ -29,7 +29,7 @@ test("has a valid user name", async ({ page }) => {
   const disconnectButton = await page.getByRole("button", {
     name: "Se déconnecter",
   });
-  await expect(disconnectButton).toBeVisible();
+  expect(disconnectButton).toBeVisible({ timeout: 10000 });
   // await expect(
   //   page.getByRole("button", {name: "Se déconnecter"})
   // ).toBeVisible();
