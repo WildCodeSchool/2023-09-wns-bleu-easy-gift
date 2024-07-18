@@ -1,21 +1,26 @@
-import { PubSubEngine, Query, Resolver, Root, Subscription } from 'type-graphql'
+import {
+    PubSub,
+    PubSubEngine,
+    Query,
+    Resolver,
+    Root,
+    Subscription,
+} from 'type-graphql'
 import { Discussion } from '../entities/discussion'
 import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 
-async function createDiscussion(
-    {
-        name,
-        groupId,
-        participantUsers,
-    }: {
-        name: string
-        groupId: number
-        participantUsers: User[]
-    },
-    pubsub: PubSubEngine,
-) {
+async function createDiscussion({
+    name,
+    groupId,
+    participantUsers,
+}: {
+    name: string
+    groupId: number
+    participantUsers: User[]
+}) {
+    // pubsub: PubSubEngine,
     const newDiscussion = await Discussion.create({ name })
 
     const group = await Group.findOne({ where: { id: groupId } })
@@ -29,19 +34,17 @@ async function createDiscussion(
     newDiscussion.save()
     console.log('NEW_DISCUSSION&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', newDiscussion)
 
-    pubsub.publish('NEW_DISCUSSION', newDiscussion)
+    // pubsub.publish('NEW_DISCUSSION', newDiscussion)
 }
 
-export async function createGroupDiscussions(
-    {
-        groupUsers,
-        groupId,
-    }: {
-        groupUsers: User[]
-        groupId: number
-    },
-    pubsub: PubSubEngine,
-) {
+export async function createGroupDiscussions({
+    groupUsers,
+    groupId,
+}: {
+    groupUsers: User[]
+    groupId: number
+}) {
+    // pubsub: PubSubEngine,
     groupUsers.forEach(currentUser => {
         const participantUsers = groupUsers.filter(
             user => user.id !== currentUser.id,
@@ -54,7 +57,7 @@ export async function createGroupDiscussions(
                 groupId,
                 participantUsers,
             },
-            pubsub,
+            // pubsub,
         )
     })
 }

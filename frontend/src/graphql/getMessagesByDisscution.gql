@@ -1,0 +1,12 @@
+query getMessagesByDisscution($discussionId: Float!) {
+  getMessagesByDisscution(discussionId: $discussionId) {
+    id
+    content
+    user {
+      id
+      name
+    }
+    created_at
+    modified_at
+  }
+}

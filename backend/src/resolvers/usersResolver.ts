@@ -51,7 +51,7 @@ export async function createUser({
 class UsersResolver {
     @Query(() => [User])
     async users() {
-        return User.find({ relations: ['avatar', 'discussions'] })
+        return User.find({ relations: ['avatar'] })
     }
 
     @Query(() => User)

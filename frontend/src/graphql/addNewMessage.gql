@@ -1,0 +1,15 @@
+subscription addNewMessage {
+  newMessage {
+    id
+    content
+    user {
+      id
+      name
+    }
+    discussion {
+      id
+      name
+    }
+    created_at
+  }
+}

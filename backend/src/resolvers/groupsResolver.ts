@@ -171,13 +171,10 @@ class GroupsResolver {
                 ? [ctx.user, ...groupUsers.filter(user => user !== undefined)]
                 : groupUsers.filter(user => user !== undefined)
 
-            createGroupDiscussions(
-                {
-                    groupUsers: filteredGroupUsers as User[],
-                    groupId: newGroup.id,
-                },
-                ctx.pubsub,
-            )
+            createGroupDiscussions({
+                groupUsers: filteredGroupUsers as User[],
+                groupId: newGroup.id,
+            })
         })
 
         return newGroup

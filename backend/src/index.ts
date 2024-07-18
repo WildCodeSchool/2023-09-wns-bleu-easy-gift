@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 // import { startStandaloneServer } from '@apollo/server/standalone'
 import schema from './schema'
 import db from './db'
@@ -24,7 +25,6 @@ export interface MyContext {
     req: express.Request
     res: express.Response
     user: User | null
-    pubsub: PubSubEngine
 }
 
 export interface Payload {
@@ -36,16 +36,36 @@ const port = 4001
 const app = express()
 const httpServer = http.createServer(app)
 
-export const pubsub = new PubSub()
+const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/',
+})
+console.log('wsServer&&&&&&&@@@@@@@@@@@@@@@@', wsServer)
 
 schema.then(async schema => {
     await db.initialize()
+    const serverCleanup = useServer({ schema }, wsServer)
     const server = new ApolloServer<MyContext>({
         schema,
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        csrfPrevention: true,
+        cache: 'bounded',
+        plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }),
+            ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+            {
+                async serverWillStart() {
+                    return {
+                        async drainServer() {
+                            await serverCleanup.dispose()
+                        },
+                    }
+                },
+            },
+        ],
     })
 
     await server.start()
+
     app.use(
         '/',
         cors<cors.CorsRequest>({
@@ -77,15 +97,11 @@ schema.then(async schema => {
                         console.log('Error during JWT verification, ', error)
                     }
                 }
-                return { req, res, user, pubsub }
+                return { req, res, user }
             },
         }),
     )
-    const wsServer = new WebSocketServer({
-        server: httpServer,
-        path: '/graphql',
-    })
-    useServer({ schema, context: { pubsub } }, wsServer)
+
     // const { url } = await startStandaloneServer(server, { listen: { port } })
 
     await new Promise<void>(resolve => httpServer.listen({ port }, resolve))
