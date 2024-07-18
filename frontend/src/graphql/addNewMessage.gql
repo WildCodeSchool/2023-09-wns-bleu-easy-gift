@@ -1,6 +1,6 @@
-subscription addNewMessage {
-  newMessage {
-    id
+subscription addNewMessage($discussionId: Float!) {
+  newMessage(discussionId: $discussionId) {
+id
     content
     user {
       id

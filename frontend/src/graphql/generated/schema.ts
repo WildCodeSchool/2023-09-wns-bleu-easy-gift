@@ -205,6 +205,11 @@ export type Subscription = {
   newMessage: Message;
 };
 
+
+export type SubscriptionNewMessageArgs = {
+  discussionId: Scalars['Float'];
+};
+
 export type UpdateGroupInput = {
   event_date?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -277,7 +282,9 @@ export type AddNewGroupMutationVariables = Exact<{
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
 
-export type AddNewMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
+export type AddNewMessageSubscriptionVariables = Exact<{
+  discussionId: Scalars['Float'];
+}>;
 
 
 export type AddNewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string } } };
@@ -514,8 +521,8 @@ export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMuta
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
 export const AddNewMessageDocument = gql`
-    subscription addNewMessage {
-  newMessage {
+    subscription addNewMessage($discussionId: Float!) {
+  newMessage(discussionId: $discussionId) {
     id
     content
     user {
@@ -540,10 +547,11 @@ export const AddNewMessageDocument = gql`
  * @example
  * const { data, loading, error } = useAddNewMessageSubscription({
  *   variables: {
+ *      discussionId: // value for 'discussionId'
  *   },
  * });
  */
-export function useAddNewMessageSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>) {
+export function useAddNewMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useSubscription<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>(AddNewMessageDocument, options);
       }

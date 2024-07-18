@@ -6,7 +6,7 @@ import {
 } from '@/graphql/generated/schema';
 import { useState, useEffect } from 'react';
 
-function NewDiscussionComponent() {
+function NewDiscussionComponent({discId, userId}: {discId: number, userId: number}) {
   const [messages, setMessages] = useState<
     GetMessagesByDisscutionQuery['getMessagesByDisscution']
   >([]);
@@ -14,11 +14,13 @@ function NewDiscussionComponent() {
 
   const { data, loading, error } = useGetMessagesByDisscutionQuery({
     variables: {
-      discussionId: 1,
+      discussionId: discId,
     },
   });
   const { data: subscriptionData } = useAddNewMessageSubscription({
-    variables: {},
+    variables: {
+      discussionId: discId,
+    },
   });
 
   const [createMessage] = useCreateMessageMutation();
@@ -27,8 +29,8 @@ function NewDiscussionComponent() {
     try {
       await createMessage({
         variables: {
-          discussionId: 1,
-          userId: 3,
+          discussionId: discId,
+          userId: userId,
           content,
         },
       });

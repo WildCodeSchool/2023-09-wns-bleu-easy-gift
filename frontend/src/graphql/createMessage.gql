@@ -1,14 +1,6 @@
-mutation createMessage(
-  $discussionId: Float!
-  $userId: Float!
-  $content: String!
-) {
-  createMessage(
-    discussionId: $discussionId
-    userId: $userId
-    content: $content
-  ) {
-    id
+mutation createMessage($discussionId: Float!, $userId: Float!, $content: String!) {
+  createMessage(discussionId: $discussionId, userId: $userId, content: $content) {
+   id
     content
     user {
       id
