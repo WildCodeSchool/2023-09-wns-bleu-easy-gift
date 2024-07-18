@@ -1,25 +1,25 @@
 query UserGroups {
-  userGroups {
-    id
-    name
-    event_date
-    created_at
-    avatar {
-      id
-      name
-      url
-      name
-    }
-    userToGroups {
-      user {
+    userGroups {
         id
-        pseudo
+        name
+        event_date
+        created_at
         avatar {
-          id
-          name
-          url
+            id
+            name
+            url
+            name
         }
-      }
+        userToGroups {
+            user {
+                id
+                pseudo
+                avatar {
+                    id
+                    name
+                    url
+                }
+            }
+        }
     }
-  }
 }

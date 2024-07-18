@@ -27,14 +27,14 @@ export async function clearDB() {
     await Promise.all(
         db.entityMetadatas.map(async entity =>
             runner.query(
-                `ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`,
-            ),
-        ),
+                `ALTER TABLE "${entity.tableName}" DISABLE TRIGGER ALL`
+            )
+        )
     )
     await Promise.all(
         db.entityMetadatas.map(async entity =>
-            runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`),
-        ),
+            runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`)
+        )
     )
     await runner.query("SET session_replication_role = 'origin'")
     await db.synchronize()

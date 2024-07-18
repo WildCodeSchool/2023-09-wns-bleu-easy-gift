@@ -1,14 +1,14 @@
-import {fakerFR as faker} from '@faker-js/faker';
-import {User} from "../entities/user";
-import {Group} from "../entities/group";
-import {Avatar} from "../entities/avatar";
-import {UserToGroup} from "../entities/userToGroup";
-import {usersFactory} from "./userFactory";
-import {createGroupDiscussions} from "../resolvers/discussionsResolver";
+import { fakerFR as faker } from '@faker-js/faker'
+import { User } from '../entities/user'
+import { Group } from '../entities/group'
+import { Avatar } from '../entities/avatar'
+import { UserToGroup } from '../entities/userToGroup'
+import { usersFactory } from './userFactory'
+import { createGroupDiscussions } from '../resolvers/discussionsResolver'
 
 export const groupFactory = async (user: User, numberOfGroupUser: number) => {
     //on récupère les avatars de type généric pour les groupes
-    const groupAvatars = await Avatar.find({where: {type: 'generic'}})
+    const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
     const randomGroupAvatar =
         groupAvatars[Math.floor(Math.random() * groupAvatars.length)]
 
@@ -40,8 +40,5 @@ export const groupFactory = async (user: User, numberOfGroupUser: number) => {
         groupUsers: allGroupUsers as User[],
         groupId: newGroup.id,
     })
-    return newGroup;
+    return newGroup
 }
-
-
-
