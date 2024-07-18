@@ -1,6 +1,14 @@
-import {Resolver, Query, Arg, Mutation, Ctx, Authorized, Int} from 'type-graphql'
+import {
+    Resolver,
+    Query,
+    Arg,
+    Mutation,
+    Ctx,
+    Authorized,
+    Int,
+} from 'type-graphql'
 import { GraphQLError } from 'graphql'
-import {Group, NewGroupInput, UpdateGroupInput} from '../entities/group'
+import { Group, NewGroupInput, UpdateGroupInput } from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
 import { MyContext } from '..'
 import { createUser, findUserByEmail } from './usersResolver'
@@ -16,8 +24,8 @@ export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
 }
 
-async function createGroup(name: string,event_date: string) {
-    return await Group.create({ name,event_date }).save()
+async function createGroup(name: string, event_date: string) {
+    return await Group.create({ name, event_date }).save()
 }
 
 async function createUserToGroup({
@@ -40,13 +48,18 @@ class GroupsResolver {
     }
 
     @Query(() => Group)
-    async getGroupById(@Arg("groupId", () => Int) id: number) {
+    async getGroupById(@Arg('groupId', () => Int) id: number) {
         const group = await Group.findOne({
             where: { id },
-            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
-        });
-        if (!group) throw new GraphQLError('Group not found');
-        return group;
+            relations: [
+                'avatar',
+                'userToGroups',
+                'userToGroups.user',
+                'userToGroups.user.avatar',
+            ],
+        })
+        if (!group) throw new GraphQLError('Group not found')
+        return group
     }
 
     @Query(() => [Group])
@@ -98,7 +111,7 @@ class GroupsResolver {
     @Authorized()
     @Mutation(() => Group)
     async addNewGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
-        const { name, emailUsers,event_date } = data
+        const { name, emailUsers, event_date } = data
         const group = await findGroupByName(name)
 
         const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
@@ -110,7 +123,7 @@ class GroupsResolver {
                 `Group already exist, fait pas trop le malin.`,
             )
         }
-        const newGroup = await createGroup(name,event_date)
+        const newGroup = await createGroup(name, event_date)
 
         if (randomGroupAvatar) {
             newGroup.avatar = randomGroupAvatar
@@ -126,6 +139,7 @@ class GroupsResolver {
         })
 
         const groupUsers = emailUsers.map(async email => {
+            // retrun le user
             if (email === ctx.user?.email) return
 
             const isUser = await findUserByEmail(email)
@@ -155,7 +169,9 @@ class GroupsResolver {
                     subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
                     to: email,
                     from: 'crazygift24@gmail.com',
-                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}.
+                     Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
+                      : http://localhost:3000/confirm-participation?token=${newUser.token}`,
                 })
 
                 return newUser
@@ -198,31 +214,43 @@ class GroupsResolver {
     }
     @Mutation(() => Group)
     async updateGroup(
-        @Arg("groupId") id: number,
-        @Arg("data", { validate: true }) data: UpdateGroupInput,
-        @Ctx() ctx: MyContext
+        @Arg('groupId') id: number,
+        @Arg('data', { validate: true }) data: UpdateGroupInput,
+        @Ctx() ctx: MyContext,
     ) {
         const user = ctx.user || undefined
-        if (typeof user === "undefined") throw new GraphQLError("Connect toi pour editer le groupe")
+        if (typeof user === 'undefined')
+            throw new GraphQLError('Connect toi pour editer le groupe')
         const groupToUpdate = await Group.findOne({
             where: { id },
-            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
-        });
+            relations: [
+                'avatar',
+                'userToGroups',
+                'userToGroups.user',
+                'userToGroups.user.avatar',
+            ],
+        })
 
-        if (!groupToUpdate)throw new GraphQLError("Le groupe n'existe pas");
+        if (!groupToUpdate) throw new GraphQLError("Le groupe n'existe pas")
 
         const groupAdmin = groupToUpdate.userToGroups
-            .filter(user=>user.is_admin)
-            .map((user)=>user.user_id);
+            .filter(user => user.is_admin)
+            .map(user => user.user_id)
 
-        if (!groupAdmin.includes(user?.id)) throw new GraphQLError("Tu dois être un administrateur du groupe")
+        if (!groupAdmin.includes(user?.id))
+            throw new GraphQLError('Tu dois être un administrateur du groupe')
 
-        Object.assign(groupToUpdate, data);
-        await groupToUpdate.save();
+        Object.assign(groupToUpdate, data)
+        await groupToUpdate.save()
         return Group.findOne({
             where: { id },
-            relations: ['avatar','userToGroups', 'userToGroups.user', 'userToGroups.user.avatar'],
-        });
+            relations: [
+                'avatar',
+                'userToGroups',
+                'userToGroups.user',
+                'userToGroups.user.avatar',
+            ],
+        })
     }
 }
 
