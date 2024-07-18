@@ -16,7 +16,7 @@ import { Discussion } from '../entities/discussion'
 class MessageResolver {
     @Query(() => [Message])
     async getMessagesByDisscution(
-        @Arg('discussionId') discussionId: number,
+        @Arg('discussionId') discussionId: number
     ): Promise<Message[]> {
         return await Message.find({
             where: { discussion: { id: discussionId } },
@@ -29,7 +29,7 @@ class MessageResolver {
         @Arg('content') content: string,
         @Arg('userId') userId: number,
         @Arg('discussionId') discussionId: number,
-        @PubSub() pubsub: PubSubEngine,
+        @PubSub() pubsub: PubSubEngine
     ): Promise<Message> {
         const message = new Message()
         message.content = content
@@ -39,11 +39,16 @@ class MessageResolver {
         })
 
         await message.save()
-        await pubsub.publish('NEW_MESSAGE', message)
+        await pubsub.publish(`NEW_DISCUSSION_${discussionId}`, message)
         return message
     }
-    @Subscription(() => Message, { topics: 'NEW_MESSAGE' })
-    newMessage(@Root() newMessage: Message): Message {
+    @Subscription(() => Message, {
+        topics: ({ args }) => `NEW_DISCUSSION_${args.discussionId}`,
+    })
+    newMessage(
+        @Arg('discussionId') discussionId: number,
+        @Root() newMessage: Message
+    ): Message {
         return newMessage
     }
 }

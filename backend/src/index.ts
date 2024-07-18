@@ -3,7 +3,6 @@ import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
-// import { startStandaloneServer } from '@apollo/server/standalone'
 import schema from './schema'
 import db from './db'
 import express from 'express'
@@ -14,10 +13,8 @@ import Cookies from 'cookies'
 import { jwtVerify } from 'jose'
 import { User } from './entities/user'
 import { findUserByEmail } from './resolvers/usersResolver'
-import { PubSub } from 'graphql-subscriptions'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
-import { PubSubEngine } from 'graphql-subscriptions'
 
 dotenv.config()
 
@@ -40,7 +37,6 @@ const wsServer = new WebSocketServer({
     server: httpServer,
     path: '/',
 })
-console.log('wsServer&&&&&&&@@@@@@@@@@@@@@@@', wsServer)
 
 schema.then(async schema => {
     await db.initialize()

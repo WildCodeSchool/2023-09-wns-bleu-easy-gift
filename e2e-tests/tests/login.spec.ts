@@ -26,7 +26,7 @@ test("has a valid user name", async ({ page }) => {
   await page.getByTestId("login-email").fill(emailToCheck);
   await page.getByTestId("login-password").fill(passwordToCheck);
   await page.getByRole("button", { name: "Se connecter" }).click();
-  const disconnectButton = page.getByRole("button", {
+  const disconnectButton = await page.getByRole("button", {
     name: "Se déconnecter",
   });
   await expect(disconnectButton).toBeVisible();
