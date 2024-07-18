@@ -30,7 +30,7 @@ export default function CreatingGroups() {
     const router = useRouter()
 
     useEffect(() => {
-        const formIsValid = name.trim() !== '' && emails.length >= 3
+        const formIsValid = name.trim() !== '' && emails.length >= 2
         setIsFormValid(formIsValid)
     }, [name, emails])
 

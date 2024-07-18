@@ -21,10 +21,13 @@ export default function GroupDetails() {
     const [showModal, setShowModal] = useState(false)
     const [isModalAvatarOpen, setIsModalAvatarOpen] = useState(false)
 
-    const group = data?.getGroupById
-
     if (loading) return <h1>Loading...</h1>
     if (error) return <h1>Erreur : {error.message}</h1>
+
+    const group = data?.getGroupById
+
+    const eventDate =
+        group && group.event_date ? new Date(group.event_date) : undefined
 
     return (
         <div>
@@ -99,9 +102,13 @@ export default function GroupDetails() {
                                         <p className='text-base font-semibold w-44'>
                                             Date de l'évenement
                                         </p>
-                                        <p className='text-base'>
-                                            {group?.event_date}
-                                        </p>
+                                        {eventDate && (
+                                            <p className='text-base'>
+                                                {new Date(
+                                                    eventDate
+                                                ).toLocaleDateString()}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className='flex sm:justify-end'>
                                         <Button
