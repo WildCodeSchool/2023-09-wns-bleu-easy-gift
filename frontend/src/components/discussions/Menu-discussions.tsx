@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
-
-
+import { use } from "react";
 
 const MenuDiscussions = () => {
-
   const router = useRouter();
+  const { data, loading, error } = useGetUsersByGroupQuery({
+    variables: ,
+    fetchPolicy: "no-cache",
+  });
 
   return (
     <nav className="bg-slate-200 w-full h-full pt-5 pb-6 flex  flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start">
@@ -17,7 +19,7 @@ const MenuDiscussions = () => {
           </h1>
         </div>
         <div className="h-12 self-end">
-          <button type="button" className="w-8 h-8 shadow-lg">
+          <button type="button" className="w-8 h-8 shadow-lg lg:duration-150 lg:hover:scale-125">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="w-full h-full bg-white text-primaryBlue rounded-md">
               <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1" />
             </svg>
@@ -156,8 +158,8 @@ const MenuDiscussions = () => {
       <div className="w-4/5 mx-auto self-start flex flex-grow justify-end items-start shadow-[1px_-7px_8px_-8px_theme(colors.slate.400)] md:shadow-none">
         <div className="flex justify-end mt-4 lg:self-end">
           <img src="" alt="" />
-          <p className="text-2xl font-bold text-red400">Quitter Nöel</p>
-          <button type="button" className="ml-4" onClick={() => router.push("/groupes")}>
+          <p className="text-2xl font-bold text-red400 cursor-pointer lg:transition lg:duration-150 lg:hover:scale-125 lg:hover:translate-x-[-15px] ">Quitter Nöel</p>
+          <button type="button" className="ml-4 lg:duration-100 lg:hover:scale-125" onClick={() => router.push("/groupes")}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-left text-red400 w-8 h-8" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z" />
               <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z" />

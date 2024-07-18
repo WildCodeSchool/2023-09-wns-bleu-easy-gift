@@ -1,0 +1,13 @@
+query getUsersByGroup {
+    id
+    userToGroups {
+      id
+      user_id
+      user {
+        pseudo
+        avatar {
+          url
+        }
+      }
+    }
+  }
