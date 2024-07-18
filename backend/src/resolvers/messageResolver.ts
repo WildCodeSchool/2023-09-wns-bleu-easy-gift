@@ -37,7 +37,6 @@ class MessageResolver {
         message.discussion = await Discussion.findOneOrFail({
             where: { id: discussionId },
         })
-        console.log('message', message)
 
         await message.save()
         await pubsub.publish('NEW_MESSAGE', message)

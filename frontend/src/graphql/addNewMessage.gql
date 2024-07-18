@@ -4,12 +4,9 @@ subscription addNewMessage {
     content
     user {
       id
-      name
-    }
-    discussion {
-      id
-      name
+      pseudo
     }
     created_at
+    modified_at
   }
 }

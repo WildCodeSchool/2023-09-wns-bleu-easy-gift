@@ -44,7 +44,6 @@ export async function createGroupDiscussions({
     groupUsers: User[]
     groupId: number
 }) {
-    // pubsub: PubSubEngine,
     groupUsers.forEach(currentUser => {
         const participantUsers = groupUsers.filter(
             user => user.id !== currentUser.id,
@@ -57,7 +56,6 @@ export async function createGroupDiscussions({
                 groupId,
                 participantUsers,
             },
-            // pubsub,
         )
     })
 }

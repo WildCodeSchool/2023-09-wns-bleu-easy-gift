@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/carousel';
 import { useRouter } from 'next/router';
 import { checkUserConnected } from '@/utils/checkConnection';
-import NewDiscussionComponent from '@/components/NewDiscussionComponent';
 
 export default function Home() {
   const router = useRouter();
@@ -42,7 +41,6 @@ export default function Home() {
           <h1 className='mb-10 text-4xl md:text-5xl md:mb-14 2xl::text-6xl font-bold text-primaryBlue'>
             Easy Gift
           </h1>
-          <NewDiscussionComponent />
           <p className='mb-9 text-lg text-left md:mb-10 md:text-xl 2xl:text-2xl'>
             Prêt à déclarer la guerre aux cadeaux ratés 🎁😅 ?
             <br />

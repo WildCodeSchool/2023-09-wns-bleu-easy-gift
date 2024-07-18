@@ -74,6 +74,7 @@ export type Message = {
   __typename?: 'Message';
   content: Scalars['String'];
   created_at: Scalars['String'];
+  discussion: Discussion;
   id: Scalars['Int'];
   modified_at: Scalars['String'];
   user: User;
@@ -176,7 +177,7 @@ export type ResponseMessage = {
 export type Subscription = {
   __typename?: 'Subscription';
   newDiscussion: Discussion;
-  newMessaage: Message;
+  newMessage: Message;
 };
 
 export type User = {
@@ -238,12 +239,26 @@ export type AddNewGroupMutationVariables = Exact<{
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, avatar: { __typename?: 'Avatar', id: number, name: string } } };
 
+export type AddNewMessageSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AddNewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string } } };
+
+export type CreateMessageMutationVariables = Exact<{
+  discussionId: Scalars['Float'];
+  userId: Scalars['Float'];
+  content: Scalars['String'];
+}>;
+
+
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number, name: string } } };
+
 export type GetMessagesByDisscutionQueryVariables = Exact<{
   discussionId: Scalars['Float'];
 }>;
 
 
-export type GetMessagesByDisscutionQuery = { __typename?: 'Query', getMessagesByDisscution: Array<{ __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number } }> };
+export type GetMessagesByDisscutionQuery = { __typename?: 'Query', getMessagesByDisscution: Array<{ __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string } }> };
 
 export type ProfilAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -383,6 +398,88 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
+export const AddNewMessageDocument = gql`
+    subscription addNewMessage {
+  newMessage {
+    id
+    content
+    user {
+      id
+      pseudo
+    }
+    created_at
+    modified_at
+  }
+}
+    `;
+
+/**
+ * __useAddNewMessageSubscription__
+ *
+ * To run a query within a React component, call `useAddNewMessageSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAddNewMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAddNewMessageSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddNewMessageSubscription(baseOptions?: Apollo.SubscriptionHookOptions<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>(AddNewMessageDocument, options);
+      }
+export type AddNewMessageSubscriptionHookResult = ReturnType<typeof useAddNewMessageSubscription>;
+export type AddNewMessageSubscriptionResult = Apollo.SubscriptionResult<AddNewMessageSubscription>;
+export const CreateMessageDocument = gql`
+    mutation createMessage($discussionId: Float!, $userId: Float!, $content: String!) {
+  createMessage(discussionId: $discussionId, userId: $userId, content: $content) {
+    id
+    content
+    user {
+      id
+      pseudo
+    }
+    discussion {
+      id
+      name
+    }
+    created_at
+    modified_at
+  }
+}
+    `;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      discussionId: // value for 'discussionId'
+ *      userId: // value for 'userId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const GetMessagesByDisscutionDocument = gql`
     query getMessagesByDisscution($discussionId: Float!) {
   getMessagesByDisscution(discussionId: $discussionId) {
@@ -390,6 +487,7 @@ export const GetMessagesByDisscutionDocument = gql`
     content
     user {
       id
+      pseudo
     }
     created_at
     modified_at

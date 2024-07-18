@@ -4,7 +4,7 @@ query getMessagesByDisscution($discussionId: Float!) {
     content
     user {
       id
-      name
+      pseudo
     }
     created_at
     modified_at
