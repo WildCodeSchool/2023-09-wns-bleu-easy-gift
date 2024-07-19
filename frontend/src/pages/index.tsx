@@ -1,30 +1,37 @@
-import { Inter } from "next/font/google";
-import React, { use } from "react";
-import { Button } from "@/components/ui/button";
-import MyGroups from "@/components/MyGroups";
-import Image from "next/image";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { useRouter } from "next/router";
-import { checkUserConnected } from "@/utils/checkConnection";
-import { useUserGroupsQuery } from "@/graphql/generated/schema";
-import { useState, useEffect } from "react";
+import { Inter } from 'next/font/google'
+import React, { use } from 'react'
+import { Button } from '@/components/ui/button'
+import MyGroups from '@/components/MyGroups'
+import Image from 'next/image'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from '@/components/ui/carousel'
+import { useRouter } from 'next/router'
+import { checkUserConnected } from '@/utils/checkConnection'
+import { useUserGroupsQuery } from '@/graphql/generated/schema'
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 export default function Home() {
-  const router = useRouter();
-  const [isConnected, setIsConnected] = useState(checkUserConnected());
+  const router = useRouter()
+  const [isConnected, setIsConnected] = useState(checkUserConnected())
 
   useEffect(() => {
     const handleUserChange = () => {
-      setIsConnected(checkUserConnected());
-    };
+      setIsConnected(checkUserConnected())
+    }
 
-    window.addEventListener("userChange", handleUserChange);
+    window.addEventListener('userChange', handleUserChange)
 
     // Cleanup on component unmount
     return () => {
-      window.removeEventListener("userChange", handleUserChange);
-    };
-  }, []);
+      window.removeEventListener('userChange', handleUserChange)
+    }
+  }, [])
 
   const {
     data: groupsData,
@@ -33,15 +40,15 @@ export default function Home() {
     refetch: refetchGroups,
   } = useUserGroupsQuery({
     skip: !isConnected,
-  });
+  })
 
-  const groups = groupsData?.userGroups;
+  const groups = groupsData?.userGroups
 
   useEffect(() => {
     if (isConnected) {
-      refetchGroups();
+      refetchGroups()
     }
-  }, [isConnected, refetchGroups]);
+  }, [isConnected, refetchGroups])
 
   const handleButtonClick = () => {
     if (isConnected) {

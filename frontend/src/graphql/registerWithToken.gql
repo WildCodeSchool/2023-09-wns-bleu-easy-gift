@@ -1,6 +1,6 @@
 mutation registerWithToken($data: InputRegistrationWithToken!) {
-  registrationWithToken(data: $data) {
-    email
-    pseudo
-  }
+    registrationWithToken(data: $data) {
+        email
+        pseudo
+    }
 }

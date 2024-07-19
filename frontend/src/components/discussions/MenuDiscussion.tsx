@@ -87,7 +87,7 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
     <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out ${isMenuHidden ? 'max-w-0 md:max-w-0 -translate-x-full opacity-25' : 'translate-x-0 w-full opacity-100'}`}>
       <div className="w-4/5 mx-auto h-36 flex flex-shrink-0 flex-wrap justify-between items-center md:min-h-40 md:w-11/12 lg:w-4/5">
         <div className="basis-5/6 flex justify-start items-center h-14">
-          <img src="/images/avatar/group_xmas8.png" alt="" className="w-16 h-16 inset-0 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue" />
+          <img src="/images/avatar/group_xmas8.png" alt="" className="w-16 h-12 inset-0 rounded-full mr-2 border-solid border-4 border-primaryBlue" />
           <h1 className="text-4xl md:text-2xl xl:text-4xl 2xl:text-5xl font-bold text-primaryBlue inline-block
           ml-4 self-center">
             {group.name}
@@ -101,7 +101,7 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
           </button>
         </div>
         <div className="basis-full h-11 2xl:h-12">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="relative z-10 top-[30px] left-[2px] ml-3 mt-3.5 z-10 text-slate-500">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="relative z-10 top-[30px] left-[2px] ml-3 mt-3.5 text-slate-500">
             <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
             <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2" />
           </svg>
