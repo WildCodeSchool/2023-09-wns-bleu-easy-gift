@@ -84,7 +84,7 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
   }
 
   return (
-    <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex  flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-700 ease-in-out ${isMenuHidden ? 'md:w-0 md:overflow-hidden opacity-0' : 'opacity-100'}`}>
+    <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out ${isMenuHidden ? 'max-w-0 md:max-w-0 -translate-x-full opacity-25' : 'translate-x-0 w-full opacity-100'}`}>
       <div className="w-4/5 mx-auto h-36 flex flex-shrink-0 flex-wrap justify-between items-center md:min-h-40 md:w-11/12 lg:w-4/5">
         <div className="basis-5/6 flex justify-start items-center h-14">
           <img src="/images/avatar/group_xmas8.png" alt="" className="w-14 h-14 rounded-sm" />
@@ -94,7 +94,7 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
           </h1>
         </div>
         <div className="h-12 self-end">
-          <button type="button" className="hidden md:block w-8 h-8 shadow-lg lg:duration-150 lg:hover:scale-125" onClick={toggleMenu}>
+          <button type="button" className="hidden md:block xl:hidden w-8 h-8 shadow-lg lg:duration-150 lg:hover:scale-125" onClick={toggleMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="w-full h-full bg-white text-primaryBlue rounded-md">
               <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
             </svg>
