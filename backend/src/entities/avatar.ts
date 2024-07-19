@@ -10,7 +10,7 @@ import { Length } from 'class-validator'
 import { User } from './user'
 import { Group } from './group'
 
-export type AvatarType = "generic" | "profil"
+// export type AvatarType = "generic" | "profil" | null
 
 
 @Entity()
@@ -27,12 +27,14 @@ export class Avatar extends BaseEntity {
     })
     name: string
 
-    @Column({
-        type: "enum",
-        enum: ["generic", "profil"]
-    })
+    @Column(
+    //     {
+    //     type: "enum",
+    //     enum: ["generic", "profil", null]
+    // }
+    )
     @Field()
-    type: AvatarType
+    type: string
 
     @Column()
     @Field()
