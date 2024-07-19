@@ -15,10 +15,14 @@ import { checkUserConnected } from '@/utils/checkConnection'
 import { useUserGroupsQuery } from '@/graphql/generated/schema'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import GroupCard from '@/components/GroupCard'
+import FakeDataGroups from '@/components/group/fakeDataGroups'
 
 export default function Home() {
     const router = useRouter()
     const [isConnected, setIsConnected] = useState(checkUserConnected())
+
+    const { group1, link1, group2, link2, group3, link3 } = FakeDataGroups()
 
     useEffect(() => {
         const handleUserChange = () => {
@@ -162,7 +166,7 @@ export default function Home() {
             </section>
             <section className='mb-40 mx-auto min-h-150 h-full flex flex-col justify-evenly items-center sm:min-h-160 lg:min-h-130 lg:flex-wrap lg:justify-evenly 2xl:justify-center 2xl:min-h-140 2xl:items-center 2xl:flex-row'>
                 <h2 className='w-4/5 text-3xl text-primaryRed mb-8  sm:text-center md:mb-10 md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl'>
-                    Tes groupes
+                    Retrouve tes groupes
                 </h2>
                 <span className='w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 '>
                     <p>
@@ -171,6 +175,9 @@ export default function Home() {
                             'Une fois que tu auras créé ou rejoint un groupe, retrouve-le ici !'}
                     </p>
                 </span>
+                <GroupCard key='1' group={group1} link={link1} />
+                <GroupCard key='1' group={group2} link={link2} />
+                <GroupCard key='1' group={group3} link={link3} />
                 <MyGroups
                     groups={groups}
                     isConnected={isConnected}

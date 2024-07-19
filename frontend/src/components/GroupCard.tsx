@@ -21,7 +21,7 @@ interface UserToGroup {
     user: User
 }
 
-interface Group {
+export interface Group {
     __typename?: 'Group'
     id: number
     name: string
@@ -35,6 +35,7 @@ interface GroupComponentProps {
 }
 export default function MyGroup({ group, link }: GroupComponentProps) {
     const [showAll, setShowAll] = useState(false)
+    console.log(group)
     const handleToggle = () => {
         setShowAll(!showAll)
     }
