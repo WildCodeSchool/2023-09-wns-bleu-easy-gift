@@ -139,6 +139,7 @@ class GroupsResolver {
         })
 
         const groupUsers = emailUsers.map(async email => {
+            // retrun le user
             if (email === ctx.user?.email) return
 
             const isUser = await findUserByEmail(email)
@@ -168,7 +169,9 @@ class GroupsResolver {
                     subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
                     to: email,
                     from: 'crazygift24@gmail.com',
-                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}. Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}.
+                     Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
+                      : http://localhost:3000/confirm-participation?token=${newUser.token}`,
                 })
 
                 return newUser
