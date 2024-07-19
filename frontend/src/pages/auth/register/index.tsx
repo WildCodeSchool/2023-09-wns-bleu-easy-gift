@@ -2,30 +2,51 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRegisterUserMutation } from '@/graphql/generated/schema'
 import { useRouter } from 'next/router'
+import React, { useState } from 'react'
 
 function Register() {
     const router = useRouter()
-    const [register, { data, error }] = useRegisterUserMutation({
+    // const [register, { data, error }] = useRegisterUserMutation({
+    //     onCompleted: () => {
+    //         router.push('/auth/login')
+    //     },
+    // })
+    const [register, { data }] = useRegisterUserMutation({
         onCompleted: () => {
             router.push('/auth/login')
         },
     })
+    const [error, setError] = useState<string | null>(null)
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
 
         const data = Object.fromEntries(formData)
         console.log('data register', data)
-        register({
-            variables: {
-                data: {
-                    email: data.email as string,
-                    password: data.password as string,
-                    pseudo: data.pseudo as string,
+        // register({
+        //     variables: {
+        //         data: {
+        //             email: data.email as string,
+        //             password: data.password as string,
+        //             pseudo: data.pseudo as string,
+        //         },
+        //     },
+        // })
+        try {
+            await register({
+                variables: {
+                    data: {
+                        email: data.email as string,
+                        password: data.password as string,
+                        pseudo: data.pseudo as string,
+                    },
                 },
-            },
-        })
+            })
+        } catch (err: any) {
+            setError(err.message || 'Une erreur est survenue')
+            console.error('err.message', err.message)
+        }
     }
 
     return (
@@ -33,6 +54,7 @@ function Register() {
             <h2 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
                 Inscription
             </h2>
+            {error && <p className='text-red-500'>{error}</p>}
             <form
                 className='flex flex-col items-center gap-2'
                 onSubmit={handleSubmit}

@@ -1,3 +1,4 @@
+
 import {
     PubSub,
     PubSubEngine,
@@ -10,6 +11,7 @@ import { Discussion } from '../entities/discussion'
 import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
+import { MyContext } from '..'
 
 async function createDiscussion({
     name,
@@ -73,7 +75,7 @@ export async function createGroupDiscussions({
 @Resolver(Discussion)
 class DiscussionResolver {
     @Query(() => [Discussion])
-    async getDiscusions() {
+    async getDiscussions() {
         return await Discussion.find({
             relations: ['group', 'messages', 'users'],
         })
@@ -83,6 +85,22 @@ class DiscussionResolver {
     })
     newDiscussion(@Root() discussion: Discussion): Discussion {
         return discussion
+    }
+}
+
+    @Authorized()
+    @Query(() => [Discussion])
+    async getDiscussionsByGroupIdWithoutCtxUser(
+        @Ctx() ctx: MyContext,
+        @Arg('groupId') groupId: number,
+    ) {
+        const groupDiscussions = await Discussion.find({
+            where: { group: { id: groupId } },
+            relations: ['group', 'messages', 'users'],
+        })
+        return groupDiscussions.filter(
+            discussion => discussion.name !== ctx.user?.pseudo,
+        )
     }
 }
 
