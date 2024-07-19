@@ -22,7 +22,7 @@ export default function ModalUpdateGroup({
     group,
 }: ModalUpdateGroupProps) {
     const router = useRouter()
-    const [updateGroup] = useUpdateGroupMutation()
+    const [updateGroup, { error }] = useUpdateGroupMutation()
     const groupId = typeof group?.id === 'number' ? group?.id : 0
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -50,6 +50,20 @@ export default function ModalUpdateGroup({
             })
             .catch(console.error)
     }
+    const getConstraints = (data: any) => {
+        return Array.isArray(data)
+            ? data.map((item: any) => {
+                  const constraintsKey = Object.values(item.constraints)[0]
+                  const propertyName = item.property
+                  return {
+                      [propertyName]: constraintsKey,
+                  }
+              })
+            : null
+    }
+    const errorMessages = getConstraints(
+        error?.graphQLErrors[0].extensions.validationErrors
+    )
 
     return (
         <div className='bg-white p-6 rounded-lg shadow-lg max-w-md w-full'>
@@ -84,12 +98,29 @@ export default function ModalUpdateGroup({
                         className='mt-1 w-full p-2 border border-gray-300 rounded'
                     />
                 </div>
-                <Button
-                    type='submit'
-                    className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600'
-                >
-                    Valider
-                </Button>
+                <div className='mb-4'>
+                    {errorMessages &&
+                        errorMessages.map((item, index) =>
+                            Object.values(item).map(
+                                (value: any, valueIndex) => (
+                                    <p
+                                        key={`${index}-${valueIndex}`}
+                                        className='text-red-500 mt-2'
+                                    >
+                                        {value}
+                                    </p>
+                                )
+                            )
+                        )}
+                </div>
+                <div>
+                    <Button
+                        type='submit'
+                        className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600'
+                    >
+                        Valider
+                    </Button>
+                </div>
             </form>
         </div>
     )
