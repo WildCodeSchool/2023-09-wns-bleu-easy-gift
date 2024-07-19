@@ -68,40 +68,33 @@ export class NewGroupInput {
     name: string
 
     @Field(() => [String])
-    @IsArray({ message: 'emailUsers doit être un tableau' })
-    @ArrayNotEmpty({ message: 'emailUsers ne doit pas être vide' })
+    @ArrayNotEmpty({ message: 'Le groupe doit contenir au moins 3 emails' })
     @ArrayMinSize(3, {
-        message: 'Le tableau emailUsers doit contenir au moins trois emails',
+        message: 'Le groupe doit contenir au moins 3 emails',
     })
     @IsEmail(
         {},
         {
             each: true,
-            message: 'Chaque élément de emailUsers doit être un email valide',
+            message: 'Le groupe doit contenir des adresses Emails valides',
         }
     )
     emailUsers: string[]
 
     @Field()
-    @IsDateString(
-        {},
-        { message: 'event_date doit être une date valide au format string' }
-    )
+    @IsDateString({}, { message: "La date de l'évenement doit être définie" })
     event_date: string
 }
 
 @InputType()
 export class UpdateGroupInput {
     @Field({ nullable: true })
-    @Length(5, 50, {
-        message: 'Le nom du groupe doit contenir entre 5 et 50 caractères',
+    @Length(3, 50, {
+        message: 'Le nom du groupe doit contenir entre 3 et 50 caractères',
     })
     name?: string
 
     @Field({ nullable: true })
-    @IsDateString(
-        {},
-        { message: 'event_date doit être une date valide au format string' }
-    )
+    @IsDateString({}, { message: "La date de l'évenement doit être définie" })
     event_date?: string
 }
