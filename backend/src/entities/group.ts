@@ -46,7 +46,7 @@ export class Group extends BaseEntity {
     @Field(() => Avatar)
     avatar: Avatar
 
-    @Field( { nullable: true })
+    @Field({ nullable: true })
     @Column({ default: null })
     event_date?: string
 
@@ -73,9 +73,8 @@ export class NewGroupInput {
 @InputType()
 export class UpdateGroupInput {
     @Field({ nullable: true })
-    name?: string;
+    name?: string
 
     @Field({ nullable: true })
-    event_date?: string;
-
+    event_date?: string
 }

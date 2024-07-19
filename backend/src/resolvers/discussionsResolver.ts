@@ -1,3 +1,4 @@
+
 import {
     Arg,
     Authorized,
@@ -42,7 +43,7 @@ export async function createGroupDiscussions({
     await Promise.all(
         groupUsers.map(async currentUser => {
             const participantUsers = groupUsers.filter(
-                user => user.id !== currentUser.id,
+                user => user.id !== currentUser.id
             )
 
             return await createDiscussion({
@@ -50,14 +51,14 @@ export async function createGroupDiscussions({
                 groupId,
                 participantUsers,
             })
-        }),
+        })
     )
 }
 
 @Resolver(Discussion)
 class DiscussionResolver {
     @Query(() => [Discussion])
-    async getDiscusions() {
+    async getDiscussions() {
         return await Discussion.find({
             relations: ['group', 'messages', 'users'],
         })
