@@ -19,7 +19,7 @@ import {
 import * as argon2 from 'argon2'
 import { UserToGroup } from './userToGroup'
 import { ObjectId } from '../utils'
-import { IsEmail, Length } from 'class-validator'
+import { IsDateString, IsEmail, Length } from 'class-validator'
 
 @Entity()
 @ObjectType()
@@ -95,12 +95,14 @@ export class User extends BaseEntity {
 export class InputRegister {
     @Field({ nullable: true })
     @Length(3, 50, {
-        message: "Le pseudo de l'utilisateur doit contenir entre 3 et 50 caractères",
+        message: "Le pseudo doit contenir entre 3 et 50 caractères",
     })
     pseudo: string
 
     @Field()
-    @IsEmail()
+    @IsEmail({},{
+        message: 'Une adresse mail valide est requise',
+    })
     email: string
 
     @Field()
@@ -110,6 +112,7 @@ export class InputRegister {
     avatar?: Avatar | null
 
     @Field({ nullable: true })
+    @IsDateString({}, { message: "Vérifier la date choisie" })
     birthday?: string
 }
 
@@ -137,6 +140,9 @@ export class UserWithoutPasswordAvatar {
 @InputType()
 export class InputLogin {
     @Field()
+    @IsEmail({},{
+        message: 'Une adresse mail valide est requise',
+    })
     email: string
 
     @Field()
@@ -173,6 +179,9 @@ export class UserInfos {
 @InputType()
 export class InputRegistrationWithToken {
     @Field()
+    @Length(3, 50, {
+        message: "Le pseudo doit contenir entre 3 et 50 caractères",
+    })
     pseudo: string
 
     @Field()
@@ -185,9 +194,15 @@ export class InputRegistrationWithToken {
 @InputType()
 export class InputUpdateUser {
     @Field({ nullable: true })
+    @Length(3, 50, {
+        message: "Le pseudo doit contenir entre 3 et 50 caractères",
+    })
     pseudo?: string
 
     @Field({ nullable: true })
+    @IsEmail({},{
+        message: 'Une adresse mail valide est requise',
+    })
     email?: string
 }
 
