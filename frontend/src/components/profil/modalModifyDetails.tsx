@@ -1,15 +1,12 @@
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import {
-    Avatar,
-    User,
     useProfilAvatarsQuery,
-    useUpdateAvatarMutation,
     useUpdateUserMutation,
     GetUserInfosQuery,
 } from '../../graphql/generated/schema'
 import { useState, useEffect, useRef, CSSProperties } from 'react'
-import clsx from 'clsx'
+import { getConstraints } from '@/lib/utils'
 
 interface ModalModifyDetailsProps {
     isOpen: boolean
@@ -76,17 +73,6 @@ export default function ModalModifyDetails({
     const [updateUserMutation, { loading: updating, error: updateError }] =
         useUpdateUserMutation()
 
-    const getConstraints = (data: any) => {
-        return Array.isArray(data)
-            ? data.map((item: any) => {
-                  const constraintsKey = Object.values(item.constraints)[0]
-                  const propertyName = item.property
-                  return {
-                      [propertyName]: constraintsKey,
-                  }
-              })
-            : null
-    }
     const errorMessages = getConstraints(
         updateError?.graphQLErrors[0].extensions.validationErrors
     )

@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import Layout from '../layout'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { getConstraints } from '@/lib/utils'
 
 export default function ConfirmParticipationPage() {
     const [errorMatchPassword, setErrorMatchPassword] = useState(false)
@@ -55,17 +56,7 @@ export default function ConfirmParticipationPage() {
             },
         }).catch(console.error)
     }
-    const getConstraints = (data: any) => {
-        return Array.isArray(data)
-            ? data.map((item: any) => {
-                  const constraintsKey = Object.values(item.constraints)[0]
-                  const propertyName = item.property
-                  return {
-                      [propertyName]: constraintsKey,
-                  }
-              })
-            : null
-    }
+
     const errorMessages = getConstraints(
         registerError?.graphQLErrors[0].extensions.validationErrors
     )

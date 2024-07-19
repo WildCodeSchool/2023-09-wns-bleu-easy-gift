@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input'
 import { useAddNewGroupMutation } from '@/graphql/generated/schema'
 import { useRouter } from 'next/router'
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
+import { getConstraints } from '@/lib/utils'
 
 const iconStar = {
     id: 'star',
@@ -68,17 +69,6 @@ export default function CreatingGroups() {
         })
     }
 
-    const getConstraints = (data: any) => {
-        return Array.isArray(data)
-            ? data.map((item: any) => {
-                  const constraintsKey = Object.values(item.constraints)[0]
-                  const propertyName = item.property
-                  return {
-                      [propertyName]: constraintsKey,
-                  }
-              })
-            : null
-    }
     const errorMessages = getConstraints(
         error?.graphQLErrors[0].extensions.validationErrors
     )

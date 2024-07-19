@@ -2,7 +2,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useRegisterUserMutation } from '@/graphql/generated/schema'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import { getConstraints } from '@/lib/utils'
+import { useState } from 'react'
 
 function Register() {
     const router = useRouter()
@@ -38,17 +39,6 @@ function Register() {
         })
     }
 
-    const getConstraints = (data: any) => {
-        return Array.isArray(data)
-            ? data.map((item: any) => {
-                  const constraintsKey = Object.values(item.constraints)[0]
-                  const propertyName = item.property
-                  return {
-                      [propertyName]: constraintsKey,
-                  }
-              })
-            : null
-    }
     const errorMessages = getConstraints(
         error?.graphQLErrors[0].extensions.validationErrors
     )

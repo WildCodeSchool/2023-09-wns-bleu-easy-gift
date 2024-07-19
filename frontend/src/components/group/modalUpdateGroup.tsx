@@ -6,6 +6,7 @@ import {
 } from '@/graphql/generated/schema'
 import { FormEvent } from 'react'
 import { useRouter } from 'next/router'
+import { getConstraints } from '@/lib/utils'
 
 interface Group {
     name: string
@@ -50,17 +51,7 @@ export default function ModalUpdateGroup({
             })
             .catch(console.error)
     }
-    const getConstraints = (data: any) => {
-        return Array.isArray(data)
-            ? data.map((item: any) => {
-                  const constraintsKey = Object.values(item.constraints)[0]
-                  const propertyName = item.property
-                  return {
-                      [propertyName]: constraintsKey,
-                  }
-              })
-            : null
-    }
+
     const errorMessages = getConstraints(
         error?.graphQLErrors[0].extensions.validationErrors
     )
