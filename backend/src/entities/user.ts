@@ -19,6 +19,7 @@ import {
 import * as argon2 from 'argon2'
 import { UserToGroup } from './userToGroup'
 import { ObjectId } from '../utils'
+import { IsEmail, Length } from 'class-validator'
 
 @Entity()
 @ObjectType()
@@ -93,9 +94,13 @@ export class User extends BaseEntity {
 @InputType()
 export class InputRegister {
     @Field({ nullable: true })
+    @Length(3, 50, {
+        message: "Le pseudo de l'utilisateur doit contenir entre 3 et 50 caractères",
+    })
     pseudo: string
 
     @Field()
+    @IsEmail()
     email: string
 
     @Field()

@@ -70,8 +70,8 @@ export class NewGroupInput {
     @Field(() => [String])
     @IsArray({ message: 'emailUsers doit être un tableau' })
     @ArrayNotEmpty({ message: 'emailUsers ne doit pas être vide' })
-    @ArrayMinSize(2, {
-        message: 'Le tableau emailUsers doit contenir au moins deux emails',
+    @ArrayMinSize(3, {
+        message: 'Le tableau emailUsers doit contenir au moins trois emails',
     })
     @IsEmail(
         {},

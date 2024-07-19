@@ -33,7 +33,7 @@ export default function CreatingGroups() {
     const router = useRouter()
 
     useEffect(() => {
-        const formIsValid = name.trim() !== '' && emails.length >= 2
+        const formIsValid = name.trim() !== '' && emails.length >= 3
         setIsFormValid(formIsValid)
     }, [name, emails])
 
@@ -67,6 +67,21 @@ export default function CreatingGroups() {
             },
         })
     }
+
+    const getConstraints = (data: any) => {
+        return Array.isArray(data)
+            ? data.map((item: any) => {
+                  const constraintsKey = Object.values(item.constraints)[0]
+                  const propertyName = item.property
+                  return {
+                      [propertyName]: constraintsKey,
+                  }
+              })
+            : null
+    }
+    const errorMessages = getConstraints(
+        error?.graphQLErrors[0].extensions.validationErrors
+    )
 
     return (
         <div className='min-h-screen flex flex-col justify-center items-center'>
@@ -161,7 +176,17 @@ export default function CreatingGroups() {
                         Confirmez
                     </Button>
                 </div>
-                {error && <p className='text-red-500 mt-2'>{error.message}</p>}
+                {errorMessages &&
+                    errorMessages.map((item, index) =>
+                        Object.values(item).map((value: any, valueIndex) => (
+                            <p
+                                key={`${index}-${valueIndex}`}
+                                className='text-red-500 mt-2'
+                            >
+                                {value}
+                            </p>
+                        ))
+                    )}
             </form>
         </div>
     )

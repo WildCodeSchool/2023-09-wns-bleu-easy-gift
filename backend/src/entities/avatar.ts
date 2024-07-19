@@ -6,12 +6,8 @@ import {
     OneToMany,
 } from 'typeorm'
 import { ObjectType, Field, Int, InputType } from 'type-graphql'
-import { Length } from 'class-validator'
 import { User } from './user'
 import { Group } from './group'
-
-// export type AvatarType = "generic" | "profil" | null
-
 
 @Entity()
 @ObjectType()
@@ -22,17 +18,9 @@ export class Avatar extends BaseEntity {
 
     @Column({ length: 30 })
     @Field()
-    @Length(3, 50, {
-        message: 'Le nom du groupe doit contenir entre 3 et 50 caractères',
-    })
     name: string
 
-    @Column(
-    //     {
-    //     type: "enum",
-    //     enum: ["generic", "profil", null]
-    // }
-    )
+    @Column()
     @Field()
     type: string
 
