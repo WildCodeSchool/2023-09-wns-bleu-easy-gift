@@ -51,6 +51,8 @@ require('dotenv').config();
 
 const devApiUrl = process.env.NEXT_PUBLIC_APOLLO_URI
 
+console.log("_______ENV", process.env.NEXT_PUBLIC_APOLLO_URI)
+
 // const wsUrl = devApiUrl
 //   ? devApiUrl.replace(/^http/, 'ws') + '/subscriptions'
 //   : '/subscriptions';
@@ -66,7 +68,8 @@ const wsLink = new GraphQLWsLink(
 //   credentials: 'include',
 // });
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4001/graphql',
+//   uri: 'http://localhost:4001/graphql',
+  uri: devApiUrl ? devApiUrl : '/graphql',
   credentials: 'include',
 });
 console.log('wsLink', wsLink);
