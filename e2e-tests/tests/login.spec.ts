@@ -1,3 +1,40 @@
+// import { test, expect } from "@playwright/test";
+// import { User } from "../../backend/src/entities/user";
+// import { clearDB } from "../../backend/src/db";
+// import db from "../../backend/src/db";
+
+// test.beforeAll(async () => {
+//   await db.initialize();
+// });
+
+// test.beforeEach(async () => {
+//   await clearDB();
+// });
+
+// test("has a valid user name", async ({ page }) => {
+//   const pseudo = "Olga";
+//   const emailToCheck = "olga@gmail.com";
+//   const passwordToCheck = "test@1234";
+
+//   await User.create({
+//     pseudo: pseudo,
+//     email: emailToCheck,
+//     password: passwordToCheck,
+//   }).save();
+
+//   await page.goto("http://localhost:3000/auth/login");
+//   await page.getByTestId("login-email").fill(emailToCheck);
+//   await page.getByTestId("login-password").fill(passwordToCheck);
+//   await page.getByRole("button", { name: "Se connecter" }).click();
+//   const disconnectButton = await page.getByRole("button", {
+//     name: "Se déconnecter",
+//   });
+//   expect(disconnectButton).toBeVisible({ timeout: 10000 });
+//   // await expect(
+//   //   page.getByRole("button", {name: "Se déconnecter"})
+//   // ).toBeVisible();
+// });
+
 import { test, expect } from "@playwright/test";
 import { User } from "../../backend/src/entities/user";
 import { clearDB } from "../../backend/src/db";
@@ -23,13 +60,16 @@ test("has a valid user name", async ({ page }) => {
   }).save();
 
   await page.goto("http://localhost:3000/auth/login");
+  await page.waitForTimeout(2000);
   await page.getByTestId("login-email").fill(emailToCheck);
   await page.getByTestId("login-password").fill(passwordToCheck);
   await page.getByRole("button", { name: "Se connecter" }).click();
-  const disconnectButton = await page.getByRole("button", {
+  await page.waitForNavigation();
+  const disconnectButton = page.getByRole("button", {
     name: "Se déconnecter",
   });
-  expect(disconnectButton).toBeVisible({ timeout: 10000 });
+
+  await expect(disconnectButton).toBeVisible({ timeout: 10000 });
   // await expect(
   //   page.getByRole("button", {name: "Se déconnecter"})
   // ).toBeVisible();
