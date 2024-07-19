@@ -1,5 +1,7 @@
-
 import {
+    Arg,
+    Authorized,
+    Ctx,
     PubSub,
     PubSubEngine,
     Query,
@@ -86,20 +88,19 @@ class DiscussionResolver {
     newDiscussion(@Root() discussion: Discussion): Discussion {
         return discussion
     }
-}
 
     @Authorized()
     @Query(() => [Discussion])
     async getDiscussionsByGroupIdWithoutCtxUser(
         @Ctx() ctx: MyContext,
-        @Arg('groupId') groupId: number,
+        @Arg('groupId') groupId: number
     ) {
         const groupDiscussions = await Discussion.find({
             where: { group: { id: groupId } },
             relations: ['group', 'messages', 'users'],
         })
         return groupDiscussions.filter(
-            discussion => discussion.name !== ctx.user?.pseudo,
+            discussion => discussion.name !== ctx.user?.pseudo
         )
     }
 }
