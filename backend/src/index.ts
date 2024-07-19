@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { ApolloServer } from '@apollo/server'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-// import { startStandaloneServer } from '@apollo/server/standalone'
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 import schema from './schema'
 import db from './db'
 import express from 'express'
@@ -13,6 +13,8 @@ import Cookies from 'cookies'
 import { jwtVerify } from 'jose'
 import { User } from './entities/user'
 import { findUserByEmail } from './resolvers/usersResolver'
+import { WebSocketServer } from 'ws'
+import { useServer } from 'graphql-ws/lib/use/ws'
 
 dotenv.config()
 
@@ -31,14 +33,35 @@ const port = 4001
 const app = express()
 const httpServer = http.createServer(app)
 
+const wsServer = new WebSocketServer({
+    server: httpServer,
+    path: '/',
+})
+
 schema.then(async schema => {
     await db.initialize()
+    const serverCleanup = useServer({ schema }, wsServer)
     const server = new ApolloServer<MyContext>({
         schema,
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        csrfPrevention: true,
+        cache: 'bounded',
+        plugins: [
+            ApolloServerPluginDrainHttpServer({ httpServer }),
+            ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+            {
+                async serverWillStart() {
+                    return {
+                        async drainServer() {
+                            await serverCleanup.dispose()
+                        },
+                    }
+                },
+            },
+        ],
     })
 
     await server.start()
+
     app.use(
         '/',
         cors<cors.CorsRequest>({
