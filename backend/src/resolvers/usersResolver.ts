@@ -107,7 +107,7 @@ class UsersResolver {
 
         const isPasswordValid = await argon2.verify(
             user.password,
-            infos.password,
+            infos.password
         )
         const responseMessage = new ResponseMessage()
         if (isPasswordValid) {
@@ -142,7 +142,7 @@ class UsersResolver {
     async getUserInfos(@Ctx() ctx: MyContext) {
         if (!ctx.user) {
             throw new GraphQLError(
-                'Merci de vous identifier pour accéder à cette page',
+                'Merci de vous identifier pour accéder à cette page'
             )
         }
         const userData = await User.findOne({
@@ -178,7 +178,7 @@ class UsersResolver {
     @Mutation(() => UserWithoutPassword)
     async updateUser(
         @Arg('data') data: InputUpdateUser,
-        @Ctx() ctx: MyContext,
+        @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {
             throw new GraphQLError("L'utilisateur n'est pas authentifié")
@@ -208,7 +208,7 @@ class UsersResolver {
     @Mutation(() => UserWithoutPasswordAvatar)
     async updateAvatar(
         @Arg('data') data: InputUpdateAvatar,
-        @Ctx() ctx: MyContext,
+        @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {
             throw new GraphQLError("L'utilisateur n'est pas authentifié")

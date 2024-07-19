@@ -1,6 +1,6 @@
 query GetUserByToken($token: String!) {
-  getUserByToken(token: $token) {
-    email
-    pseudo
-  }
+    getUserByToken(token: $token) {
+        email
+        pseudo
+    }
 }

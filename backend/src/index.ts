@@ -63,7 +63,7 @@ schema.then(async schema => {
                     try {
                         const verify = await jwtVerify<Payload>(
                             token,
-                            new TextEncoder().encode(process.env.SECRET_KEY),
+                            new TextEncoder().encode(process.env.SECRET_KEY)
                         )
                         user = await findUserByEmail(verify.payload.email)
                     } catch (error) {
@@ -72,7 +72,7 @@ schema.then(async schema => {
                 }
                 return { req, res, user }
             },
-        }),
+        })
     )
 
     // const { url } = await startStandaloneServer(server, { listen: { port } })

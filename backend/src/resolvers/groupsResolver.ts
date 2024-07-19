@@ -66,7 +66,7 @@ class GroupsResolver {
     async userGroups(@Ctx() ctx: MyContext) {
         if (!ctx.user)
             throw new GraphQLError(
-                'Il faut être connecté pour voir tes groupes',
+                'Il faut être connecté pour voir tes groupes'
             )
         const userGroupsIds =
             ctx.user.userToGroups.map(value => value.group_id) || undefined
@@ -93,7 +93,7 @@ class GroupsResolver {
     async getUsersByGroup(@Arg('id') id: number, @Ctx() ctx: MyContext) {
         if (!ctx.user)
             throw new GraphQLError(
-                'Il faut être connecté pour voir les membres du groupe',
+                'Il faut être connecté pour voir les membres du groupe'
             )
 
         const group = await Group.findOne({
@@ -120,7 +120,7 @@ class GroupsResolver {
 
         if (group) {
             throw new GraphQLError(
-                `Group already exist, fait pas trop le malin.`,
+                `Group already exist, fait pas trop le malin.`
             )
         }
         const newGroup = await createGroup(name, event_date)
@@ -199,7 +199,7 @@ class GroupsResolver {
     @Mutation(() => Group)
     async updateGroupAvatar(
         @Arg('group_id') group_id: number,
-        @Arg('avatar_id') avatar_id: number,
+        @Arg('avatar_id') avatar_id: number
     ) {
         const group = await Group.findOne({ where: { id: group_id } })
         if (!group) throw new GraphQLError('Group not found')
@@ -216,7 +216,7 @@ class GroupsResolver {
     async updateGroup(
         @Arg('groupId') id: number,
         @Arg('data', { validate: true }) data: UpdateGroupInput,
-        @Ctx() ctx: MyContext,
+        @Ctx() ctx: MyContext
     ) {
         const user = ctx.user || undefined
         if (typeof user === 'undefined')
