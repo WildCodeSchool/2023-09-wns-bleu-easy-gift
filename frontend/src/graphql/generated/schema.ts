@@ -133,7 +133,8 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
-  getDiscusions: Array<Discussion>;
+  getDiscussions: Array<Discussion>;
+  getDiscussionsByGroupIdWithoutCtxUser: Array<Discussion>;
   getGroupById: Group;
   getUserByToken: User;
   getUserInfos: UserInfos;
@@ -147,6 +148,11 @@ export type Query = {
   userGroups: Array<Group>;
   users: Array<User>;
   usersToGroups: Array<UserToGroup>;
+};
+
+
+export type QueryGetDiscussionsByGroupIdWithoutCtxUserArgs = {
+  groupId: Scalars['Float'];
 };
 
 
@@ -246,6 +252,13 @@ export type AddNewGroupMutationVariables = Exact<{
 
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
+
+export type GetDiscussionsByGroupIdWithoutCtxUserQueryVariables = Exact<{
+  groupId: Scalars['Float'];
+}>;
+
+
+export type GetDiscussionsByGroupIdWithoutCtxUserQuery = { __typename?: 'Query', getDiscussionsByGroupIdWithoutCtxUser: Array<{ __typename?: 'Discussion', name: string, group: { __typename?: 'Group', name: string }, users: Array<{ __typename?: 'User', pseudo: string, id: number, avatar?: { __typename?: 'Avatar', url: string } | null }> }> };
 
 export type GroupAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -462,6 +475,51 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
+export const GetDiscussionsByGroupIdWithoutCtxUserDocument = gql`
+    query GetDiscussionsByGroupIdWithoutCtxUser($groupId: Float!) {
+  getDiscussionsByGroupIdWithoutCtxUser(groupId: $groupId) {
+    name
+    group {
+      name
+    }
+    users {
+      pseudo
+      id
+      avatar {
+        url
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDiscussionsByGroupIdWithoutCtxUserQuery__
+ *
+ * To run a query within a React component, call `useGetDiscussionsByGroupIdWithoutCtxUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDiscussionsByGroupIdWithoutCtxUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useGetDiscussionsByGroupIdWithoutCtxUserQuery(baseOptions: Apollo.QueryHookOptions<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>(GetDiscussionsByGroupIdWithoutCtxUserDocument, options);
+      }
+export function useGetDiscussionsByGroupIdWithoutCtxUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>(GetDiscussionsByGroupIdWithoutCtxUserDocument, options);
+        }
+export type GetDiscussionsByGroupIdWithoutCtxUserQueryHookResult = ReturnType<typeof useGetDiscussionsByGroupIdWithoutCtxUserQuery>;
+export type GetDiscussionsByGroupIdWithoutCtxUserLazyQueryHookResult = ReturnType<typeof useGetDiscussionsByGroupIdWithoutCtxUserLazyQuery>;
+export type GetDiscussionsByGroupIdWithoutCtxUserQueryResult = Apollo.QueryResult<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>;
 export const GroupAvatarsDocument = gql`
     query groupAvatars {
   groupAvatars {

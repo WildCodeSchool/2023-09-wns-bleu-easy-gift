@@ -4,6 +4,7 @@ import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 import { MyContext } from '..'
+import { Avatar } from '../entities/avatar'
 
 async function createDiscussion({
     name,
@@ -63,11 +64,17 @@ class DiscussionResolver {
     ) {
         const groupDiscussions = await Discussion.find({
             where: { group: { id: groupId } },
-            relations: ['group', 'messages', 'users'],
+            relations: ['group', 'messages', 'users', 'users.avatar'],
         })
-        return groupDiscussions.filter(
+        const discussions = groupDiscussions.filter(
             discussion => discussion.name !== ctx.user?.pseudo,
         )
+        return {
+            discussions: {
+                pseudo: ctx.user?.pseudo,
+                avatar: ctx.user?.avatar?.url || null,
+            }
+        }
     }
 }
 
