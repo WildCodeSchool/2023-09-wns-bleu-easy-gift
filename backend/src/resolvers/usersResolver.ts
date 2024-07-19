@@ -47,6 +47,8 @@ export async function createUser({
         avatar: avatar !== undefined ? avatar : randomProfilAvatar,
     }).save()
 
+    console.log('________________ new user', newUser)
+
     return newUser
 }
 
@@ -99,9 +101,14 @@ class UsersResolver {
 
     @Query(() => ResponseMessage)
     async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
+        console.log('_______________________infos', infos)
+
         const user = await findUserByEmail(infos.email)
+        console.log('_______________________user connected infos', infos)
 
         if (!user) {
+            console.log('_______________________user not found', infos)
+
             throw new GraphQLError(`User doesn't exist`)
         }
 
@@ -109,6 +116,8 @@ class UsersResolver {
             user.password,
             infos.password
         )
+        console.log('_______________________isPasswordValid', isPasswordValid)
+
         const responseMessage = new ResponseMessage()
         if (isPasswordValid) {
             const token = await new SignJWT({ email: user.email })
