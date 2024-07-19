@@ -6,6 +6,7 @@ import {
     Ctx,
     Authorized,
     Int,
+    PubSubEngine,
 } from 'type-graphql'
 import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput, UpdateGroupInput } from '../entities/group'

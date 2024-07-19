@@ -1,4 +1,14 @@
-import { Arg, Authorized, Ctx, Query, Resolver } from 'type-graphql'
+import {
+    Arg,
+    Authorized,
+    Ctx,
+    PubSub,
+    PubSubEngine,
+    Query,
+    Resolver,
+    Root,
+    Subscription,
+} from 'type-graphql'
 import { Discussion } from '../entities/discussion'
 import { User } from '../entities/user'
 import { Group } from '../entities/group'
@@ -14,6 +24,7 @@ async function createDiscussion({
     groupId: number
     participantUsers: User[]
 }) {
+    // pubsub: PubSubEngine,
     const newDiscussion = await Discussion.create({ name })
     const group = await Group.findOne({ where: { id: groupId } })
 
@@ -21,7 +32,10 @@ async function createDiscussion({
 
     newDiscussion.group = group
     newDiscussion.users = participantUsers
+
     return newDiscussion.save()
+
+    // pubsub.publish('NEW_DISCUSSION', newDiscussion)
 }
 
 export async function createGroupDiscussions({
@@ -42,6 +56,20 @@ export async function createGroupDiscussions({
                 groupId,
                 participantUsers,
             })
+            // groupUsers.forEach(currentUser => {
+            //     const participantUsers = groupUsers.filter(
+            //         user => user.id !== currentUser.id,
+            //     )
+            //     console.log('Creating discussion for user:', currentUser.pseudo)
+
+            //     createDiscussion(
+            //         {
+            //             name: currentUser.pseudo,
+            //             groupId,
+            //             participantUsers,
+            //         },
+            //     )
+            // }
         })
     )
 }
@@ -54,19 +82,25 @@ class DiscussionResolver {
             relations: ['group', 'messages', 'users'],
         })
     }
+    @Subscription(() => Discussion, {
+        topics: 'NEW_DISCUSSION',
+    })
+    newDiscussion(@Root() discussion: Discussion): Discussion {
+        return discussion
+    }
 
     @Authorized()
     @Query(() => [Discussion])
     async getDiscussionsByGroupIdWithoutCtxUser(
         @Ctx() ctx: MyContext,
-        @Arg('groupId') groupId: number,
+        @Arg('groupId') groupId: number
     ) {
         const groupDiscussions = await Discussion.find({
             where: { group: { id: groupId } },
             relations: ['group', 'messages', 'users'],
         })
         return groupDiscussions.filter(
-            discussion => discussion.name !== ctx.user?.pseudo,
+            discussion => discussion.name !== ctx.user?.pseudo
         )
     }
 }

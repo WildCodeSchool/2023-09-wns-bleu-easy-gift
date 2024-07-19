@@ -73,9 +73,20 @@ export type InputUpdateUser = {
   pseudo?: InputMaybe<Scalars['String']>;
 };
 
+export type Message = {
+  __typename?: 'Message';
+  content: Scalars['String'];
+  created_at: Scalars['String'];
+  discussion: Discussion;
+  id: Scalars['Int'];
+  modified_at: Scalars['String'];
+  user: User;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addNewGroup: Group;
+  createMessage: Message;
   register: UserWithoutPassword;
   registrationWithToken: UserWithoutPassword;
   updateAvatar: UserWithoutPasswordAvatar;
@@ -87,6 +98,13 @@ export type Mutation = {
 
 export type MutationAddNewGroupArgs = {
   data: NewGroupInput;
+};
+
+
+export type MutationCreateMessageArgs = {
+  content: Scalars['String'];
+  discussionId: Scalars['Float'];
+  userId: Scalars['Float'];
 };
 
 
@@ -133,8 +151,10 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
-  getDiscusions: Array<Discussion>;
+  getDiscussions: Array<Discussion>;
+  getDiscussionsByGroupIdWithoutCtxUser: Array<Discussion>;
   getGroupById: Group;
+  getMessagesByDisscution: Array<Message>;
   getUserByToken: User;
   getUserInfos: UserInfos;
   getUsersByGroup: Array<Group>;
@@ -150,8 +170,20 @@ export type Query = {
 };
 
 
+export type QueryGetDiscussionsByGroupIdWithoutCtxUserArgs = {
+  groupId: Scalars['Float'];
+};
+
+
 export type QueryGetGroupByIdArgs = {
   groupId: Scalars['Int'];
+};
+
+
+export type QueryGetMessagesByDisscutionArgs = {
+  discussionId: Scalars['Float'];
+  limit?: Scalars['Int'];
+  offset?: Scalars['Int'];
 };
 
 
@@ -173,6 +205,17 @@ export type ResponseMessage = {
   __typename?: 'ResponseMessage';
   message: Scalars['String'];
   success: Scalars['Boolean'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  newDiscussion: Discussion;
+  newMessage: Message;
+};
+
+
+export type SubscriptionNewMessageArgs = {
+  discussionId: Scalars['Float'];
 };
 
 export type UpdateGroupInput = {
@@ -247,6 +290,22 @@ export type AddNewGroupMutationVariables = Exact<{
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
 
+export type AddNewMessageSubscriptionVariables = Exact<{
+  discussionId: Scalars['Float'];
+}>;
+
+
+export type AddNewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string } } };
+
+export type CreateMessageMutationVariables = Exact<{
+  discussionId: Scalars['Float'];
+  userId: Scalars['Float'];
+  content: Scalars['String'];
+}>;
+
+
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number, name: string } } };
+
 export type GroupAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -258,6 +317,15 @@ export type GetGroupByIdQueryVariables = Exact<{
 
 
 export type GetGroupByIdQuery = { __typename?: 'Query', getGroupById: { __typename?: 'Group', id: number, name: string, created_at: string, event_date?: string | null, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, user_id: number, group_id: number, user: { __typename?: 'User', email: string, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string } | null } }>, avatar: { __typename?: 'Avatar', id: number, url: string } } };
+
+export type GetMessagesByDisscutionQueryVariables = Exact<{
+  discussionId: Scalars['Float'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
+
+
+export type GetMessagesByDisscutionQuery = { __typename?: 'Query', getMessagesByDisscution: Array<{ __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string } }> };
 
 export type ProfilAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -462,6 +530,89 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
+export const AddNewMessageDocument = gql`
+    subscription addNewMessage($discussionId: Float!) {
+  newMessage(discussionId: $discussionId) {
+    id
+    content
+    user {
+      id
+      pseudo
+    }
+    created_at
+    modified_at
+  }
+}
+    `;
+
+/**
+ * __useAddNewMessageSubscription__
+ *
+ * To run a query within a React component, call `useAddNewMessageSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAddNewMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAddNewMessageSubscription({
+ *   variables: {
+ *      discussionId: // value for 'discussionId'
+ *   },
+ * });
+ */
+export function useAddNewMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>(AddNewMessageDocument, options);
+      }
+export type AddNewMessageSubscriptionHookResult = ReturnType<typeof useAddNewMessageSubscription>;
+export type AddNewMessageSubscriptionResult = Apollo.SubscriptionResult<AddNewMessageSubscription>;
+export const CreateMessageDocument = gql`
+    mutation createMessage($discussionId: Float!, $userId: Float!, $content: String!) {
+  createMessage(discussionId: $discussionId, userId: $userId, content: $content) {
+    id
+    content
+    user {
+      id
+      pseudo
+    }
+    discussion {
+      id
+      name
+    }
+    created_at
+    modified_at
+  }
+}
+    `;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      discussionId: // value for 'discussionId'
+ *      userId: // value for 'userId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const GroupAvatarsDocument = gql`
     query groupAvatars {
   groupAvatars {
@@ -554,6 +705,54 @@ export function useGetGroupByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetGroupByIdQueryHookResult = ReturnType<typeof useGetGroupByIdQuery>;
 export type GetGroupByIdLazyQueryHookResult = ReturnType<typeof useGetGroupByIdLazyQuery>;
 export type GetGroupByIdQueryResult = Apollo.QueryResult<GetGroupByIdQuery, GetGroupByIdQueryVariables>;
+export const GetMessagesByDisscutionDocument = gql`
+    query getMessagesByDisscution($discussionId: Float!, $offset: Int!, $limit: Int!) {
+  getMessagesByDisscution(
+    discussionId: $discussionId
+    offset: $offset
+    limit: $limit
+  ) {
+    id
+    content
+    user {
+      id
+      pseudo
+    }
+    created_at
+    modified_at
+  }
+}
+    `;
+
+/**
+ * __useGetMessagesByDisscutionQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesByDisscutionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesByDisscutionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesByDisscutionQuery({
+ *   variables: {
+ *      discussionId: // value for 'discussionId'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetMessagesByDisscutionQuery(baseOptions: Apollo.QueryHookOptions<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>(GetMessagesByDisscutionDocument, options);
+      }
+export function useGetMessagesByDisscutionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>(GetMessagesByDisscutionDocument, options);
+        }
+export type GetMessagesByDisscutionQueryHookResult = ReturnType<typeof useGetMessagesByDisscutionQuery>;
+export type GetMessagesByDisscutionLazyQueryHookResult = ReturnType<typeof useGetMessagesByDisscutionLazyQuery>;
+export type GetMessagesByDisscutionQueryResult = Apollo.QueryResult<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>;
 export const ProfilAvatarsDocument = gql`
     query ProfilAvatars {
   profilAvatars {
