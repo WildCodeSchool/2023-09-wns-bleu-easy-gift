@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MenuDiscussions from "@/components/discussions/MenuDiscussion";
-import EspaceDiscussion from "@/components/discussions/espaceDiscussion";
+import EspaceDiscussion from "@/components/discussions/EspaceDiscussion";
 
 const DiscussionsPage = () => {
   const [isMenuHidden, setIsMenuHidden] = useState<boolean>(false);
