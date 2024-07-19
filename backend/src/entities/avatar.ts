@@ -10,6 +10,9 @@ import { Length } from 'class-validator'
 import { User } from './user'
 import { Group } from './group'
 
+export type AvatarType = "generic" | "profil"
+
+
 @Entity()
 @ObjectType()
 export class Avatar extends BaseEntity {
@@ -19,14 +22,17 @@ export class Avatar extends BaseEntity {
 
     @Column({ length: 30 })
     @Field()
-    @Length(3, 30, {
-        message: "Le nom de l'avatar doit contenir entre 3 and 30 caractères",
+    @Length(3, 50, {
+        message: 'Le nom du groupe doit contenir entre 3 et 50 caractères',
     })
     name: string
 
-    @Column()
+    @Column({
+        type: "enum",
+        enum: ["generic", "profil"]
+    })
     @Field()
-    type: string
+    type: AvatarType
 
     @Column()
     @Field()

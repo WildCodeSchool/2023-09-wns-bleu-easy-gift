@@ -62,8 +62,8 @@ export class Group extends BaseEntity {
 @InputType()
 export class NewGroupInput {
     @Field()
-    @Length(5, 50, {
-        message: 'Le nom du groupe doit contenir entre 5 et 50 caractères',
+    @Length(3, 50, {
+        message: 'Le nom du groupe doit contenir entre 3 et 50 caractères',
     })
     name: string
 
@@ -71,7 +71,7 @@ export class NewGroupInput {
     @IsArray({ message: 'emailUsers doit être un tableau' })
     @ArrayNotEmpty({ message: 'emailUsers ne doit pas être vide' })
     @ArrayMinSize(2, {
-        message: 'Le tableau emailUsers doit contenir au moins un email',
+        message: 'Le tableau emailUsers doit contenir au moins deux emails',
     })
     @IsEmail(
         {},

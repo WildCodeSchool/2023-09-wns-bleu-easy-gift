@@ -26,6 +26,9 @@ export default function CreatingGroups() {
         onCompleted: () => {
             router.push('/groupes')
         },
+        onError: error => {
+            console.log(error)
+        },
     })
     const router = useRouter()
 
