@@ -91,22 +91,54 @@ export default function Navbar() {
                 >
                     {/* Close Button */}
                     <button onClick={() => setMenuOpen(false)} className="self-end">
-                        <svg
-                            className="h-6 w-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M6 18L18 6M6 6l12 12"
-                            />
+                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
+                    <Link href="/mon-profil" onClick={closeMenu}>
+                        Mon profil
+                    </Link>
+                    <Link href="#" onClick={closeMenu}>
+                        Mes groupes
+                    </Link>
+                    <Link href="#" onClick={closeMenu}>
+                        Mes chats
+                    </Link>
+                    <Link href="#" onClick={closeMenu}>
+                        Link 3
+                    </Link>
+                    {!isConnected && (
+                        <>
+                            <Button className="shadow-md">
+                                <Link onClick={closeMenu} href="/auth/login">
+                                    Login
+                                </Link>
+                            </Button>
+                            <Button className="shadow-md">
+                                <Link onClick={closeMenu} href="/auth/login">
+                                    Sign up
+                                </Link>
+                            </Button>
+                        </>
+                    )}
+                    <Logout />
+                </div>
+
+                {/* Auth Buttons for Larger Screens */}
+                <div className={`hidden md:flex md:flex-row gap-2`}>
+                    {!isConnected && (
+                        <>
+                            <Button className="shadow-md">
+                                <Link href="/auth/login">Login</Link>
+                            </Button>
+                            <Button className="shadow-md">
+                                <Link href="/auth/login">Sign up</Link>
+                            </Button>
+                        </>
+                    )}
+                    {isConnected && <Logout />}
                 </div>
             </div>
-        </nav>
+        </nav >
     );
 }
