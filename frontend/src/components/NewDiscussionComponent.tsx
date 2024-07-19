@@ -11,10 +11,14 @@ function NewDiscussionComponent({discId, userId}: {discId: number, userId: numbe
     GetMessagesByDisscutionQuery['getMessagesByDisscution']
   >([]);
   const [content, setContent] = useState('');
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(0);
 
   const { data, loading, error } = useGetMessagesByDisscutionQuery({
     variables: {
       discussionId: discId,
+      limit: limit,
+      offset: offset,
     },
   });
   const { data: subscriptionData } = useAddNewMessageSubscription({
@@ -58,6 +62,10 @@ function NewDiscussionComponent({discId, userId}: {discId: number, userId: numbe
     }
   }, [subscriptionData]);
 
+  const loadMoreMessages = () => {
+    setOffset((prevOffset) => prevOffset + limit);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -68,11 +76,12 @@ function NewDiscussionComponent({discId, userId}: {discId: number, userId: numbe
         {messages.map((message) => (
           <li key={message.id}>
             <p>{message.content}</p>
-            <small>By: {message.user.id}</small>
+            <small>By: {message.user.id} {message.user.pseudo}</small>
             <small>At: {message.created_at}</small>
           </li>
         ))}
       </ul>
+        <button onClick={loadMoreMessages}>Load More</button>
       <div>
         <input
           type='text'

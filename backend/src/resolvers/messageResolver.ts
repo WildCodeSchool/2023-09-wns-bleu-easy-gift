@@ -1,5 +1,6 @@
 import {
     Arg,
+    Int,
     Mutation,
     PubSub,
     PubSubEngine,
@@ -16,12 +17,16 @@ import { Discussion } from '../entities/discussion'
 class MessageResolver {
     @Query(() => [Message])
     async getMessagesByDisscution(
-        @Arg('discussionId') discussionId: number
+        @Arg('discussionId') discussionId: number,
+        @Arg('limit', () => Int, { defaultValue: 10 }) limit: number,
+        @Arg('offset', () => Int, { defaultValue: 0 }) offset: number
     ): Promise<Message[]> {
         return await Message.find({
             where: { discussion: { id: discussionId } },
             order: { created_at: 'ASC' },
             relations: ['user'],
+            take: limit,
+            skip: offset,
         })
     }
     @Mutation(() => Message)

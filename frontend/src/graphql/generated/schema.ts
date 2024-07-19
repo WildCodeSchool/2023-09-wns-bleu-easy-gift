@@ -151,7 +151,8 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
-  getDiscusions: Array<Discussion>;
+  getDiscussions: Array<Discussion>;
+  getDiscussionsByGroupIdWithoutCtxUser: Array<Discussion>;
   getGroupById: Group;
   getMessagesByDisscution: Array<Message>;
   getUserByToken: User;
@@ -169,6 +170,11 @@ export type Query = {
 };
 
 
+export type QueryGetDiscussionsByGroupIdWithoutCtxUserArgs = {
+  groupId: Scalars['Float'];
+};
+
+
 export type QueryGetGroupByIdArgs = {
   groupId: Scalars['Int'];
 };
@@ -176,6 +182,8 @@ export type QueryGetGroupByIdArgs = {
 
 export type QueryGetMessagesByDisscutionArgs = {
   discussionId: Scalars['Float'];
+  limit?: Scalars['Int'];
+  offset?: Scalars['Int'];
 };
 
 
@@ -312,6 +320,8 @@ export type GetGroupByIdQuery = { __typename?: 'Query', getGroupById: { __typena
 
 export type GetMessagesByDisscutionQueryVariables = Exact<{
   discussionId: Scalars['Float'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 }>;
 
 
@@ -696,8 +706,12 @@ export type GetGroupByIdQueryHookResult = ReturnType<typeof useGetGroupByIdQuery
 export type GetGroupByIdLazyQueryHookResult = ReturnType<typeof useGetGroupByIdLazyQuery>;
 export type GetGroupByIdQueryResult = Apollo.QueryResult<GetGroupByIdQuery, GetGroupByIdQueryVariables>;
 export const GetMessagesByDisscutionDocument = gql`
-    query getMessagesByDisscution($discussionId: Float!) {
-  getMessagesByDisscution(discussionId: $discussionId) {
+    query getMessagesByDisscution($discussionId: Float!, $offset: Int!, $limit: Int!) {
+  getMessagesByDisscution(
+    discussionId: $discussionId
+    offset: $offset
+    limit: $limit
+  ) {
     id
     content
     user {
@@ -723,6 +737,8 @@ export const GetMessagesByDisscutionDocument = gql`
  * const { data, loading, error } = useGetMessagesByDisscutionQuery({
  *   variables: {
  *      discussionId: // value for 'discussionId'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
