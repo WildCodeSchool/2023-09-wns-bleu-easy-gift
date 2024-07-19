@@ -20,11 +20,12 @@ export default function ConfirmParticipationPage() {
         },
     })
 
-    const [registerWithToken] = useRegisterWithTokenMutation({
-        onCompleted: () => {
-            router.push('/auth/login')
-        },
-    })
+    const [registerWithToken, { error: registerError }] =
+        useRegisterWithTokenMutation({
+            onCompleted: () => {
+                router.push('/auth/login')
+            },
+        })
 
     if (!data || error) return <div>error</div>
 
@@ -52,8 +53,22 @@ export default function ConfirmParticipationPage() {
                     token,
                 },
             },
-        })
+        }).catch(console.error)
     }
+    const getConstraints = (data: any) => {
+        return Array.isArray(data)
+            ? data.map((item: any) => {
+                  const constraintsKey = Object.values(item.constraints)[0]
+                  const propertyName = item.property
+                  return {
+                      [propertyName]: constraintsKey,
+                  }
+              })
+            : null
+    }
+    const errorMessages = getConstraints(
+        registerError?.graphQLErrors[0].extensions.validationErrors
+    )
 
     return (
         <div className='flex flex-col  justify-center  items-center w-full h-full '>
@@ -81,6 +96,21 @@ export default function ConfirmParticipationPage() {
                         Les mots de passe ne correspondent pas
                     </p>
                 )}
+                <div className='mb-4'>
+                    {errorMessages &&
+                        errorMessages.map((item, index) =>
+                            Object.values(item).map(
+                                (value: any, valueIndex) => (
+                                    <p
+                                        key={`${index}-${valueIndex}`}
+                                        className='text-red-500 mt-2'
+                                    >
+                                        {value}
+                                    </p>
+                                )
+                            )
+                        )}
+                </div>
                 <Button type='submit'>{"S'enregistrer"}</Button>
             </form>
         </div>
