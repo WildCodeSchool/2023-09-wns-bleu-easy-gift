@@ -15,7 +15,7 @@ const wsLink = new GraphQLWsLink(
 );
 
 const httpLink = new HttpLink({
-  uri: `${devApiUrl}graphql`,
+  uri: devApiUrl ? devApiUrl : '/graphql',
   credentials: 'include',
 });
 
