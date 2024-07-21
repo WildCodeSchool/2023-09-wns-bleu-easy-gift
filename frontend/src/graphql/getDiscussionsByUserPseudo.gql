@@ -1,0 +1,17 @@
+query GetDiscussionByUserPseudo($groupId: Float!) {
+  getDiscussionByUserPseudo(groupId: $groupId) {
+    name
+    users {
+      id
+      pseudo
+      avatar {
+        url
+      }
+    }
+    group {
+      avatar {
+        url
+      }
+    }
+  }
+}
