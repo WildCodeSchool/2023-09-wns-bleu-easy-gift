@@ -4,6 +4,8 @@ import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 import { MyContext } from '..'
+import { UserToGroup } from '../entities/userToGroup'
+import { Avatar } from '../entities/avatar'
 
 async function createDiscussion({
     name,
@@ -21,7 +23,7 @@ async function createDiscussion({
 
     newDiscussion.group = group
     newDiscussion.users = participantUsers
-    return newDiscussion.save()
+    return await newDiscussion.save()
 }
 
 export async function createGroupDiscussions({
@@ -56,18 +58,35 @@ class DiscussionResolver {
     }
 
     @Authorized()
-    @Query(() => [Discussion])
-    async getDiscussionsByGroupIdWithoutCtxUser(
+    @Query(() => Discussion)
+    async getDiscussionByUserPseudo(
         @Ctx() ctx: MyContext,
         @Arg('groupId') groupId: number,
     ) {
-        const groupDiscussions = await Discussion.find({
-            where: { group: { id: groupId } },
-            relations: ['group', 'messages', 'users'],
-        })
-        return groupDiscussions.filter(
-            discussion => discussion.name !== ctx.user?.pseudo,
-        )
+
+        const userDiscussion = await Discussion.findOne({
+            where: { group: { id: groupId }, name: ctx.user?.pseudo },
+            relations: ['group', 'group.avatar', 'messages', 'users', 'users.avatar'],
+        });
+
+        if (!userDiscussion) return new GraphQLError('Discussion not found');
+
+        const filteredUsers = userDiscussion.users?.filter(user =>
+            user.pseudo !== ctx.user?.pseudo);
+        userDiscussion.users = filteredUsers;
+
+        userDiscussion.users = userDiscussion.users?.map(user => ({
+            id: user.id,
+            pseudo: user.pseudo,
+            avatar: {
+                url: user.avatar ? user.avatar.url : null,
+            }
+
+        } as User));
+
+
+        return userDiscussion;
+
     }
 }
 
