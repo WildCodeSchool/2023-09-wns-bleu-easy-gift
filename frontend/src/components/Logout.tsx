@@ -8,7 +8,9 @@ export default function Logout() {
     const router = useRouter()
     const [logout] = useLogoutLazyQuery({
         onCompleted: () => {
-            router.push('/')
+            router.push('/').then(() => {
+                window.location.reload()
+            })
         },
         fetchPolicy: 'cache-and-network',
     })
