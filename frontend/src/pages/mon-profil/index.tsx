@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 export default function Profile() {
     const [isModalAvatarOpen, setIsModalAvatarOpen] = useState(false)
@@ -30,8 +31,14 @@ export default function Profile() {
     const avatarId = user?.avatar?.id
 
     if (groupsLoading || userLoading) return <h1>Loading...</h1>
-    if (groupsError) return <h1>Error: {groupsError.message}</h1>
-    if (userError) return <h1>Error: {userError.message}</h1>
+    if (groupsError) {
+        toast.error(groupsError.message)
+        return <h1>Error: {groupsError.message}</h1>
+    }
+    if (userError) {
+        toast.error(userError.message)
+        return <h1>Error: {userError.message}</h1>
+    }
 
     return (
         <>

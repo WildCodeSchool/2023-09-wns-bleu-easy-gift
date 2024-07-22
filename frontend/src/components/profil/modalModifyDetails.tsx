@@ -7,6 +7,7 @@ import {
 } from '../../graphql/generated/schema'
 import { useState, useEffect, useRef, CSSProperties } from 'react'
 import { getConstraints } from '@/lib/utils'
+import { toast } from 'react-toastify'
 
 interface ModalModifyDetailsProps {
     isOpen: boolean
@@ -54,10 +55,12 @@ export default function ModalModifyDetails({
             variables: { data: { email: email, pseudo: pseudo } },
         })
             .then(() => {
+                toast.success('Les informations ont été modifiées avec succès!')
                 handleClose()
                 window.location.reload()
             })
             .catch(console.error)
+        toast.error('Erreur lors de la modification des informations.')
     }
 
     //end of inmport code scroll modal

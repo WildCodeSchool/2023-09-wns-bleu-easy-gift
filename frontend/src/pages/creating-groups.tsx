@@ -4,6 +4,7 @@ import { useAddNewGroupMutation } from '@/graphql/generated/schema'
 import { useRouter } from 'next/router'
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
 import { getConstraints } from '@/lib/utils'
+import { toast } from 'react-toastify'
 
 const iconStar = {
     id: 'star',
@@ -25,10 +26,13 @@ export default function CreatingGroups() {
 
     const [addNewGroup, { error }] = useAddNewGroupMutation({
         onCompleted: () => {
+            toast.success('Groupe créé avec succès!')
             router.push('/groupes')
         },
         onError: error => {
-            console.log(error)
+            toast.error(
+                `Erreur lors de la création du groupe: ${error.message}`
+            )
         },
     })
     const router = useRouter()

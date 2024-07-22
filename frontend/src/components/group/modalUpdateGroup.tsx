@@ -7,6 +7,7 @@ import {
 import { FormEvent } from 'react'
 import { useRouter } from 'next/router'
 import { getConstraints } from '@/lib/utils'
+import { toast } from 'react-toastify'
 
 interface Group {
     name: string
@@ -46,10 +47,16 @@ export default function ModalUpdateGroup({
             awaitRefetchQueries: true,
         })
             .then(res => {
+                toast.success('Groupe mis à jour avec succès!')
                 onClose()
                 router.push(`/group/${res.data?.updateGroup.id}`)
             })
-            .catch(console.error)
+            .catch(err => {
+                toast.error(
+                    `Erreur lors de la mise à jour du groupe: ${err.message}`
+                )
+                console.error(err)
+            })
     }
 
     const errorMessages = getConstraints(
