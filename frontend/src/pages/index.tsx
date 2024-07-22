@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/carousel'
 import { useRouter } from 'next/router'
 import { checkUserConnected } from '@/utils/checkConnection'
-import { useUserGroupsQuery } from '@/graphql/generated/schema'
+import { useUserGroupsQuery, UserGroupsQuery } from '@/graphql/generated/schema'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import GroupCard from '@/components/GroupCard'
@@ -21,12 +21,40 @@ import FakeDataGroups from '@/components/group/fakeDataGroups'
 export default function Home() {
     const router = useRouter()
     const [isConnected, setIsConnected] = useState(checkUserConnected())
+    const [groups, setGroups] = useState<UserGroupsQuery['userGroups']>([])
+
+    const today = new Date()
+
+    const { data, loading, error } = useUserGroupsQuery({
+        fetchPolicy: 'cache-and-network',
+        skip: !isConnected, // Skip the query if not connected
+    })
+
+    useEffect(() => {
+        if (data?.userGroups) {
+            setGroups(data.userGroups)
+        } else {
+            setGroups([])
+        }
+    }, [data, isConnected])
+
+    if (loading) {
+        console.log('En cours de chargement de vos groupes...')
+    }
+
+    if (error) {
+        console.error('Error fetching user groups:', error)
+    }
 
     const { group1, link1, group2, link2, group3, link3 } = FakeDataGroups()
 
     useEffect(() => {
         const handleUserChange = () => {
-            setIsConnected(checkUserConnected())
+            const connected = checkUserConnected()
+            setIsConnected(connected)
+            if (!connected) {
+                setGroups([])
+            }
         }
 
         window.addEventListener('userChange', handleUserChange)
@@ -36,23 +64,6 @@ export default function Home() {
             window.removeEventListener('userChange', handleUserChange)
         }
     }, [])
-
-    const {
-        data: groupsData,
-        loading: groupsLoading,
-        error: groupsError,
-        refetch: refetchGroups,
-    } = useUserGroupsQuery({
-        skip: !isConnected,
-    })
-
-    const groups = groupsData?.userGroups
-
-    useEffect(() => {
-        if (isConnected) {
-            refetchGroups()
-        }
-    }, [isConnected, refetchGroups])
 
     const handleButtonClick = () => {
         if (isConnected) {
@@ -164,26 +175,41 @@ export default function Home() {
                     </CarouselNext>
                 </Carousel>
             </section>
-            <section className='mb-40 mx-auto min-h-150 h-full flex flex-col justify-evenly items-center sm:min-h-160 lg:min-h-130 lg:flex-wrap lg:justify-evenly 2xl:justify-center 2xl:min-h-140 2xl:items-center 2xl:flex-row'>
-                <h2 className='w-4/5 text-3xl text-primaryRed mb-8  sm:text-center md:mb-10 md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl'>
-                    Retrouve tes groupes
-                </h2>
-                <span className='w-4/5 mb-8 text-lg text-center md:text-2xl md:mb-16 lg:mb-10 '>
-                    <p>
-                        {(!isConnected ||
-                            (isConnected && groups && groups?.length < 1)) &&
-                            'Une fois que tu auras créé ou rejoint un groupe, retrouve-le ici !'}
-                    </p>
-                </span>
-                <GroupCard key='1' group={group1} link={link1} />
-                <GroupCard key='1' group={group2} link={link2} />
-                <GroupCard key='1' group={group3} link={link3} />
-                <MyGroups
-                    groups={groups}
-                    isConnected={isConnected}
-                    groupsLoading={groupsLoading}
-                    groupsError={groupsError}
-                />
+            <section className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto w-4/5 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>
+                {(!isConnected ||
+                    (isConnected && groups && groups?.length < 1)) && (
+                    <span>
+                        <h2 className='w-4/5 text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl lg:w-full lg:mb-14 font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-28'>
+                            Retrouve tes groupes
+                        </h2>
+                        <p className='mb-8 text-lg md:mb-10 md:text-xl  2xl:text-2xl 2xl:pt-12'>
+                            Une fois que tu auras créé ou rejoint un groupe,
+                            retrouve-le ici !
+                        </p>
+                        <div className='flex flex-wrap gap-6 justify-evenly'>
+                            <GroupCard key='1' group={group1} link={link1} />
+                            <GroupCard key='1' group={group2} link={link2} />
+                            <GroupCard key='1' group={group3} link={link3} />
+                        </div>
+                    </span>
+                )}
+
+                {isConnected && groups && groups.length > 0 && (
+                    <span>
+                        <h2 className='w-4/5 text-3xl text-primaryRed mb-8  sm:text-center md:mb-10 md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl'>
+                            Mes groupes
+                        </h2>
+                        <div className='flex flex-wrap gap-6 justify-evenly'>
+                            {groups.map(group => (
+                                <GroupCard
+                                    key={group.id}
+                                    group={group}
+                                    link={`/group/${group.id}`}
+                                />
+                            ))}
+                        </div>
+                    </span>
+                )}
             </section>
         </>
     )

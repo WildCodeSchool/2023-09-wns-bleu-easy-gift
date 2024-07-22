@@ -17,7 +17,7 @@ export default function FakeDataGroups() {
             {
                 user: {
                     id: 1,
-                    pseudo: 'Arnaud',
+                    pseudo: 'Olga',
                     avatar: {
                         id: 1,
                         name: 'Panda cute',
@@ -39,7 +39,7 @@ export default function FakeDataGroups() {
             {
                 user: {
                     id: 3,
-                    pseudo: 'Maude',
+                    pseudo: 'Morgane',
                     avatar: {
                         id: 3,
                         name: 'Baby girafe',
@@ -59,7 +59,7 @@ export default function FakeDataGroups() {
         avatar: {
             id: 2,
             name: 'Cadeau 2',
-            url: 'https://ucarecdn.com/4ef50c61-0ad5-40ec-b649-0e16789931ce/-/preview/1000x1000/',
+            url: 'https://ucarecdn.com/0d17da9c-ea08-4222-b689-1a53cdc185a1/-/preview/1000x1000/',
         },
         userToGroups: [
             {
@@ -118,13 +118,13 @@ export default function FakeDataGroups() {
         avatar: {
             id: 3,
             name: 'Cadeau 3',
-            url: 'https://ucarecdn.com/4ef50c61-0ad5-40ec-b649-0e16789931ce/-/preview/1000x1000/',
+            url: 'https://ucarecdn.com/adcacefd-41f7-4f50-b0d2-36a5ad9c2a75/-/preview/1000x1000/',
         },
         userToGroups: [
             {
                 user: {
                     id: 8,
-                    pseudo: 'Arnaud',
+                    pseudo: 'Jérémie',
                     avatar: {
                         id: 8,
                         name: 'Caricature bébé guépart',
@@ -135,7 +135,7 @@ export default function FakeDataGroups() {
             {
                 user: {
                     id: 9,
-                    pseudo: 'Gilles',
+                    pseudo: 'Léopold',
                     avatar: {
                         id: 9,
                         name: 'Caricature éléphanteau',
@@ -146,7 +146,7 @@ export default function FakeDataGroups() {
             {
                 user: {
                     id: 10,
-                    pseudo: 'Maude',
+                    pseudo: 'Justine',
                     avatar: {
                         id: 10,
                         name: 'Caricature chaton',

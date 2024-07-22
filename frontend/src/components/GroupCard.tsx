@@ -35,7 +35,6 @@ interface GroupComponentProps {
 }
 export default function MyGroup({ group, link }: GroupComponentProps) {
     const [showAll, setShowAll] = useState(false)
-    console.log(group)
     const handleToggle = () => {
         setShowAll(!showAll)
     }
@@ -43,7 +42,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
         ? group.userToGroups
         : group.userToGroups.slice(0, 7)
     return (
-        <div className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out md:max-w-[318px]'>
+        <div className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px]'>
             <div className='flex flex-col p-5 shadow-sm rounded-t-lg gap-3'>
                 <img
                     src={group.avatar.url}
