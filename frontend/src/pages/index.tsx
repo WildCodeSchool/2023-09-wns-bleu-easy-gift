@@ -214,6 +214,3 @@ export default function Home() {
         </>
     )
 }
-
-// Envie de partager une idée de cadeau avec tes amis ?
-// Retrouve ici les groupes que tu as créé ou rejoint.

@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input'
 import { useAddNewGroupMutation } from '@/graphql/generated/schema'
 import { useRouter } from 'next/router'
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react'
+import { getConstraints } from '@/lib/utils'
 
 const iconStar = {
     id: 'star',
@@ -25,6 +26,9 @@ export default function CreatingGroups() {
     const [addNewGroup, { error }] = useAddNewGroupMutation({
         onCompleted: () => {
             router.push('/groupes')
+        },
+        onError: error => {
+            console.log(error)
         },
     })
     const router = useRouter()
@@ -64,6 +68,10 @@ export default function CreatingGroups() {
             },
         })
     }
+
+    const errorMessages = getConstraints(
+        error?.graphQLErrors[0].extensions.validationErrors
+    )
 
     return (
         <div className='min-h-screen flex flex-col justify-center items-center'>
@@ -158,7 +166,17 @@ export default function CreatingGroups() {
                         Confirmez
                     </Button>
                 </div>
-                {error && <p className='text-red-500 mt-2'>{error.message}</p>}
+                {errorMessages &&
+                    errorMessages.map((item, index) =>
+                        Object.values(item).map((value: any, valueIndex) => (
+                            <p
+                                key={`${index}-${valueIndex}`}
+                                className='text-red-500 mt-2'
+                            >
+                                {value}
+                            </p>
+                        ))
+                    )}
             </form>
         </div>
     )

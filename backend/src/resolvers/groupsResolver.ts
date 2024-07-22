@@ -6,6 +6,7 @@ import {
     Ctx,
     Authorized,
     Int,
+    PubSubEngine,
 } from 'type-graphql'
 import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput, UpdateGroupInput } from '../entities/group'
@@ -110,7 +111,7 @@ class GroupsResolver {
 
     @Authorized()
     @Mutation(() => Group)
-    async addNewGroup(@Ctx() ctx: MyContext, @Arg('data') data: NewGroupInput) {
+    async addNewGroup(@Ctx() ctx: MyContext, @Arg('data',{ validate: true }) data: NewGroupInput) {
         const { name, emailUsers, event_date } = data
         const group = await findGroupByName(name)
 

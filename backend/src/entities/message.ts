@@ -33,6 +33,7 @@ export class Message extends BaseEntity {
         cascade: true,
         onDelete: 'CASCADE',
     })
+    @Field(() => Discussion)
     discussion: Discussion
 
     @Field()
