@@ -60,21 +60,15 @@ class DiscussionResolver {
     @Query(() => [Discussion])
     async getDiscussionsByGroupIdWithoutCtxUser(
         @Ctx() ctx: MyContext,
-        @Arg('groupId') groupId: number,
+        @Arg('groupId') groupId: number
     ) {
         const groupDiscussions = await Discussion.find({
             where: { group: { id: groupId } },
-            relations: ['group', 'messages', 'users', 'users.avatar'],
+            relations: ['group', 'messages', 'users'],
         })
-        const discussions = groupDiscussions.filter(
-            discussion => discussion.name !== ctx.user?.pseudo,
+        return groupDiscussions.filter(
+            discussion => discussion.name !== ctx.user?.pseudo
         )
-        return {
-            discussions: {
-                pseudo: ctx.user?.pseudo,
-                avatar: ctx.user?.avatar?.url || null,
-            }
-        }
     }
 }
 
