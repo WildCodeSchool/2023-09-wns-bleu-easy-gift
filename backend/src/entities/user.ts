@@ -89,20 +89,27 @@ export class User extends BaseEntity {
     // @Field(() => String, { nullable: true })
     @Column({ nullable: true, type: 'varchar', unique: true })
     token: string | null
+
+    @Field(() => [Discussion])
+    @OneToMany(() => Discussion, discussion => discussion.userDiscussion)
+    discussions: Discussion[]
 }
 
 @InputType()
 export class InputRegister {
     @Field({ nullable: true })
     @Length(3, 50, {
-        message: "Le pseudo doit contenir entre 3 et 50 caractères",
+        message: 'Le pseudo doit contenir entre 3 et 50 caractères',
     })
     pseudo: string
 
     @Field()
-    @IsEmail({},{
-        message: 'Une adresse mail valide est requise',
-    })
+    @IsEmail(
+        {},
+        {
+            message: 'Une adresse mail valide est requise',
+        }
+    )
     email: string
 
     @Field()
@@ -112,7 +119,7 @@ export class InputRegister {
     avatar?: Avatar | null
 
     @Field({ nullable: true })
-    @IsDateString({}, { message: "Vérifier la date choisie" })
+    @IsDateString({}, { message: 'Vérifier la date choisie' })
     birthday?: string
 }
 
@@ -140,9 +147,12 @@ export class UserWithoutPasswordAvatar {
 @InputType()
 export class InputLogin {
     @Field()
-    @IsEmail({},{
-        message: 'Une adresse mail valide est requise',
-    })
+    @IsEmail(
+        {},
+        {
+            message: 'Une adresse mail valide est requise',
+        }
+    )
     email: string
 
     @Field()
@@ -180,7 +190,7 @@ export class UserInfos {
 export class InputRegistrationWithToken {
     @Field()
     @Length(3, 50, {
-        message: "Le pseudo doit contenir entre 3 et 50 caractères",
+        message: 'Le pseudo doit contenir entre 3 et 50 caractères',
     })
     pseudo: string
 
@@ -195,14 +205,17 @@ export class InputRegistrationWithToken {
 export class InputUpdateUser {
     @Field({ nullable: true })
     @Length(3, 50, {
-        message: "Le pseudo doit contenir entre 3 et 50 caractères",
+        message: 'Le pseudo doit contenir entre 3 et 50 caractères',
     })
     pseudo?: string
 
     @Field({ nullable: true })
-    @IsEmail({},{
-        message: 'Une adresse mail valide est requise',
-    })
+    @IsEmail(
+        {},
+        {
+            message: 'Une adresse mail valide est requise',
+        }
+    )
     email?: string
 }
 

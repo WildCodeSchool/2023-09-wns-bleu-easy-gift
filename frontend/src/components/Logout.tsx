@@ -11,7 +11,10 @@ export default function Logout() {
     const [logout] = useLogoutLazyQuery({
         onCompleted: () => {
             toast.success('Déconnexion réussie!')
-            router.push('/')
+            router.push('/').then(() => {
+                window.location.reload()
+            })
+
         },
         onError: error => {
             toast.error(`Erreur lors de la déconnexion: ${error.message}`)

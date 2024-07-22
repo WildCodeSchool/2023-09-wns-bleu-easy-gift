@@ -10,6 +10,7 @@ import {
     JoinTable,
     ManyToMany,
     ManyToOne,
+    OneToOne,
 } from 'typeorm'
 import { Group } from './group'
 import { Message } from './message'
@@ -23,9 +24,9 @@ export class Discussion extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ length: 50 })
-    @Field()
-    name: string
+    // @Column({ length: 50 })
+    // @Field()
+    // name: string
 
     @CreateDateColumn()
     @Field()
@@ -49,6 +50,10 @@ export class Discussion extends BaseEntity {
     @JoinTable()
     @Field(() => [User])
     users?: User[]
+
+    @Field(() => User)
+    @ManyToOne(() => User, user => user.discussions)
+    userDiscussion: User
 }
 
 @InputType()
@@ -61,4 +66,16 @@ export class NewDiscussionInput {
 
     @Field(() => [ObjectId], { nullable: true })
     users?: ObjectId[]
+}
+
+@ObjectType()
+export class GroupDiscussionsResponse {
+    @Field(() => [Discussion])
+    discussions: Discussion[]
+
+    @Field(() => String)
+    groupName: string
+
+    @Field(() => String)
+    groupAvatarUrl: string
 }
