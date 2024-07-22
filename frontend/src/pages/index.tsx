@@ -61,14 +61,14 @@ export default function Home() {
 
     return (
         <>
-        <div className='flex flex-row gap-2 justify-between'>
-        <NewDiscussionComponent discId={1}  userId={2} />
-        <NewDiscussionComponent discId={1}  userId={3} />
-        </div>
-        <div className='flex flex-row gap-2 justify-between'>
-        <NewDiscussionComponent discId={2}  userId={3} />
-        <NewDiscussionComponent discId={2}  userId={3} />
-        </div>
+            <div className='flex flex-row gap-2 justify-between'>
+                <NewDiscussionComponent discId={1} userId={2} />
+                <NewDiscussionComponent discId={1} userId={3} />
+            </div>
+            <div className='flex flex-row gap-2 justify-between'>
+                <NewDiscussionComponent discId={2} userId={3} />
+                <NewDiscussionComponent discId={2} userId={3} />
+            </div>
         </>
         // <>
         //     <section className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto w-4/5 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>

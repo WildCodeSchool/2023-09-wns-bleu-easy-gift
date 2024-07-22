@@ -211,3 +211,12 @@ export class InputUpdateAvatar {
     @Field(() => Int)
     avatarId: number
 }
+
+@InputType()
+export class InputUpdatePassword {
+    @Field()
+    oldPassword: string
+
+    @Field()
+    newPassword: string
+}

@@ -1,5 +1,6 @@
 import ModalModifyAvatar from '@/components/profil/modalModifyAvatar'
 import ModalModifyDetails from '@/components/profil/modalModifyDetails'
+import ModalModifyPassword from '@/components/profil/ModalModifyPassword'
 import {
     useUserGroupsQuery,
     useGetUserInfosQuery,
@@ -11,6 +12,8 @@ import { useState } from 'react'
 export default function Profile() {
     const [isModalAvatarOpen, setIsModalAvatarOpen] = useState(false)
     const [isModalDetailsOpen, setIsModalDetailsOpen] = useState(false)
+    const [isModalPasswordOpen, setIsModalPasswordOpen] = useState(false)
+
     const {
         data: groupsData,
         loading: groupsLoading,
@@ -77,7 +80,11 @@ export default function Profile() {
                             <p className='text-base font-semibold w-32'>
                                 Mot de passe
                             </p>
-                            <a href='/' className='text-primaryBlue'>
+                            <a
+                                href='#'
+                                className='text-primaryBlue'
+                                onClick={() => setIsModalPasswordOpen(true)}
+                            >
                                 Modifier
                             </a>
                         </div>
@@ -121,6 +128,14 @@ export default function Profile() {
                         setIsModalDetailsOpen(!isModalDetailsOpen)
                     }
                     user={user}
+                />
+            )}
+            {isModalPasswordOpen && (
+                <ModalModifyPassword
+                    isOpen={isModalPasswordOpen}
+                    handleClose={() =>
+                        setIsModalPasswordOpen(!isModalPasswordOpen)
+                    }
                 />
             )}
         </>
