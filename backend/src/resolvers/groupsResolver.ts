@@ -45,7 +45,9 @@ async function createUserToGroup({
 class GroupsResolver {
     @Query(() => [Group])
     async groups() {
-        return Group.find({ relations: ['avatar', 'userToGroups.user'] })
+        return Group.find({
+            relations: ['avatar', 'userToGroups.user'],
+        })
     }
 
     @Query(() => Group)
@@ -128,6 +130,7 @@ class GroupsResolver {
         @Ctx() ctx: MyContext,
         @Arg('data', { validate: true }) data: NewGroupInput
     ) {
+
         if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
 
         const { name, emailUsers, event_date } = data
