@@ -11,6 +11,7 @@ import {
     InputRegistrationWithToken,
     InputUpdateUser,
     InputUpdateAvatar,
+    InputUpdatePassword,
 } from '../entities/user'
 import * as argon2 from 'argon2'
 import { SignJWT } from 'jose'
@@ -240,6 +241,36 @@ class UsersResolver {
             pseudo: user.pseudo,
             avatar: user.avatar,
         }
+    }
+
+    @Mutation(() => ResponseMessage)
+    @Authorized()
+    async updatePassword(
+        @Arg('data') data: InputUpdatePassword,
+        @Ctx() ctx: MyContext
+    ): Promise<ResponseMessage> {
+        if (!ctx.user) {
+            throw new GraphQLError("L'utilisateur n'est pas authentifié")
+        }
+        const user = await User.findOne({ where: { id: ctx.user.id } })
+        if (!user) {
+            throw new GraphQLError('Utilisateur non trouvé')
+        }
+        const isOldPasswordValid = await argon2.verify(
+            user.password,
+            data.oldPassword
+        )
+        if (!isOldPasswordValid) {
+            throw new GraphQLError("L'ancien mot de passe est incorrect")
+        }
+        user.password = data.newPassword
+        await user.save()
+
+        const responseMessage = new ResponseMessage()
+        responseMessage.success = true
+        responseMessage.message = 'Mot de passe modifié avec succès'
+
+        return responseMessage
     }
 }
 
