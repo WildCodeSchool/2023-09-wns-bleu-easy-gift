@@ -53,14 +53,11 @@ class GroupsResolver {
         @Ctx() ctx: MyContext,
         @Arg('groupId', () => Int) id: number
     ) {
-        if (!ctx.user)
+        if (!ctx.user) {
             throw new GraphQLError('Il faut être connecté pour voir ce groupe')
+        }
         const group = await Group.findOne({
-            where: {
-                id,
-                userToGroups: { user_id: ctx.user.id },
-            },
-
+            where: { id },
             relations: [
                 'avatar',
                 'userToGroups',
@@ -68,8 +65,15 @@ class GroupsResolver {
                 'userToGroups.user.avatar',
             ],
         })
-        if (!group) throw new GraphQLError("Vous n'avez pas accès à ce groupe")
-        return group
+        if (
+            group?.userToGroups.some(
+                userToGroup => userToGroup.user_id === ctx.user?.id
+            )
+        ) {
+            return group
+        }
+
+        throw new GraphQLError("Vous n'avez pas accès à ce groupe")
     }
 
     @Query(() => [Group])
