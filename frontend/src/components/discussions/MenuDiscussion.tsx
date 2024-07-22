@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from "@/graphql/generated/schema";
+import { useRouter } from "next/router";
 type MenuDiscussionsProps = {
   isMenuHidden: boolean;
   toggleMenu: () => void;
@@ -8,7 +8,7 @@ type MenuDiscussionsProps = {
 const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => {
   const router = useRouter();
   // const groupId = Number(router.query.groupId);
-  const groupId = 2;
+  const groupId = 31;
 
   const { data, loading, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
     variables: { groupId },
