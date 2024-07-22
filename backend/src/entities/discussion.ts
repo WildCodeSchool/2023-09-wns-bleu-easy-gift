@@ -75,4 +75,7 @@ export class GroupDiscussionsResponse {
 
     @Field(() => String)
     groupName: string
+
+    @Field(() => String)
+    groupAvatarUrl: string
 }
