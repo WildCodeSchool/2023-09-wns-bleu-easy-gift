@@ -59,20 +59,6 @@ export async function createGroupDiscussions({
                 groupId,
                 participantUsers,
             })
-            // groupUsers.forEach(currentUser => {
-            //     const participantUsers = groupUsers.filter(
-            //         user => user.id !== currentUser.id,
-            //     )
-            //     console.log('Creating discussion for user:', currentUser.pseudo)
-
-            //     createDiscussion(
-            //         {
-            //             name: currentUser.pseudo,
-            //             groupId,
-            //             participantUsers,
-            //         },
-            //     )
-            // }
         })
     )
 }
