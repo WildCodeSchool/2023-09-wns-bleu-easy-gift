@@ -9,7 +9,7 @@ function Login() {
     const router = useRouter()
     const [login, { data, error }] = useLoginLazyQuery({
         onCompleted: () => {
-            router.push('/user')
+            router.push('/')
         },
     })
     console.log(data, error)

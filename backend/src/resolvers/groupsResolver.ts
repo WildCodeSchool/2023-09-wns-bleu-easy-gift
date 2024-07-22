@@ -51,7 +51,13 @@ class GroupsResolver {
     }
 
     @Query(() => Group)
-    async getGroupById(@Arg('groupId', () => Int) id: number) {
+    async getGroupById(
+        @Ctx() ctx: MyContext,
+        @Arg('groupId', () => Int) id: number
+    ) {
+        if (!ctx.user) {
+            throw new GraphQLError('Il faut être connecté pour voir ce groupe')
+        }
         const group = await Group.findOne({
             where: { id },
             relations: [
@@ -61,8 +67,15 @@ class GroupsResolver {
                 'userToGroups.user.avatar',
             ],
         })
-        if (!group) throw new GraphQLError('Group not found')
-        return group
+        if (
+            group?.userToGroups.some(
+                userToGroup => userToGroup.user_id === ctx.user?.id
+            )
+        ) {
+            return group
+        }
+
+        throw new GraphQLError("Vous n'avez pas accès à ce groupe")
     }
 
     @Query(() => [Group])
@@ -117,9 +130,11 @@ class GroupsResolver {
         @Ctx() ctx: MyContext,
         @Arg('data', { validate: true }) data: NewGroupInput
     ) {
+
+        if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
+
         const { name, emailUsers, event_date } = data
         const group = await findGroupByName(name)
-
         const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
         const randomGroupAvatar =
             groupAvatars[Math.floor(Math.random() * groupAvatars.length)]
@@ -135,8 +150,6 @@ class GroupsResolver {
             newGroup.avatar = randomGroupAvatar
             await newGroup.save()
         }
-
-        if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
 
         await createUserToGroup({
             group_id: newGroup.id,
@@ -155,7 +168,18 @@ class GroupsResolver {
                     user_id: isUser.id,
                     is_admin: false,
                 })
-                return isUser
+                try {
+                    await mailer.sendMail({
+                        subject: `Bienvenue sur le groupe ${name} !`,
+                        to: email,
+                        from: 'crazygift24@gmail.com',
+                        text: `Bienvenue dans le groupe ${name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
+                        Connecte toi vite pour commencer à discuter : http://localhost:3000/group/${newGroup.id}`,
+                    })
+                    return isUser
+                } catch (error) {
+                    throw new GraphQLError("Erreur d'envoi de mail")
+                }
             }
 
             const pseudo = email.split('@')[0]
@@ -175,7 +199,7 @@ class GroupsResolver {
                     subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
                     to: email,
                     from: 'crazygift24@gmail.com',
-                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'echange de cadeau : ${name}.
+                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
                      Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
                       : http://localhost:3000/confirm-participation?token=${newUser.token}`,
                 })
