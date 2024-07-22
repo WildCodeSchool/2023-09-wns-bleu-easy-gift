@@ -4,6 +4,7 @@ import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 import { MyContext } from '..'
+import { UserToGroup } from '../entities/userToGroup'
 import { Avatar } from '../entities/avatar'
 
 async function createDiscussion({
@@ -22,7 +23,7 @@ async function createDiscussion({
 
     newDiscussion.group = group
     newDiscussion.users = participantUsers
-    return newDiscussion.save()
+    return await newDiscussion.save()
 }
 
 export async function createGroupDiscussions({
@@ -57,8 +58,8 @@ class DiscussionResolver {
     }
 
     @Authorized()
-    @Query(() => [Discussion])
-    async getDiscussionsByGroupIdWithoutCtxUser(
+    @Query(() => Discussion)
+    async getDiscussionByUserPseudo(
         @Ctx() ctx: MyContext,
         @Arg('groupId') groupId: number
     ) {

@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from "@/graphql/generated/schema";
-
 type MenuDiscussionsProps = {
   isMenuHidden: boolean;
   toggleMenu: () => void;
@@ -90,7 +89,9 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
   // }
 
   return (
-    <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out ${isMenuHidden ? 'max-w-0 md:max-w-0 -translate-x-full opacity-25' : 'translate-x-0 w-full opacity-100'}`}>
+    <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out
+    ${isMenuHidden ? 'md:w-0 md:max-w-0 overflow-hidden -translate-x-full opacity-25' : 'w-full md:w-5/12 translate-x-0 opacity-100'}
+    `}>
       <div className="w-4/5 mx-auto h-36 flex flex-shrink-0 flex-wrap justify-between items-center md:min-h-40 md:w-11/12 lg:w-4/5">
         <div className="basis-5/6 flex justify-start items-center h-14">
           <img src="/images/avatar/group_xmas8.png" alt="" className="w-16 h-16 inset-0 rounded-full mr-2 border-solid border-4 border-primaryBlue" />
@@ -98,8 +99,8 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
           ml-4 self-center">
             {discussions[0].group.name}
 
-          </h1>
-        </div>
+          </h1 >
+        </div >
         <div className="self-end h-[3.5rem]">
           <button type="button" className="hidden md:block xl:hidden w-8 h-8 shadow-lg lg:duration-150 lg:hover:scale-125" onClick={toggleMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" className="w-full h-full bg-white text-primaryBlue rounded-md">
@@ -114,35 +115,37 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
           </svg>
           <input type="search" className="w-full h-full rounded-3xl shadow-lg pl-9 outline-slate-200 outline-2 outline " placeholder="Pour trouver tes copains... c'est ici" />
         </div>
-      </div>
+      </div >
       <ul className="w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 mt-8 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow md:justify-start">
-        {discussions.map((discussion, index) => (
-          <li
-            className={`w-full h-16 rounded-full ${index === 0 ? "bg-red400 shadow-md border-red500 md:mb-12" : "bg-blue200 hover:border-primaryBlue"
-              } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
-            key={discussion.users[index]?.id}
-          >
-            <a className="h-full flex items-center justify-start" href="/">
-              <div className="relative mr-3 w-12 h-12">
-                <img
-                  src={index === 0 ? "/images/avatar/profil_girafe.png" : discussion.users[index]?.avatar?.url}
-                  className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0 ? "border-red500" : "border-primaryBlue"
-                    }`}
-                  alt="Avatar of the user"
-                />
-              </div>
-              <div className="self-center flex flex-wrap w-3/4">
-                <h2 className={`text-xl ${index === 0 ? "text-white" : "text-primaryBlue font-semibold"}`}>
-                  {discussion.name}
-                </h2>
-                {/* <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
+        {
+          discussions.map((discussion, index) => (
+            <li
+              className={`w-full h-16 rounded-full ${index === 0 ? "bg-red400 shadow-md border-red500 md:mb-12" : "bg-blue200 hover:border-primaryBlue"
+                } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
+              key={discussion.users[index]?.id}
+            >
+              <a className="h-full flex items-center justify-start" href="/">
+                <div className="relative mr-3 w-12 h-12">
+                  <img
+                    src={index === 0 ? "/images/avatar/profil_girafe.png" : discussion.users[index]?.avatar?.url}
+                    className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0 ? "border-red500" : "border-primaryBlue"
+                      }`}
+                    alt="Avatar of the user"
+                  />
+                </div>
+                <div className="self-center flex flex-wrap w-3/4">
+                  <h2 className={`text-xl ${index === 0 ? "text-white" : "text-primaryBlue font-semibold"}`}>
+                    {discussion.name}
+                  </h2 >
+                  {/* <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 </p> */}
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
+                </div >
+              </a >
+            </li >
+          ))
+        }
+      </ul >
       <div className="w-4/5 mx-auto self-start flex flex-grow justify-end items-start shadow-[1px_-7px_8px_-8px_theme(colors.slate.400)] md:shadow-none md:max-h-20">
         <div className="flex justify-end mt-4 lg:self-end">
           <img src="" alt="" />
@@ -153,11 +156,11 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
               <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z" />
             </svg>
           </button>
-        </div>
+        </div >
         <div>
         </div>
-      </div>
-    </nav>
+      </div >
+    </nav >
   );
 }
 
