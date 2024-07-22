@@ -140,12 +140,12 @@ export default function Navbar() {
                         <>
                             <Button className='shadow-md'>
                                 <Link onClick={closeMenu} href='/auth/login'>
-                                    Login
+                                    Connexion
                                 </Link>
                             </Button>
                             <Button className='shadow-md'>
                                 <Link onClick={closeMenu} href='/auth/register'>
-                                    Register
+                                    Inscription
                                 </Link>
                             </Button>
                         </>
@@ -158,10 +158,10 @@ export default function Navbar() {
                     {!isConnected && (
                         <>
                             <Button className='shadow-md'>
-                                <Link href='/auth/login'>Login</Link>
+                                <Link href='/auth/login'>Connexion</Link>
                             </Button>
                             <Button className='shadow-md'>
-                                <Link href='/auth/register'>Register</Link>
+                                <Link href='/auth/register'>Inscription</Link>
                             </Button>
                         </>
                     )}

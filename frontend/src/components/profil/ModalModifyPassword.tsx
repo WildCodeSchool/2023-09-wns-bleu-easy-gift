@@ -1,28 +1,22 @@
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import {
-    useProfilAvatarsQuery,
-    useUpdateUserMutation,
-    GetUserInfosQuery,
-} from '../../graphql/generated/schema'
 import { useState, useEffect, useRef, CSSProperties } from 'react'
-import { getConstraints } from '@/lib/utils'
+import clsx from 'clsx'
+import { useUpdatePasswordMutation } from '@/graphql/generated/schema'
 
-interface ModalModifyDetailsProps {
+interface ModalModifyPasswordProps {
     isOpen: boolean
     handleClose: () => void
-    user?: GetUserInfosQuery['getUserInfos']
 }
 
-export default function ModalModifyDetails({
+export default function ModalModifyPassword({
     isOpen,
     handleClose,
-    user,
-}: ModalModifyDetailsProps) {
+}: ModalModifyPasswordProps) {
     const [modalScroll, setModalScroll] = useState(false)
     const modalContentRef = useRef<HTMLDivElement>(null)
-    const [pseudo, setPseudo] = useState(user?.pseudo)
-    const [email, setEmail] = useState(user?.email)
+    const [oldPassword, setOldPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
 
     //to adjust the scroll of the modal
     const handleResize = () => {
@@ -47,38 +41,21 @@ export default function ModalModifyDetails({
         }
     }, [isOpen])
 
-    const onConfirm = (e: React.FormEvent) => {
+    const [updateUserPasswordMutation, { loading, error }] =
+        useUpdatePasswordMutation()
+
+    const onConfirm = async (e: React.FormEvent) => {
         e.preventDefault()
-
-        updateUserMutation({
-            variables: { data: { email: email, pseudo: pseudo } },
-        })
-            .then(() => {
-                handleClose()
-                window.location.reload()
+        try {
+            await updateUserPasswordMutation({
+                variables: { data: { oldPassword, newPassword } },
             })
-            .catch(console.error)
+            handleClose()
+            window.location.reload()
+        } catch (err) {
+            console.error(err)
+        }
     }
-
-    //end of inmport code scroll modal
-
-    const { data, loading, error } = useProfilAvatarsQuery()
-
-    // useEffect(() => {
-    //   if (data?.profilAvatars) {
-    //     setAvatars(data.profilAvatars as Avatar[]);
-    //   }
-    // }, [data]);
-
-    const [updateUserMutation, { loading: updating, error: updateError }] =
-        useUpdateUserMutation()
-
-    const errorMessages = getConstraints(
-        updateError?.graphQLErrors[0].extensions.validationErrors
-    )
-
-    if (loading) return <div>Loading...</div>
-    if (error) return <div>Error loading avatars</div>
 
     const modalStyles: CSSProperties = {
         position: 'absolute',
@@ -100,7 +77,7 @@ export default function ModalModifyDetails({
                     <div className='p-3'>
                         <div className='flex justify-between '>
                             <p className='mb-9 text-lg text-left md:mb-10 md:text-xl text-primaryBlue'>
-                                Modifier mes informations
+                                Modifier le mot de passe
                             </p>
                             <svg
                                 xmlns='http://www.w3.org/2000/svg'
@@ -118,37 +95,27 @@ export default function ModalModifyDetails({
                         <div className='flex justify-center'>
                             <form className='gap-2' onSubmit={onConfirm}>
                                 <Input
-                                    id='pseudo'
-                                    type='text'
-                                    name='pseudo'
-                                    label='Choisissez un nouveau pseudo'
-                                    value={pseudo}
-                                    onChange={e => setPseudo(e.target.value)}
+                                    id='oldPassword'
+                                    type='password'
+                                    name='oldPassword'
+                                    label='Ancien mot de passe'
+                                    value={oldPassword}
+                                    onChange={e =>
+                                        setOldPassword(e.target.value)
+                                    }
                                 />
 
                                 <Input
-                                    id='email'
-                                    type='email'
-                                    name='email'
-                                    label='Modifier votre email'
-                                    value={email}
-                                    onChange={e => setEmail(e.target.value)}
+                                    id='newPassword'
+                                    type='password'
+                                    name='newPassword'
+                                    label='Nouveau mot de passe'
+                                    value={newPassword}
+                                    onChange={e =>
+                                        setNewPassword(e.target.value)
+                                    }
                                 />
-                                <div className='mb-4'>
-                                    {errorMessages &&
-                                        errorMessages.map((item, index) =>
-                                            Object.values(item).map(
-                                                (value: any, valueIndex) => (
-                                                    <p
-                                                        key={`${index}-${valueIndex}`}
-                                                        className='text-red-500 mt-2'
-                                                    >
-                                                        {value}
-                                                    </p>
-                                                )
-                                            )
-                                        )}
-                                </div>
+
                                 <div className='flex justify-center'>
                                     <Button type='submit' className='mt-10'>
                                         {'Modifier'}
