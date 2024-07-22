@@ -69,7 +69,7 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async registrationWithToken(@Arg('data') data: InputRegistrationWithToken) {
+    async registrationWithToken(@Arg('data',{ validate: true }) data: InputRegistrationWithToken) {
         const user = await User.findOne({ where: { token: data.token } })
         if (!user) {
             throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
@@ -86,7 +86,7 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async register(@Arg('data') data: InputRegister) {
+    async register(@Arg('data',{ validate: true }) data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
         const user = await findUserByEmail(email)
@@ -186,7 +186,7 @@ class UsersResolver {
 
     @Mutation(() => UserWithoutPassword)
     async updateUser(
-        @Arg('data') data: InputUpdateUser,
+        @Arg('data',{ validate: true }) data: InputUpdateUser,
         @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {

@@ -1,15 +1,12 @@
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import {
-    Avatar,
-    User,
     useProfilAvatarsQuery,
-    useUpdateAvatarMutation,
     useUpdateUserMutation,
     GetUserInfosQuery,
 } from '../../graphql/generated/schema'
 import { useState, useEffect, useRef, CSSProperties } from 'react'
-import clsx from 'clsx'
+import { getConstraints } from '@/lib/utils'
 
 interface ModalModifyDetailsProps {
     isOpen: boolean
@@ -52,15 +49,15 @@ export default function ModalModifyDetails({
 
     const onConfirm = (e: React.FormEvent) => {
         e.preventDefault()
-        try {
-            updateUserMutation({
-                variables: { data: { email: email, pseudo: pseudo } },
+
+        updateUserMutation({
+            variables: { data: { email: email, pseudo: pseudo } },
+        })
+            .then(() => {
+                handleClose()
+                window.location.reload()
             })
-            handleClose()
-            window.location.reload()
-        } catch (err) {
-            console.error(err)
-        }
+            .catch(console.error)
     }
 
     //end of inmport code scroll modal
@@ -75,6 +72,10 @@ export default function ModalModifyDetails({
 
     const [updateUserMutation, { loading: updating, error: updateError }] =
         useUpdateUserMutation()
+
+    const errorMessages = getConstraints(
+        updateError?.graphQLErrors[0].extensions.validationErrors
+    )
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error loading avatars</div>
@@ -133,7 +134,21 @@ export default function ModalModifyDetails({
                                     value={email}
                                     onChange={e => setEmail(e.target.value)}
                                 />
-
+                                <div className='mb-4'>
+                                    {errorMessages &&
+                                        errorMessages.map((item, index) =>
+                                            Object.values(item).map(
+                                                (value: any, valueIndex) => (
+                                                    <p
+                                                        key={`${index}-${valueIndex}`}
+                                                        className='text-red-500 mt-2'
+                                                    >
+                                                        {value}
+                                                    </p>
+                                                )
+                                            )
+                                        )}
+                                </div>
                                 <div className='flex justify-center'>
                                     <Button type='submit' className='mt-10'>
                                         {'Modifier'}
