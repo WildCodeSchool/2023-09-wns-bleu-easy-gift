@@ -84,7 +84,9 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
     } */
 
   return (
-    <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out ${isMenuHidden ? 'max-w-0 md:max-w-0 -translate-x-full opacity-25' : 'translate-x-0 w-full opacity-100'}`}>
+    <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out
+    ${isMenuHidden ? 'md:w-0 md:max-w-0 overflow-hidden -translate-x-full opacity-25' : 'w-full md:w-5/12 translate-x-0 opacity-100'}
+    `}>
       <div className="w-4/5 mx-auto h-36 flex flex-shrink-0 flex-wrap justify-between items-center md:min-h-40 md:w-11/12 lg:w-4/5">
         <div className="basis-5/6 flex justify-start items-center h-14">
           <img src="/images/avatar/group_xmas8.png" alt="" className="w-16 h-12 inset-0 rounded-full mr-2 border-solid border-4 border-primaryBlue" />
