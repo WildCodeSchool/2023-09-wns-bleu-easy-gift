@@ -32,6 +32,10 @@ async function checkToken(token: string | undefined, request: NextRequest) {
             response = NextResponse.redirect(
                 new URL('/auth/login', request.url)
             )
+        } else if (request.nextUrl.pathname.startsWith('/group')) {
+            response = NextResponse.redirect(
+                new URL('/auth/login', request.url)
+            )
         } else {
             response = NextResponse.next()
         }
