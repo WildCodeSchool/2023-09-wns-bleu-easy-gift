@@ -14,7 +14,7 @@ export const groupFactory = async (user: User, numberOfGroupUser: number) => {
 
     const newGroup = await Group.create({
         name: faker.animal.type(),
-        event_date: faker.date.future().toString(),
+        event_date: faker.date.future().toLocaleDateString(),
         avatar: randomGroupAvatar,
     }).save()
 

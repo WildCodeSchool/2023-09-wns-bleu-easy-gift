@@ -15,6 +15,7 @@ import { checkUserConnected } from '@/utils/checkConnection'
 import { useUserGroupsQuery } from '@/graphql/generated/schema'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import NewDiscussionComponent from '@/components/NewDiscussionComponent'
 
 export default function Home() {
   const router = useRouter()

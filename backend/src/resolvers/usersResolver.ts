@@ -11,6 +11,7 @@ import {
     InputRegistrationWithToken,
     InputUpdateUser,
     InputUpdateAvatar,
+    InputUpdatePassword,
 } from '../entities/user'
 import * as argon2 from 'argon2'
 import { SignJWT } from 'jose'
@@ -47,6 +48,8 @@ export async function createUser({
         avatar: avatar !== undefined ? avatar : randomProfilAvatar,
     }).save()
 
+    console.log('________________ new user', newUser)
+
     return newUser
 }
 
@@ -67,7 +70,7 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async registrationWithToken(@Arg('data') data: InputRegistrationWithToken) {
+    async registrationWithToken(@Arg('data',{ validate: true }) data: InputRegistrationWithToken) {
         const user = await User.findOne({ where: { token: data.token } })
         if (!user) {
             throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
@@ -84,7 +87,7 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async register(@Arg('data') data: InputRegister) {
+    async register(@Arg('data',{ validate: true }) data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
         const user = await findUserByEmail(email)
@@ -99,9 +102,14 @@ class UsersResolver {
 
     @Query(() => ResponseMessage)
     async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
+        console.log('_______________________infos', infos)
+
         const user = await findUserByEmail(infos.email)
+        console.log('_______________________user connected infos', infos)
 
         if (!user) {
+            console.log('_______________________user not found', infos)
+
             throw new GraphQLError(`User doesn't exist`)
         }
 
@@ -109,6 +117,8 @@ class UsersResolver {
             user.password,
             infos.password
         )
+        console.log('_______________________isPasswordValid', isPasswordValid)
+
         const responseMessage = new ResponseMessage()
         if (isPasswordValid) {
             const token = await new SignJWT({ email: user.email })
@@ -177,7 +187,7 @@ class UsersResolver {
 
     @Mutation(() => UserWithoutPassword)
     async updateUser(
-        @Arg('data') data: InputUpdateUser,
+        @Arg('data',{ validate: true }) data: InputUpdateUser,
         @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {
@@ -231,6 +241,36 @@ class UsersResolver {
             pseudo: user.pseudo,
             avatar: user.avatar,
         }
+    }
+
+    @Mutation(() => ResponseMessage)
+    @Authorized()
+    async updatePassword(
+        @Arg('data') data: InputUpdatePassword,
+        @Ctx() ctx: MyContext
+    ): Promise<ResponseMessage> {
+        if (!ctx.user) {
+            throw new GraphQLError("L'utilisateur n'est pas authentifié")
+        }
+        const user = await User.findOne({ where: { id: ctx.user.id } })
+        if (!user) {
+            throw new GraphQLError('Utilisateur non trouvé')
+        }
+        const isOldPasswordValid = await argon2.verify(
+            user.password,
+            data.oldPassword
+        )
+        if (!isOldPasswordValid) {
+            throw new GraphQLError("L'ancien mot de passe est incorrect")
+        }
+        user.password = data.newPassword
+        await user.save()
+
+        const responseMessage = new ResponseMessage()
+        responseMessage.success = true
+        responseMessage.message = 'Mot de passe modifié avec succès'
+
+        return responseMessage
     }
 }
 

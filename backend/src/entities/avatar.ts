@@ -6,7 +6,6 @@ import {
     OneToMany,
 } from 'typeorm'
 import { ObjectType, Field, Int, InputType } from 'type-graphql'
-import { Length } from 'class-validator'
 import { User } from './user'
 import { Group } from './group'
 
@@ -19,9 +18,6 @@ export class Avatar extends BaseEntity {
 
     @Column({ length: 30 })
     @Field()
-    @Length(3, 30, {
-        message: "Le nom de l'avatar doit contenir entre 3 and 30 caractères",
-    })
     name: string
 
     @Column()
