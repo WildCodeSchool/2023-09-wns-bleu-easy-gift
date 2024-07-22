@@ -181,6 +181,11 @@ export type Query = {
 };
 
 
+export type QueryGetDiscussionsByGroupIdWithoutCtxUserArgs = {
+  groupId: Scalars['Float'];
+};
+
+
 export type QueryGetGroupByIdArgs = {
   groupId: Scalars['Int'];
 };
@@ -295,6 +300,22 @@ export type AddNewGroupMutationVariables = Exact<{
 
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
+
+export type AddNewMessageSubscriptionVariables = Exact<{
+  discussionId: Scalars['Float'];
+}>;
+
+
+export type AddNewMessageSubscription = { __typename?: 'Subscription', newMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string } } };
+
+export type CreateMessageMutationVariables = Exact<{
+  discussionId: Scalars['Float'];
+  userId: Scalars['Float'];
+  content: Scalars['String'];
+}>;
+
+
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number, name: string } } };
 
 export type GroupAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -527,51 +548,89 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
-export const GetDiscussionsByGroupIdWithoutCtxUserDocument = gql`
-    query GetDiscussionsByGroupIdWithoutCtxUser($groupId: Float!) {
-  getDiscussionsByGroupIdWithoutCtxUser(groupId: $groupId) {
-    name
-    group {
-      name
-    }
-    users {
-      pseudo
+export const AddNewMessageDocument = gql`
+    subscription addNewMessage($discussionId: Float!) {
+  newMessage(discussionId: $discussionId) {
+    id
+    content
+    user {
       id
-      avatar {
-        url
-      }
+      pseudo
     }
+    created_at
+    modified_at
   }
 }
-`;
+    `;
 
 /**
- * __useGetDiscussionsByGroupIdWithoutCtxUserQuery__
+ * __useAddNewMessageSubscription__
  *
- * To run a query within a React component, call `useGetDiscussionsByGroupIdWithoutCtxUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDiscussionsByGroupIdWithoutCtxUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAddNewMessageSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAddNewMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
+ * const { data, loading, error } = useAddNewMessageSubscription({
  *   variables: {
- *      groupId: // value for 'groupId'
+ *      discussionId: // value for 'discussionId'
  *   },
  * });
  */
-export function useGetDiscussionsByGroupIdWithoutCtxUserQuery(baseOptions: Apollo.QueryHookOptions<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>) {
+export function useAddNewMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>(GetDiscussionsByGroupIdWithoutCtxUserDocument, options);
+  return Apollo.useSubscription<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>(AddNewMessageDocument, options);
 }
-export function useGetDiscussionsByGroupIdWithoutCtxUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>) {
+export type AddNewMessageSubscriptionHookResult = ReturnType<typeof useAddNewMessageSubscription>;
+export type AddNewMessageSubscriptionResult = Apollo.SubscriptionResult<AddNewMessageSubscription>;
+export const CreateMessageDocument = gql`
+    mutation createMessage($discussionId: Float!, $userId: Float!, $content: String!) {
+  createMessage(discussionId: $discussionId, userId: $userId, content: $content) {
+    id
+    content
+    user {
+      id
+      pseudo
+    }
+    discussion {
+      id
+      name
+    }
+    created_at
+    modified_at
+  }
+}
+    `;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      discussionId: // value for 'discussionId'
+ *      userId: // value for 'userId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>(GetDiscussionsByGroupIdWithoutCtxUserDocument, options);
+  return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
 }
-export type GetDiscussionsByGroupIdWithoutCtxUserQueryHookResult = ReturnType<typeof useGetDiscussionsByGroupIdWithoutCtxUserQuery>;
-export type GetDiscussionsByGroupIdWithoutCtxUserLazyQueryHookResult = ReturnType<typeof useGetDiscussionsByGroupIdWithoutCtxUserLazyQuery>;
-export type GetDiscussionsByGroupIdWithoutCtxUserQueryResult = Apollo.QueryResult<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>;
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const GroupAvatarsDocument = gql`
     query groupAvatars {
   groupAvatars {
@@ -581,7 +640,7 @@ export const GroupAvatarsDocument = gql`
     url
   }
 }
-`;
+    `;
 
 /**
  * __useGroupAvatarsQuery__
@@ -635,7 +694,7 @@ export const GetGroupByIdDocument = gql`
     }
   }
 }
-`;
+    `;
 
 /**
  * __useGetGroupByIdQuery__
@@ -720,7 +779,7 @@ export const ProfilAvatarsDocument = gql`
     url
   }
 }
-`;
+    `;
 
 /**
  * __useProfilAvatarsQuery__
@@ -755,7 +814,7 @@ export const GetUserByTokenDocument = gql`
     pseudo
   }
 }
-`;
+    `;
 
 /**
  * __useGetUserByTokenQuery__
@@ -810,7 +869,7 @@ export const UserGroupsDocument = gql`
     }
   }
 }
-`;
+    `;
 
 /**
  * __useUserGroupsQuery__
@@ -851,7 +910,7 @@ export const GetUserInfosDocument = gql`
     }
   }
 }
-`;
+    `;
 
 /**
  * __useGetUserInfosQuery__
@@ -890,7 +949,7 @@ export const UsersDocument = gql`
     }
   }
 }
-`;
+    `;
 
 /**
  * __useUsersQuery__
@@ -925,7 +984,7 @@ export const LoginDocument = gql`
     success
   }
 }
-`;
+    `;
 
 /**
  * __useLoginQuery__
@@ -961,7 +1020,7 @@ export const LogoutDocument = gql`
     message
   }
 }
-`;
+    `;
 
 /**
  * __useLogoutQuery__
@@ -996,7 +1055,7 @@ export const RegisterUserDocument = gql`
     pseudo
   }
 }
-`;
+    `;
 export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutation, RegisterUserMutationVariables>;
 
 /**
@@ -1030,7 +1089,7 @@ export const RegisterWithTokenDocument = gql`
     pseudo
   }
 }
-`;
+    `;
 export type RegisterWithTokenMutationFn = Apollo.MutationFunction<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>;
 
 /**
@@ -1072,7 +1131,7 @@ export const UpdateGroupAvatarDocument = gql`
     event_date
   }
 }
-`;
+    `;
 export type UpdateGroupAvatarMutationFn = Apollo.MutationFunction<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>;
 
 /**
@@ -1141,7 +1200,7 @@ export const UpdateUserDocument = gql`
     pseudo
   }
 }
-`;
+    `;
 export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
 
 /**

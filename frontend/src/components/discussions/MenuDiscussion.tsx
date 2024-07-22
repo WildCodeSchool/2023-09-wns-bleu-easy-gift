@@ -6,87 +6,87 @@ type MenuDiscussionsProps = {
 };
 
 const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => {
-  const router = useRouter();
-  // const groupId = Number(router.query.groupId);
-  const groupId = 31;
+  /*   const router = useRouter();
+    // const groupId = Number(router.query.groupId);
+    const groupId = 31;
 
-  const { data, loading, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
-    variables: { groupId },
-    fetchPolicy: "cache-and-network",
-  });
+    const { data, loading, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
+      variables: { groupId },
+      fetchPolicy: "cache-and-network",
+    });
 
-  console.log(data);
+    console.log(data);
 
-  if (loading) return <div>Chargement...</div>;
-  if (error) return <div>Oups, une erreur est survenue</div>;
-  if (!data || !data.getDiscussionsByGroupIdWithoutCtxUser) {
-    return <div>Groupe introuvable</div>;
+    if (loading) return <div>Chargement...</div>;
+    if (error) return <div>Oups, une erreur est survenue</div>;
+    if (!data || !data.getDiscussionsByGroupIdWithoutCtxUser) {
+      return <div>Groupe introuvable</div>;
+    }
+
+    const discussions = data.getDiscussionsByGroupIdWithoutCtxUser;
+   */
+
+
+  const group = {
+    "id": 1,
+    "name": "anniversaire",
+    "userToGroups": [
+      {
+        "user": {
+          "pseudo": "Pierre",
+          "avatar": {
+            "url": "https://ucarecdn.com/bb05bd7d-e0cc-49b1-867b-36aa9ff245f2/-/preview/1000x1000/"
+          },
+          "id": 1
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Dorothée",
+          "avatar": {
+            "url": "https://ucarecdn.com/74347f17-c04e-4e57-aafd-fc518ebd332e/-/preview/1000x1000/"
+          },
+          "id": 8
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Alliaume",
+          "avatar": {
+            "url": "https://ucarecdn.com/4efb4fd3-382c-4734-86ae-23eb62594036/-/preview/1000x1000/"
+          },
+          "id": 7
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Guilhemine",
+          "avatar": {
+            "url": "https://ucarecdn.com/f3546ab4-0edd-4470-90b9-f604c84266e1/-/preview/1000x1000/"
+          },
+          "id": 9
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Cyriaque",
+          "avatar": {
+            "url": "https://ucarecdn.com/beb1818b-3726-4a90-9db0-563b8a2671c1/-/preview/1000x1000/"
+          },
+          "id": 11
+        }
+      },
+      {
+        "user": {
+          "pseudo": "Chilpéric",
+          "avatar": {
+            "url": "https://ucarecdn.com/9dab743e-7860-4603-850f-64e5c344ae1a/-/preview/1000x1000/"
+          },
+          "id": 10
+        }
+      }
+    ]
   }
-
-  const discussions = data.getDiscussionsByGroupIdWithoutCtxUser;
-
-
-
-  // const group = {
-  //   "id": 1,
-  //   "name": "anniversaire",
-  //   "userToGroups": [
-  //     {
-  //       "user": {
-  //         "pseudo": "Pierre",
-  //         "avatar": {
-  //           "url": "https://ucarecdn.com/bb05bd7d-e0cc-49b1-867b-36aa9ff245f2/-/preview/1000x1000/"
-  //         },
-  //         "id": 1
-  //       }
-  //     },
-  //     {
-  //       "user": {
-  //         "pseudo": "Dorothée",
-  //         "avatar": {
-  //           "url": "https://ucarecdn.com/74347f17-c04e-4e57-aafd-fc518ebd332e/-/preview/1000x1000/"
-  //         },
-  //         "id": 8
-  //       }
-  //     },
-  //     {
-  //       "user": {
-  //         "pseudo": "Alliaume",
-  //         "avatar": {
-  //           "url": "https://ucarecdn.com/4efb4fd3-382c-4734-86ae-23eb62594036/-/preview/1000x1000/"
-  //         },
-  //         "id": 7
-  //       }
-  //     },
-  //     {
-  //       "user": {
-  //         "pseudo": "Guilhemine",
-  //         "avatar": {
-  //           "url": "https://ucarecdn.com/f3546ab4-0edd-4470-90b9-f604c84266e1/-/preview/1000x1000/"
-  //         },
-  //         "id": 9
-  //       }
-  //     },
-  //     {
-  //       "user": {
-  //         "pseudo": "Cyriaque",
-  //         "avatar": {
-  //           "url": "https://ucarecdn.com/beb1818b-3726-4a90-9db0-563b8a2671c1/-/preview/1000x1000/"
-  //         },
-  //         "id": 11
-  //       }
-  //     },
-  //     {
-  //       "user": {
-  //         "pseudo": "Chilpéric",
-  //         "avatar": {
-  //           "url": "https://ucarecdn.com/9dab743e-7860-4603-850f-64e5c344ae1a/-/preview/1000x1000/"
-  //         },
-  //         "id": 10
-  //       }
-  //     }
-  //   ]
-  // }
 
   return (
     <nav className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out
@@ -97,7 +97,7 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
           <img src="/images/avatar/group_xmas8.png" alt="" className="w-16 h-16 inset-0 rounded-full mr-2 border-solid border-4 border-primaryBlue" />
           <h1 className="text-4xl md:text-2xl xl:text-4xl 2xl:text-5xl font-bold text-primaryBlue inline-block
           ml-4 self-center">
-            {discussions[0].group.name}
+            {group.name}
 
           </h1 >
         </div >
@@ -118,16 +118,16 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
       </div >
       <ul className="w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 mt-8 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow md:justify-start">
         {
-          discussions.map((discussion, index) => (
+          group.userToGroups.map((discussion, index) => (
             <li
               className={`w-full h-16 rounded-full ${index === 0 ? "bg-red400 shadow-md border-red500 md:mb-12" : "bg-blue200 hover:border-primaryBlue"
                 } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
-              key={discussion.users[index]?.id}
+              key={discussion.user.id}
             >
               <a className="h-full flex items-center justify-start" href="/">
                 <div className="relative mr-3 w-12 h-12">
                   <img
-                    src={index === 0 ? "/images/avatar/profil_girafe.png" : discussion.users[index]?.avatar?.url}
+                    src={index === 0 ? "/images/avatar/profil_girafe.png" : group.userToGroups[index]?.user?.avatar?.url}
                     className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0 ? "border-red500" : "border-primaryBlue"
                       }`}
                     alt="Avatar of the user"
@@ -135,7 +135,7 @@ const MenuDiscussions = ({ isMenuHidden, toggleMenu }: MenuDiscussionsProps) => 
                 </div>
                 <div className="self-center flex flex-wrap w-3/4">
                   <h2 className={`text-xl ${index === 0 ? "text-white" : "text-primaryBlue font-semibold"}`}>
-                    {discussion.name}
+                    {discussion.user.pseudo}
                   </h2 >
                   {/* <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
