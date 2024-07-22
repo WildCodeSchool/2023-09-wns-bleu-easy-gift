@@ -16,16 +16,18 @@ import { GraphQLError } from 'graphql'
 import { MyContext } from '..'
 
 async function createDiscussion({
-    name,
+    // name,
+    userDiscussion,
     groupId,
     participantUsers,
 }: {
-    name: string
+    // name: string
+    userDiscussion: User
     groupId: number
     participantUsers: User[]
 }) {
     // pubsub: PubSubEngine,
-    const newDiscussion = await Discussion.create({ name })
+    const newDiscussion = Discussion.create({ userDiscussion })
     const group = await Group.findOne({ where: { id: groupId } })
 
     if (!group) throw new GraphQLError(`Can't find group `)
@@ -33,7 +35,7 @@ async function createDiscussion({
     newDiscussion.group = group
     newDiscussion.users = participantUsers
 
-    return newDiscussion.save()
+    return await newDiscussion.save()
 
     // pubsub.publish('NEW_DISCUSSION', newDiscussion)
 }
@@ -52,7 +54,8 @@ export async function createGroupDiscussions({
             )
 
             return await createDiscussion({
-                name: currentUser.pseudo,
+                // name: currentUser.pseudo,
+                userDiscussion: currentUser,
                 groupId,
                 participantUsers,
             })
@@ -97,11 +100,43 @@ class DiscussionResolver {
     ) {
         const groupDiscussions = await Discussion.find({
             where: { group: { id: groupId } },
-            relations: ['group', 'messages', 'users'],
+            relations: [
+                'group',
+                'group.avatar',
+                'messages',
+                'users',
+                'userDiscussion',
+                'userDiscussion.avatar',
+            ],
         })
         return groupDiscussions.filter(
-            discussion => discussion.name !== ctx.user?.pseudo
+            discussion => discussion.userDiscussion.pseudo !== ctx.user?.pseudo
         )
+    }
+
+    @Authorized()
+    @Query(() => Discussion)
+    async getDiscussionById(
+        @Ctx() ctx: MyContext,
+        @Arg('discussionId') discussionId: number
+    ) {
+        const discussion = await Discussion.findOne({
+            where: { id: discussionId },
+            relations: [
+                'group',
+                'group.avatar',
+                'messages',
+                'users',
+                'userDiscussion',
+                'userDiscussion.avatar',
+            ],
+        })
+
+        if (!discussion) throw new GraphQLError('Discussion not found')
+        if (discussion.userDiscussion.pseudo !== ctx.user?.pseudo)
+            throw new GraphQLError('You are not allowed to see this discussion')
+
+        return discussion
     }
 }
 
