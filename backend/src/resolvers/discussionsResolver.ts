@@ -9,7 +9,7 @@ import {
     Root,
     Subscription,
 } from 'type-graphql'
-import { Discussion } from '../entities/discussion'
+import { Discussion, GroupDiscussionsResponse } from '../entities/discussion'
 import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
@@ -59,20 +59,6 @@ export async function createGroupDiscussions({
                 groupId,
                 participantUsers,
             })
-            // groupUsers.forEach(currentUser => {
-            //     const participantUsers = groupUsers.filter(
-            //         user => user.id !== currentUser.id,
-            //     )
-            //     console.log('Creating discussion for user:', currentUser.pseudo)
-
-            //     createDiscussion(
-            //         {
-            //             name: currentUser.pseudo,
-            //             groupId,
-            //             participantUsers,
-            //         },
-            //     )
-            // }
         })
     )
 }
@@ -93,7 +79,7 @@ class DiscussionResolver {
     }
 
     @Authorized()
-    @Query(() => [Discussion])
+    @Query(() => GroupDiscussionsResponse)
     async getDiscussionsByGroupIdWithoutCtxUser(
         @Ctx() ctx: MyContext,
         @Arg('groupId') groupId: number
@@ -109,9 +95,19 @@ class DiscussionResolver {
                 'userDiscussion.avatar',
             ],
         })
-        return groupDiscussions.filter(
+        const discussions = groupDiscussions.filter(
             discussion => discussion.userDiscussion.pseudo !== ctx.user?.pseudo
         )
+
+        const groupData = groupDiscussions[0].group
+
+        if (!groupData) throw new GraphQLError('Group not found')
+
+        return {
+            discussions,
+            groupName: groupData.name,
+            groupAvatarUrl: groupData.avatar.url,
+        }
     }
 
     @Authorized()
