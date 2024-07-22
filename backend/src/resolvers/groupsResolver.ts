@@ -49,9 +49,18 @@ class GroupsResolver {
     }
 
     @Query(() => Group)
-    async getGroupById(@Arg('groupId', () => Int) id: number) {
+    async getGroupById(
+        @Ctx() ctx: MyContext,
+        @Arg('groupId', () => Int) id: number
+    ) {
+        if (!ctx.user)
+            throw new GraphQLError('Il faut être connecté pour voir ce groupe')
         const group = await Group.findOne({
-            where: { id },
+            where: {
+                id,
+                userToGroups: { user_id: ctx.user.id },
+            },
+
             relations: [
                 'avatar',
                 'userToGroups',
@@ -59,7 +68,7 @@ class GroupsResolver {
                 'userToGroups.user.avatar',
             ],
         })
-        if (!group) throw new GraphQLError('Group not found')
+        if (!group) throw new GraphQLError("Vous n'avez pas accès à ce groupe")
         return group
     }
 
@@ -158,7 +167,7 @@ class GroupsResolver {
                         to: email,
                         from: 'crazygift24@gmail.com',
                         text: `Bienvenue dans le groupe ${name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
-                        Connecte toi vite pour commencer à discuter : http://localhost:3000/auth/login`,
+                        Connecte toi vite pour commencer à discuter : http://localhost:3000/group/${newGroup.id}`,
                     })
                     return isUser
                 } catch (error) {
