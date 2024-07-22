@@ -9,7 +9,7 @@ import {
     Root,
     Subscription,
 } from 'type-graphql'
-import { Discussion } from '../entities/discussion'
+import { Discussion, GroupDiscussionsResponse } from '../entities/discussion'
 import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
@@ -18,16 +18,18 @@ import { UserToGroup } from '../entities/userToGroup'
 import { Avatar } from '../entities/avatar'
 
 async function createDiscussion({
-    name,
+    // name,
+    userDiscussion,
     groupId,
     participantUsers,
 }: {
-    name: string
+    // name: string
+    userDiscussion: User
     groupId: number
     participantUsers: User[]
 }) {
     // pubsub: PubSubEngine,
-    const newDiscussion = await Discussion.create({ name })
+    const newDiscussion = Discussion.create({ userDiscussion })
     const group = await Group.findOne({ where: { id: groupId } })
 
     if (!group) throw new GraphQLError(`Can't find group `)
@@ -54,24 +56,11 @@ export async function createGroupDiscussions({
             )
 
             return await createDiscussion({
-                name: currentUser.pseudo,
+                // name: currentUser.pseudo,
+                userDiscussion: currentUser,
                 groupId,
                 participantUsers,
             })
-            // groupUsers.forEach(currentUser => {
-            //     const participantUsers = groupUsers.filter(
-            //         user => user.id !== currentUser.id,
-            //     )
-            //     console.log('Creating discussion for user:', currentUser.pseudo)
-
-            //     createDiscussion(
-            //         {
-            //             name: currentUser.pseudo,
-            //             groupId,
-            //             participantUsers,
-            //         },
-            //     )
-            // }
         })
     )
 }
@@ -92,18 +81,60 @@ class DiscussionResolver {
     }
 
     @Authorized()
-    @Query(() => Discussion)
-    async getDiscussionByUserPseudo(
+    @Query(() => GroupDiscussionsResponse)
+    async getDiscussionsByGroupIdWithoutCtxUser(
         @Ctx() ctx: MyContext,
         @Arg('groupId') groupId: number
     ) {
         const groupDiscussions = await Discussion.find({
             where: { group: { id: groupId } },
-            relations: ['group', 'messages', 'users'],
+            relations: [
+                'group',
+                'group.avatar',
+                'messages',
+                'users',
+                'userDiscussion',
+                'userDiscussion.avatar',
+            ],
         })
-        return groupDiscussions.filter(
-            discussion => discussion.name !== ctx.user?.pseudo
+        const discussions = groupDiscussions.filter(
+            discussion => discussion.userDiscussion.pseudo !== ctx.user?.pseudo
         )
+
+        const groupData = groupDiscussions[0].group
+
+        if (!groupData) throw new GraphQLError('Group not found')
+
+        return {
+            discussions,
+            groupName: groupData.name,
+            groupAvatarUrl: groupData.avatar.url,
+        }
+    }
+
+    @Authorized()
+    @Query(() => Discussion)
+    async getDiscussionById(
+        @Ctx() ctx: MyContext,
+        @Arg('discussionId') discussionId: number
+    ) {
+        const discussion = await Discussion.findOne({
+            where: { id: discussionId },
+            relations: [
+                'group',
+                'group.avatar',
+                'messages',
+                'users',
+                'userDiscussion',
+                'userDiscussion.avatar',
+            ],
+        })
+
+        if (!discussion) throw new GraphQLError('Discussion not found')
+        if (discussion.userDiscussion.pseudo !== ctx.user?.pseudo)
+            throw new GraphQLError('You are not allowed to see this discussion')
+
+        return discussion
     }
 }
 
