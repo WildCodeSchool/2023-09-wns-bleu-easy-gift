@@ -6,7 +6,6 @@ import {
     Ctx,
     Authorized,
     Int,
-    PubSubEngine,
 } from 'type-graphql'
 import { GraphQLError } from 'graphql'
 import { Group, NewGroupInput, UpdateGroupInput } from '../entities/group'
@@ -130,7 +129,6 @@ class GroupsResolver {
         @Ctx() ctx: MyContext,
         @Arg('data', { validate: true }) data: NewGroupInput
     ) {
-
         if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
 
         const { name, emailUsers, event_date } = data

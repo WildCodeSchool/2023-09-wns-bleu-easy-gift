@@ -14,7 +14,6 @@ export default function Logout() {
             router.push('/').then(() => {
                 window.location.reload()
             })
-
         },
         onError: error => {
             toast.error(`Erreur lors de la déconnexion: ${error.message}`)

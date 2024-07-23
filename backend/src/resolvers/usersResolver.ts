@@ -48,8 +48,6 @@ export async function createUser({
         avatar: avatar !== undefined ? avatar : randomProfilAvatar,
     }).save()
 
-    console.log('________________ new user', newUser)
-
     return newUser
 }
 
@@ -70,7 +68,9 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async registrationWithToken(@Arg('data',{ validate: true }) data: InputRegistrationWithToken) {
+    async registrationWithToken(
+        @Arg('data', { validate: true }) data: InputRegistrationWithToken
+    ) {
         const user = await User.findOne({ where: { token: data.token } })
         if (!user) {
             throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
@@ -82,12 +82,11 @@ class UsersResolver {
         })
 
         await user.save()
-
         return user
     }
 
     @Mutation(() => UserWithoutPassword)
-    async register(@Arg('data',{ validate: true }) data: InputRegister) {
+    async register(@Arg('data', { validate: true }) data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
         const user = await findUserByEmail(email)
@@ -102,14 +101,9 @@ class UsersResolver {
 
     @Query(() => ResponseMessage)
     async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
-        console.log('_______________________infos', infos)
-
         const user = await findUserByEmail(infos.email)
-        console.log('_______________________user connected infos', infos)
 
         if (!user) {
-            console.log('_______________________user not found', infos)
-
             throw new GraphQLError(`User doesn't exist`)
         }
 
@@ -117,7 +111,6 @@ class UsersResolver {
             user.password,
             infos.password
         )
-        console.log('_______________________isPasswordValid', isPasswordValid)
 
         const responseMessage = new ResponseMessage()
         if (isPasswordValid) {
@@ -187,7 +180,7 @@ class UsersResolver {
 
     @Mutation(() => UserWithoutPassword)
     async updateUser(
-        @Arg('data',{ validate: true }) data: InputUpdateUser,
+        @Arg('data', { validate: true }) data: InputUpdateUser,
         @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {

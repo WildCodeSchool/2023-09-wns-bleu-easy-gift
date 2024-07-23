@@ -19,7 +19,6 @@ describe('user resolver', () => {
             password: 'test@1234',
         }).save()
         const res = await execute(getUsers)
-        console.log(res)
         expect(res).toMatchInlineSnapshot(`
             {
               "data": {
