@@ -2,8 +2,6 @@ import {
     Arg,
     Authorized,
     Ctx,
-    PubSub,
-    PubSubEngine,
     Query,
     Resolver,
     Root,
