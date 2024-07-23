@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+/* import React, { useState } from "react";
 import { useRouter } from "next/router";
 import MenuDiscussions from "@/components/discussions/MenuDiscussion";
 import EspaceDiscussion from "@/components/discussions/EspaceDiscussion";
@@ -44,3 +44,4 @@ const DiscussionsPage = () => {
 
 
 export default DiscussionsPage;
+ */

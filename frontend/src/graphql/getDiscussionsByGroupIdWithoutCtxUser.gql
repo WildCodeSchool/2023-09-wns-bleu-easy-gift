@@ -1,14 +1,15 @@
 query GetDiscussionsByGroupIdWithoutCtxUser($groupId: Float!) {
   getDiscussionsByGroupIdWithoutCtxUser(groupId: $groupId) {
-    name
-     group {
-      name
-    }
-    users {
+    groupAvatarUrl
+    groupName
+    discussions {
+      id
+      userDiscussion {
         pseudo
         id
-      avatar {
-        url
+        avatar {
+          url
+        }
       }
     }
   }

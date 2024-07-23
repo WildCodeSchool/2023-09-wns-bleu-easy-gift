@@ -30,7 +30,7 @@ export type Discussion = {
   group: Group;
   id: Scalars['Int'];
   modified_at: Scalars['String'];
-  name: Scalars['String'];
+  userDiscussion: User;
   users: Array<User>;
 };
 
@@ -43,6 +43,13 @@ export type Group = {
   modified_at: Scalars['String'];
   name: Scalars['String'];
   userToGroups: Array<UserToGroup>;
+};
+
+export type GroupDiscussionsResponse = {
+  __typename?: 'GroupDiscussionsResponse';
+  discussions: Array<Discussion>;
+  groupAvatarUrl: Scalars['String'];
+  groupName: Scalars['String'];
 };
 
 export type InputLogin = {
@@ -162,8 +169,9 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
+  getDiscussionById: Discussion;
   getDiscussions: Array<Discussion>;
-  getDiscussionsByGroupIdWithoutCtxUser: Array<Discussion>;
+  getDiscussionsByGroupIdWithoutCtxUser: GroupDiscussionsResponse;
   getGroupById: Group;
   getMessagesByDisscution: Array<Message>;
   getUserByToken: User;
@@ -178,6 +186,11 @@ export type Query = {
   userGroups: Array<Group>;
   users: Array<User>;
   usersToGroups: Array<UserToGroup>;
+};
+
+
+export type QueryGetDiscussionByIdArgs = {
+  discussionId: Scalars['Float'];
 };
 
 
@@ -239,6 +252,7 @@ export type User = {
   avatar?: Maybe<Avatar>;
   birthday?: Maybe<Scalars['DateTimeISO']>;
   created_at: Scalars['String'];
+  discussions: Array<Discussion>;
   email: Scalars['String'];
   id: Scalars['Int'];
   modified_at: Scalars['String'];
@@ -315,7 +329,14 @@ export type CreateMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number, name: string } } };
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number } } };
+
+export type GetDiscussionsByGroupIdWithoutCtxUserQueryVariables = Exact<{
+  groupId: Scalars['Float'];
+}>;
+
+
+export type GetDiscussionsByGroupIdWithoutCtxUserQuery = { __typename?: 'Query', getDiscussionsByGroupIdWithoutCtxUser: { __typename?: 'GroupDiscussionsResponse', groupAvatarUrl: string, groupName: string, discussions: Array<{ __typename?: 'Discussion', id: number, userDiscussion: { __typename?: 'User', pseudo: string, id: number, avatar?: { __typename?: 'Avatar', url: string } | null } }> } };
 
 export type GroupAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -447,9 +468,9 @@ export type UpdateAvatarMutationFn = Apollo.MutationFunction<UpdateAvatarMutatio
  * });
  */
 export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateAvatarMutation, UpdateAvatarMutationVariables>(UpdateAvatarDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAvatarMutation, UpdateAvatarMutationVariables>(UpdateAvatarDocument, options);
+      }
 export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
 export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
 export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
@@ -503,9 +524,9 @@ export type UpdateGroupMutationFn = Apollo.MutationFunction<UpdateGroupMutation,
  * });
  */
 export function useUpdateGroupMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupMutation, UpdateGroupMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(UpdateGroupDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(UpdateGroupDocument, options);
+      }
 export type UpdateGroupMutationHookResult = ReturnType<typeof useUpdateGroupMutation>;
 export type UpdateGroupMutationResult = Apollo.MutationResult<UpdateGroupMutation>;
 export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<UpdateGroupMutation, UpdateGroupMutationVariables>;
@@ -542,9 +563,9 @@ export type AddNewGroupMutationFn = Apollo.MutationFunction<AddNewGroupMutation,
  * });
  */
 export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<AddNewGroupMutation, AddNewGroupMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<AddNewGroupMutation, AddNewGroupMutationVariables>(AddNewGroupDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddNewGroupMutation, AddNewGroupMutationVariables>(AddNewGroupDocument, options);
+      }
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
@@ -580,9 +601,9 @@ export const AddNewMessageDocument = gql`
  * });
  */
 export function useAddNewMessageSubscription(baseOptions: Apollo.SubscriptionHookOptions<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useSubscription<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>(AddNewMessageDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<AddNewMessageSubscription, AddNewMessageSubscriptionVariables>(AddNewMessageDocument, options);
+      }
 export type AddNewMessageSubscriptionHookResult = ReturnType<typeof useAddNewMessageSubscription>;
 export type AddNewMessageSubscriptionResult = Apollo.SubscriptionResult<AddNewMessageSubscription>;
 export const CreateMessageDocument = gql`
@@ -596,7 +617,6 @@ export const CreateMessageDocument = gql`
     }
     discussion {
       id
-      name
     }
     created_at
     modified_at
@@ -625,12 +645,58 @@ export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutat
  * });
  */
 export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
+export const GetDiscussionsByGroupIdWithoutCtxUserDocument = gql`
+    query GetDiscussionsByGroupIdWithoutCtxUser($groupId: Float!) {
+  getDiscussionsByGroupIdWithoutCtxUser(groupId: $groupId) {
+    groupAvatarUrl
+    groupName
+    discussions {
+      id
+      userDiscussion {
+        pseudo
+        id
+        avatar {
+          url
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDiscussionsByGroupIdWithoutCtxUserQuery__
+ *
+ * To run a query within a React component, call `useGetDiscussionsByGroupIdWithoutCtxUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDiscussionsByGroupIdWithoutCtxUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
+ *   variables: {
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useGetDiscussionsByGroupIdWithoutCtxUserQuery(baseOptions: Apollo.QueryHookOptions<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>(GetDiscussionsByGroupIdWithoutCtxUserDocument, options);
+      }
+export function useGetDiscussionsByGroupIdWithoutCtxUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>(GetDiscussionsByGroupIdWithoutCtxUserDocument, options);
+        }
+export type GetDiscussionsByGroupIdWithoutCtxUserQueryHookResult = ReturnType<typeof useGetDiscussionsByGroupIdWithoutCtxUserQuery>;
+export type GetDiscussionsByGroupIdWithoutCtxUserLazyQueryHookResult = ReturnType<typeof useGetDiscussionsByGroupIdWithoutCtxUserLazyQuery>;
+export type GetDiscussionsByGroupIdWithoutCtxUserQueryResult = Apollo.QueryResult<GetDiscussionsByGroupIdWithoutCtxUserQuery, GetDiscussionsByGroupIdWithoutCtxUserQueryVariables>;
 export const GroupAvatarsDocument = gql`
     query groupAvatars {
   groupAvatars {
@@ -658,13 +724,13 @@ export const GroupAvatarsDocument = gql`
  * });
  */
 export function useGroupAvatarsQuery(baseOptions?: Apollo.QueryHookOptions<GroupAvatarsQuery, GroupAvatarsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
+      }
 export function useGroupAvatarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GroupAvatarsQuery, GroupAvatarsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GroupAvatarsQuery, GroupAvatarsQueryVariables>(GroupAvatarsDocument, options);
+        }
 export type GroupAvatarsQueryHookResult = ReturnType<typeof useGroupAvatarsQuery>;
 export type GroupAvatarsLazyQueryHookResult = ReturnType<typeof useGroupAvatarsLazyQuery>;
 export type GroupAvatarsQueryResult = Apollo.QueryResult<GroupAvatarsQuery, GroupAvatarsQueryVariables>;
@@ -713,13 +779,13 @@ export const GetGroupByIdDocument = gql`
  * });
  */
 export function useGetGroupByIdQuery(baseOptions: Apollo.QueryHookOptions<GetGroupByIdQuery, GetGroupByIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
+      }
 export function useGetGroupByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGroupByIdQuery, GetGroupByIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGroupByIdQuery, GetGroupByIdQueryVariables>(GetGroupByIdDocument, options);
+        }
 export type GetGroupByIdQueryHookResult = ReturnType<typeof useGetGroupByIdQuery>;
 export type GetGroupByIdLazyQueryHookResult = ReturnType<typeof useGetGroupByIdLazyQuery>;
 export type GetGroupByIdQueryResult = Apollo.QueryResult<GetGroupByIdQuery, GetGroupByIdQueryVariables>;
@@ -761,13 +827,13 @@ export const GetMessagesByDisscutionDocument = gql`
  * });
  */
 export function useGetMessagesByDisscutionQuery(baseOptions: Apollo.QueryHookOptions<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>(GetMessagesByDisscutionDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>(GetMessagesByDisscutionDocument, options);
+      }
 export function useGetMessagesByDisscutionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>(GetMessagesByDisscutionDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>(GetMessagesByDisscutionDocument, options);
+        }
 export type GetMessagesByDisscutionQueryHookResult = ReturnType<typeof useGetMessagesByDisscutionQuery>;
 export type GetMessagesByDisscutionLazyQueryHookResult = ReturnType<typeof useGetMessagesByDisscutionLazyQuery>;
 export type GetMessagesByDisscutionQueryResult = Apollo.QueryResult<GetMessagesByDisscutionQuery, GetMessagesByDisscutionQueryVariables>;
@@ -797,13 +863,13 @@ export const ProfilAvatarsDocument = gql`
  * });
  */
 export function useProfilAvatarsQuery(baseOptions?: Apollo.QueryHookOptions<ProfilAvatarsQuery, ProfilAvatarsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProfilAvatarsQuery, ProfilAvatarsQueryVariables>(ProfilAvatarsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProfilAvatarsQuery, ProfilAvatarsQueryVariables>(ProfilAvatarsDocument, options);
+      }
 export function useProfilAvatarsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProfilAvatarsQuery, ProfilAvatarsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ProfilAvatarsQuery, ProfilAvatarsQueryVariables>(ProfilAvatarsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProfilAvatarsQuery, ProfilAvatarsQueryVariables>(ProfilAvatarsDocument, options);
+        }
 export type ProfilAvatarsQueryHookResult = ReturnType<typeof useProfilAvatarsQuery>;
 export type ProfilAvatarsLazyQueryHookResult = ReturnType<typeof useProfilAvatarsLazyQuery>;
 export type ProfilAvatarsQueryResult = Apollo.QueryResult<ProfilAvatarsQuery, ProfilAvatarsQueryVariables>;
@@ -833,13 +899,13 @@ export const GetUserByTokenDocument = gql`
  * });
  */
 export function useGetUserByTokenQuery(baseOptions: Apollo.QueryHookOptions<GetUserByTokenQuery, GetUserByTokenQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetUserByTokenQuery, GetUserByTokenQueryVariables>(GetUserByTokenDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserByTokenQuery, GetUserByTokenQueryVariables>(GetUserByTokenDocument, options);
+      }
 export function useGetUserByTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserByTokenQuery, GetUserByTokenQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetUserByTokenQuery, GetUserByTokenQueryVariables>(GetUserByTokenDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserByTokenQuery, GetUserByTokenQueryVariables>(GetUserByTokenDocument, options);
+        }
 export type GetUserByTokenQueryHookResult = ReturnType<typeof useGetUserByTokenQuery>;
 export type GetUserByTokenLazyQueryHookResult = ReturnType<typeof useGetUserByTokenLazyQuery>;
 export type GetUserByTokenQueryResult = Apollo.QueryResult<GetUserByTokenQuery, GetUserByTokenQueryVariables>;
@@ -887,13 +953,13 @@ export const UserGroupsDocument = gql`
  * });
  */
 export function useUserGroupsQuery(baseOptions?: Apollo.QueryHookOptions<UserGroupsQuery, UserGroupsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<UserGroupsQuery, UserGroupsQueryVariables>(UserGroupsDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserGroupsQuery, UserGroupsQueryVariables>(UserGroupsDocument, options);
+      }
 export function useUserGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserGroupsQuery, UserGroupsQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<UserGroupsQuery, UserGroupsQueryVariables>(UserGroupsDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserGroupsQuery, UserGroupsQueryVariables>(UserGroupsDocument, options);
+        }
 export type UserGroupsQueryHookResult = ReturnType<typeof useUserGroupsQuery>;
 export type UserGroupsLazyQueryHookResult = ReturnType<typeof useUserGroupsLazyQuery>;
 export type UserGroupsQueryResult = Apollo.QueryResult<UserGroupsQuery, UserGroupsQueryVariables>;
@@ -928,13 +994,13 @@ export const GetUserInfosDocument = gql`
  * });
  */
 export function useGetUserInfosQuery(baseOptions?: Apollo.QueryHookOptions<GetUserInfosQuery, GetUserInfosQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetUserInfosQuery, GetUserInfosQueryVariables>(GetUserInfosDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserInfosQuery, GetUserInfosQueryVariables>(GetUserInfosDocument, options);
+      }
 export function useGetUserInfosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserInfosQuery, GetUserInfosQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetUserInfosQuery, GetUserInfosQueryVariables>(GetUserInfosDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserInfosQuery, GetUserInfosQueryVariables>(GetUserInfosDocument, options);
+        }
 export type GetUserInfosQueryHookResult = ReturnType<typeof useGetUserInfosQuery>;
 export type GetUserInfosLazyQueryHookResult = ReturnType<typeof useGetUserInfosLazyQuery>;
 export type GetUserInfosQueryResult = Apollo.QueryResult<GetUserInfosQuery, GetUserInfosQueryVariables>;
@@ -967,13 +1033,13 @@ export const UsersDocument = gql`
  * });
  */
 export function useUsersQuery(baseOptions?: Apollo.QueryHookOptions<UsersQuery, UsersQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+      }
 export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersQuery, UsersQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersQuery, UsersQueryVariables>(UsersDocument, options);
+        }
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
@@ -1003,13 +1069,13 @@ export const LoginDocument = gql`
  * });
  */
 export function useLoginQuery(baseOptions: Apollo.QueryHookOptions<LoginQuery, LoginQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+      }
 export function useLoginLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LoginQuery, LoginQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LoginQuery, LoginQueryVariables>(LoginDocument, options);
+        }
 export type LoginQueryHookResult = ReturnType<typeof useLoginQuery>;
 export type LoginLazyQueryHookResult = ReturnType<typeof useLoginLazyQuery>;
 export type LoginQueryResult = Apollo.QueryResult<LoginQuery, LoginQueryVariables>;
@@ -1038,13 +1104,13 @@ export const LogoutDocument = gql`
  * });
  */
 export function useLogoutQuery(baseOptions?: Apollo.QueryHookOptions<LogoutQuery, LogoutQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options);
+      }
 export function useLogoutLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LogoutQuery, LogoutQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LogoutQuery, LogoutQueryVariables>(LogoutDocument, options);
+        }
 export type LogoutQueryHookResult = ReturnType<typeof useLogoutQuery>;
 export type LogoutLazyQueryHookResult = ReturnType<typeof useLogoutLazyQuery>;
 export type LogoutQueryResult = Apollo.QueryResult<LogoutQuery, LogoutQueryVariables>;
@@ -1076,9 +1142,9 @@ export type RegisterUserMutationFn = Apollo.MutationFunction<RegisterUserMutatio
  * });
  */
 export function useRegisterUserMutation(baseOptions?: Apollo.MutationHookOptions<RegisterUserMutation, RegisterUserMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterUserMutation, RegisterUserMutationVariables>(RegisterUserDocument, options);
+      }
 export type RegisterUserMutationHookResult = ReturnType<typeof useRegisterUserMutation>;
 export type RegisterUserMutationResult = Apollo.MutationResult<RegisterUserMutation>;
 export type RegisterUserMutationOptions = Apollo.BaseMutationOptions<RegisterUserMutation, RegisterUserMutationVariables>;
@@ -1110,9 +1176,9 @@ export type RegisterWithTokenMutationFn = Apollo.MutationFunction<RegisterWithTo
  * });
  */
 export function useRegisterWithTokenMutation(baseOptions?: Apollo.MutationHookOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>(RegisterWithTokenDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>(RegisterWithTokenDocument, options);
+      }
 export type RegisterWithTokenMutationHookResult = ReturnType<typeof useRegisterWithTokenMutation>;
 export type RegisterWithTokenMutationResult = Apollo.MutationResult<RegisterWithTokenMutation>;
 export type RegisterWithTokenMutationOptions = Apollo.BaseMutationOptions<RegisterWithTokenMutation, RegisterWithTokenMutationVariables>;
@@ -1153,9 +1219,9 @@ export type UpdateGroupAvatarMutationFn = Apollo.MutationFunction<UpdateGroupAva
  * });
  */
 export function useUpdateGroupAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>(UpdateGroupAvatarDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>(UpdateGroupAvatarDocument, options);
+      }
 export type UpdateGroupAvatarMutationHookResult = ReturnType<typeof useUpdateGroupAvatarMutation>;
 export type UpdateGroupAvatarMutationResult = Apollo.MutationResult<UpdateGroupAvatarMutation>;
 export type UpdateGroupAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateGroupAvatarMutation, UpdateGroupAvatarMutationVariables>;
@@ -1187,9 +1253,9 @@ export type UpdatePasswordMutationFn = Apollo.MutationFunction<UpdatePasswordMut
  * });
  */
 export function useUpdatePasswordMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePasswordMutation, UpdatePasswordMutationVariables>(UpdatePasswordDocument, options);
+      }
 export type UpdatePasswordMutationHookResult = ReturnType<typeof useUpdatePasswordMutation>;
 export type UpdatePasswordMutationResult = Apollo.MutationResult<UpdatePasswordMutation>;
 export type UpdatePasswordMutationOptions = Apollo.BaseMutationOptions<UpdatePasswordMutation, UpdatePasswordMutationVariables>;
@@ -1221,9 +1287,9 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<UpdateUserMutation, U
  * });
  */
 export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
+      }
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;

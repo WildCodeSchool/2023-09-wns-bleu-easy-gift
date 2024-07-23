@@ -8,7 +8,6 @@ mutation createMessage($discussionId: Float!, $userId: Float!, $content: String!
     }
     discussion {
       id
-      name
     }
     created_at
     modified_at
