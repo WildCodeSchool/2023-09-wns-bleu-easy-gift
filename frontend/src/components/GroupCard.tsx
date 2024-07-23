@@ -76,7 +76,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                                 <img
                                     src={user.user.avatar?.url}
                                     className='w-10 h-10 rounded-full border-solid border-2 border-primaryRed transition ease-in-out hover:-translate-y-1 hover:scale-120 duration-300'
-                                    alt='Avatar of the user'
+                                    alt={user.user.avatar?.name}
                                     title={user.user.pseudo}
                                 />
                                 <div className='opacity-0 w-28 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 bottom-full left-1/2 transform -translate-x-1/2 mb-2 pointer-events-none'>

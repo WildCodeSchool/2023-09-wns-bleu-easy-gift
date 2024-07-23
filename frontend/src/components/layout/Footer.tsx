@@ -27,7 +27,7 @@ const icons = [
 
 export default function Footer() {
     return (
-        <footer className='w-full bg-primaryRed h-48'>
+        <footer className='w-full bg-red600 h-48'>
             <div className='flex justify-center flex-col h-full'>
                 <div className='space-y-1 flex justify-center items-center w-full mt-3'>
                     <img
@@ -37,7 +37,7 @@ export default function Footer() {
                     />
                     <div>
                         <Link href='/'>
-                            <h1 className='font-rubik text-lg text-bgPrimary'>
+                            <h1 className='font-rubik font-bold text-xl text-bgPrimary'>
                                 Easy Gift
                             </h1>
                         </Link>
@@ -62,7 +62,7 @@ export default function Footer() {
                         </div>
                     ))}
                 </div>
-                <p className='text-center text-xs text-white py-2 mt-4'>
+                <p className='font-medium text-center text-xs text-white py-2 mt-4'>
                     Copyright © 2024 Easy Gift, Inc. All rights reserved.
                 </p>
             </div>

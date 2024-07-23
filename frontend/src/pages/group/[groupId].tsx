@@ -26,6 +26,11 @@ export default function GroupDetails() {
 
     const group = data?.getGroupById
 
+    const formatDate = (timestamp: string | number | undefined): string => {
+        const date = new Date(Number(timestamp))
+        return date.toLocaleDateString() // Customize the format as needed
+    }
+
     const eventDate =
         group && group.event_date ? new Date(group.event_date) : undefined
 
@@ -93,9 +98,11 @@ export default function GroupDetails() {
                                     <Separator />
                                     <div className='flex items-center h-9 md:h-11 lg:h-12 2xl:h-14'>
                                         <p className='text-base font-semibold w-44'>
-                                            Créer le
+                                            Créé le
                                         </p>
-                                        {/*<p className="text-base">{createdAt}</p>*/}
+                                        <p className='text-base'>
+                                            {formatDate(group?.created_at)}
+                                        </p>
                                     </div>
                                     <Separator />
                                     <div className='flex items-center h-9 md:h-11 lg:h-12 2xl:h-14'>

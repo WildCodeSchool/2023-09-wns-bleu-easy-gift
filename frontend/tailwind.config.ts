@@ -26,8 +26,10 @@ const config = {
                 input: 'hsl(var(--input))',
                 ring: 'hsl(var(--ring))',
                 /*Liste des couleurs persos disponibles dans le figma*/
-                bgPrimary: '#EFF1F6',
-                primaryBlue: '#567DFF',
+                // bgPrimary: '#EFF1F6',
+                bgPrimary: '#fafafc',
+                // primaryBlue: '#567DFF',
+                primaryBlue: '#3363FF',
                 blue600: '2F3DFC',
                 primaryRed: '#F94C63',
                 red400: '#FB7182',
@@ -43,7 +45,7 @@ const config = {
                     foreground: 'hsl(var(--secondary-foreground))',
                 },
                 destructive: {
-                    DEFAULT: 'hsl(var(--destructive))',
+                    DEFAULT: '#DD1D43',
                     foreground: 'hsl(var(--destructive-foreground))',
                 },
                 muted: {

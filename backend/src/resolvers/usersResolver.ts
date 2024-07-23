@@ -70,7 +70,9 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async registrationWithToken(@Arg('data',{ validate: true }) data: InputRegistrationWithToken) {
+    async registrationWithToken(
+        @Arg('data', { validate: true }) data: InputRegistrationWithToken
+    ) {
         const user = await User.findOne({ where: { token: data.token } })
         if (!user) {
             throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
@@ -87,7 +89,7 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async register(@Arg('data',{ validate: true }) data: InputRegister) {
+    async register(@Arg('data', { validate: true }) data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
         const user = await findUserByEmail(email)
@@ -110,7 +112,7 @@ class UsersResolver {
         if (!user) {
             console.log('_______________________user not found', infos)
 
-            throw new GraphQLError(`User doesn't exist`)
+            throw new GraphQLError(`Veuillez vérifier vos informations`)
         }
 
         const isPasswordValid = await argon2.verify(
@@ -143,7 +145,7 @@ class UsersResolver {
     @Query(() => ResponseMessage)
     async testAuthorized() {
         const responseMessage = new ResponseMessage()
-        responseMessage.message = 'Tu es arrive a cette query'
+        responseMessage.message = 'Tu es arrivé a cette query'
         responseMessage.success = true
         return responseMessage
     }
@@ -187,7 +189,7 @@ class UsersResolver {
 
     @Mutation(() => UserWithoutPassword)
     async updateUser(
-        @Arg('data',{ validate: true }) data: InputUpdateUser,
+        @Arg('data', { validate: true }) data: InputUpdateUser,
         @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {

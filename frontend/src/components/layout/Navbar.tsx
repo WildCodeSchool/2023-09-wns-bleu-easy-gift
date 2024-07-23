@@ -57,6 +57,7 @@ export default function Navbar() {
                             d='M4 6h16M4 12h16M4 18h16'
                         />
                     </svg>
+                    <span className='sr-only'>Ouvrir ou fermer le menu</span>
                 </button>
 
                 <div
@@ -122,6 +123,7 @@ export default function Navbar() {
                                 d='M6 18L18 6M6 6l12 12'
                             />
                         </svg>
+                        <span className='sr-only'>Fermer le menu</span>
                     </button>
                     {isConnected && (
                         <>
