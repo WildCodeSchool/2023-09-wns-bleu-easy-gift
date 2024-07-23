@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import React, { useState } from 'react'
 import ProfileCard from '@/components/ProfileCard'
 import ModalUpdateGroup from '@/components/group/modalUpdateGroup'
+import ModalAddMembers from '@/components/group/modalAddMembers'
 import { Button } from '@/components/ui/button'
 import { createPortal } from 'react-dom'
 import ModalModifyAvatar from '@/components/profil/modalModifyAvatar'
@@ -20,6 +21,7 @@ export default function GroupDetails() {
         skip: typeof groupId === 'undefined',
     })
     const [showModal, setShowModal] = useState(false)
+    const [showModalAddMembers, setShowModalAddMembers] = useState(false)
     const [isModalAvatarOpen, setIsModalAvatarOpen] = useState(false)
 
     if (loading) return <h1>Loading...</h1>
@@ -169,6 +171,26 @@ export default function GroupDetails() {
                                     )
                                 })}
                             </div>
+                        </div>
+                        <div className='flex sm:justify-end'>
+                            <Button
+                                className='bg-blue-500 text-white px-4 py-2 rounded mt-10'
+                                onClick={() => setShowModalAddMembers(true)}
+                            >
+                                Ajouter des membres au groupe
+                            </Button>
+                            {showModalAddMembers &&
+                                createPortal(
+                                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+                                        <ModalAddMembers
+                                            onClose={() =>
+                                                setShowModalAddMembers(false)
+                                            }
+                                            group={group}
+                                        />
+                                    </div>,
+                                    document.body
+                                )}
                         </div>
                     </div>
                 </div>

@@ -102,8 +102,8 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                         )}
                     </div>
                 </div>
-                <div className='flex justify-end'>
-                    <Button>
+                <div className='flex justify-between'>
+                    <Button className='shadow-md'>
                         <Link href={link}>Discussions</Link>
                     </Button>
                     <Button>
