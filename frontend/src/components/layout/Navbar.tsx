@@ -138,12 +138,12 @@ export default function Navbar() {
                     </Link>
                     {!isConnected && (
                         <>
-                            <Button className='shadow-md'>
+                            <Button>
                                 <Link onClick={closeMenu} href='/auth/login'>
                                     Se connecter
                                 </Link>
                             </Button>
-                            <Button className='shadow-md'>
+                            <Button>
                                 <Link onClick={closeMenu} href='/auth/login'>
                                     S'enregistrer
                                 </Link>
@@ -157,10 +157,10 @@ export default function Navbar() {
                 <div className={`hidden md:flex md:flex-row gap-2`}>
                     {!isConnected && (
                         <>
-                            <Button className='shadow-md'>
+                            <Button>
                                 <Link href='/auth/login'>Se connecter</Link>
                             </Button>
-                            <Button className='shadow-md'>
+                            <Button>
                                 <Link href='/auth/login'>S'enregistrer</Link>
                             </Button>
                         </>
