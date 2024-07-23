@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config = {
-    darkMode: ['class'],
+    darkMode: 'class',
     content: [
         './pages/**/*.{ts,tsx}',
         './components/**/*.{ts,tsx}',
@@ -28,9 +28,14 @@ const config = {
                 /*Liste des couleurs persos disponibles dans le figma*/
                 bgPrimary: '#EFF1F6',
                 primaryBlue: '#567DFF',
-                blue600: '2F3DFC',
+                blue200: '#BFD5FF',
+                blue300: '#99B9FF',
+                blue400: '#7090FF',
+                blue500: '#4F69FF',
+                blue600: '#2F3DFC',
                 primaryRed: '#F94C63',
                 red400: '#FB7182',
+                red500: '#F43F5B',
                 red600: '#E3264C',
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
@@ -71,10 +76,16 @@ const config = {
             width: {
                 '128': '32rem',
             },
+            height: {
+                '120': '30rem',
+                '130': '40rem',
+                '135': '45rem',
+            },
             minHeight: {
                 // tailwind s'arrête à 96 qui équivaut à 24rem
                 '120': '30rem',
                 '130': '40rem',
+                '135': '45rem',
                 '140': '50rem',
                 '150': '60rem',
                 '160': '70rem',
@@ -103,6 +114,6 @@ const config = {
         },
     },
     plugins: [require('tailwindcss-animate')],
-} satisfies Config
+}
 
 export default config

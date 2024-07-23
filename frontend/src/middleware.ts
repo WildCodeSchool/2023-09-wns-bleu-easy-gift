@@ -53,8 +53,7 @@ async function checkToken(token: string | undefined, request: NextRequest) {
         }
         return NextResponse.redirect(new URL('/auth/login', request.url))
     } catch (err) {
-        console.log('%c⧭', 'color: #e50000', err)
-        console.log('ERROR')
+        console.error('%c⧭', 'color: #e50000', err);
         if (request.nextUrl.pathname.startsWith('/auth/login')) {
             response = NextResponse.next()
         } else {

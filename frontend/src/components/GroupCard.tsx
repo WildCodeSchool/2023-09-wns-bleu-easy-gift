@@ -104,6 +104,9 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                 </div>
                 <div className='flex justify-end'>
                     <Button className='shadow-md'>
+                        <Link href={link}>Discussions</Link>
+                    </Button>
+                    <Button className='shadow-md'>
                         <Link href={link}>Consulter</Link>
                     </Button>
                 </div>

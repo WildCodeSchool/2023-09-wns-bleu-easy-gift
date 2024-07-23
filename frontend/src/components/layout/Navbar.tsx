@@ -74,28 +74,26 @@ export default function Navbar() {
                 </div>
 
                 {/* Links for Larger Screens */}
-                {isConnected && (
-                    <div className={`hidden md:flex md:flex-row gap-4`}>
-                        <Link
-                            href='/groupes'
-                            className={`font-semibold ${currentPath === '/groupes' ? 'underline' : ''}`}
-                        >
-                            Mes groupes
-                        </Link>
-                        <Link
-                            href='#'
-                            className={`font-semibold ${currentPath === '#' ? 'underline' : ''}`}
-                        >
-                            Mes discussions
-                        </Link>
-                        <Link
-                            href='/mon-profil'
-                            className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}
-                        >
-                            Mon profil
-                        </Link>
-                    </div>
-                )}
+                <div className={`hidden md:flex md:flex-row gap-4`}>
+                    <Link
+                        href='/groupes'
+                        className={`font-semibold ${currentPath === '/groupes' ? 'underline' : ''}`}
+                    >
+                        Mes groupes
+                    </Link>
+                    <Link
+                        href='/discussions'
+                        className={`font-semibold ${currentPath === '/discussions' ? 'underline' : ''}`}
+                    >
+                        Mes discussions
+                    </Link>
+                    <Link
+                        href='/mon-profil'
+                        className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}
+                    >
+                        Mon profil
+                    </Link>
+                </div>
 
                 {/* Side Drawer for Mobile Screens */}
                 <div
@@ -123,29 +121,28 @@ export default function Navbar() {
                             />
                         </svg>
                     </button>
-                    {isConnected && (
-                        <>
-                            <Link href='/mon-profil' onClick={closeMenu}>
-                                Mon profil
-                            </Link>
-                            <Link href='/groupes' onClick={closeMenu}>
-                                Mes groupes
-                            </Link>
-                            <Link href='#' onClick={closeMenu}>
-                                Mes discussions
-                            </Link>
-                        </>
-                    )}
+                    <Link href='/mon-profil' onClick={closeMenu}>
+                        Mon profil
+                    </Link>
+                    <Link href='#' onClick={closeMenu}>
+                        Mes groupes
+                    </Link>
+                    <Link href='#' onClick={closeMenu}>
+                        Mes chats
+                    </Link>
+                    <Link href='#' onClick={closeMenu}>
+                        Link 3
+                    </Link>
                     {!isConnected && (
                         <>
                             <Button className='shadow-md'>
                                 <Link onClick={closeMenu} href='/auth/login'>
-                                    Connexion
+                                    Login
                                 </Link>
                             </Button>
                             <Button className='shadow-md'>
-                                <Link onClick={closeMenu} href='/auth/register'>
-                                    Inscription
+                                <Link onClick={closeMenu} href='/auth/login'>
+                                    Sign up
                                 </Link>
                             </Button>
                         </>
@@ -158,10 +155,10 @@ export default function Navbar() {
                     {!isConnected && (
                         <>
                             <Button className='shadow-md'>
-                                <Link href='/auth/login'>Connexion</Link>
+                                <Link href='/auth/login'>Login</Link>
                             </Button>
                             <Button className='shadow-md'>
-                                <Link href='/auth/register'>Inscription</Link>
+                                <Link href='/auth/login'>Sign up</Link>
                             </Button>
                         </>
                     )}

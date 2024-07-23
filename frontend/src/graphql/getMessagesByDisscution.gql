@@ -1,13 +1,20 @@
-
-query getMessagesByDisscution($discussionId: Float!, $offset: Int!, $limit: Int!) {
-  getMessagesByDisscution(discussionId: $discussionId, offset: $offset, limit: $limit) {
-   id
-    content
-    user {
-      id
-      pseudo
+query getMessagesByDisscution(
+    $discussionId: Float!
+    $offset: Int!
+    $limit: Int!
+) {
+    getMessagesByDisscution(
+        discussionId: $discussionId
+        offset: $offset
+        limit: $limit
+    ) {
+        id
+        content
+        user {
+            id
+            pseudo
+        }
+        created_at
+        modified_at
     }
-    created_at
-    modified_at
-  }
 }
