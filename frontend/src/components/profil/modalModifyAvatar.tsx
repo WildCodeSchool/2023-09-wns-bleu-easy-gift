@@ -7,9 +7,12 @@ import {
     useUpdateGroupAvatarMutation,
     UpdateAvatarMutationVariables,
     UpdateGroupAvatarMutationVariables,
+    GetUserInfosDocument,
+    UsersDocument,
 } from '../../graphql/generated/schema'
 import { useState, useEffect, useRef, CSSProperties } from 'react'
 import clsx from 'clsx'
+import { toast } from 'react-toastify'
 
 type ModalModifyAvatarProps = {
     isOpen: boolean
@@ -62,18 +65,35 @@ export default function ModalModifyAvatar({
             if (type === 'profil') {
                 await updateAvatarMutation({
                     variables: { data: { avatarId: avatar! } },
+                    refetchQueries: [
+                        {
+                            query: GetUserInfosDocument,
+                        },
+                    ],
+                    awaitRefetchQueries: true,
                 })
+                toast.success('Avatar de profil mis à jour avec succès!')
             } else if (type === 'group' && groupId !== undefined) {
                 const variables: UpdateGroupAvatarMutationVariables = {
                     groupId,
                     avatarId: avatar!,
                 }
-                await updateGroupAvatarMutation({ variables })
+                await updateGroupAvatarMutation({
+                    variables,
+                    refetchQueries: [
+                        {
+                            query: UsersDocument,
+                            variables: { groupId },
+                        },
+                    ],
+                    awaitRefetchQueries: true,
+                })
+                toast.success('Avatar de groupe mis à jour avec succès!')
             }
             handleClose()
-            window.location.reload()
         } catch (error) {
             console.error('Error updating avatar:', error)
+            toast.error("Erreur lors de la mise à jour de l'avatar.")
         }
     }
 

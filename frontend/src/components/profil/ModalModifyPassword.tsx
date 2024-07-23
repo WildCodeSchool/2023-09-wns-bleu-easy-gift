@@ -3,6 +3,7 @@ import { Input } from '../ui/input'
 import { useState, useEffect, useRef, CSSProperties } from 'react'
 import clsx from 'clsx'
 import { useUpdatePasswordMutation } from '@/graphql/generated/schema'
+import { toast } from 'react-toastify'
 
 interface ModalModifyPasswordProps {
     isOpen: boolean
@@ -50,10 +51,12 @@ export default function ModalModifyPassword({
             await updateUserPasswordMutation({
                 variables: { data: { oldPassword, newPassword } },
             })
+            toast.success('Le mot de passe a été modifié avec succès!')
             handleClose()
             window.location.reload()
         } catch (err) {
             console.error(err)
+            toast.error('Erreur lors de la modification du mot de passe.')
         }
     }
 
