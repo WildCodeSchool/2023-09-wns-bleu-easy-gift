@@ -48,9 +48,9 @@ export default function Profile() {
             </Head>
             <section className='mb-10 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-10/12  2xl:mb-40 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
                 <div>
-                    <h2 className='mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+                    <h1 className='mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
                         Informations personnelles
-                    </h2>
+                    </h1>
                     <p className='text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl'>
                         Gère les informations de ton compte Easy Gift.
                     </p>

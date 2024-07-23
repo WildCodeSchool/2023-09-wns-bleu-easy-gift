@@ -3,6 +3,7 @@ import { useUserGroupsQuery } from '../../graphql/generated/schema'
 import GroupCard from '@/components/GroupCard'
 import { useState } from 'react'
 import Head from 'next/head'
+import { Link } from 'lucide-react'
 
 export default function Profile() {
     const { data, loading, error } = useUserGroupsQuery({
@@ -24,19 +25,17 @@ export default function Profile() {
                 <title>Page mes groupes - Easy Gift</title>
             </Head>
             <section className='flex flex-col gap-6 pb-6 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <h2 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
                     Mes groupes{' '}
                     {data?.userGroups ? `(${data.userGroups.length})` : '(0)'}
-                </h2>
+                </h1>
                 {data?.userGroups?.length === 0 ? (
                     <div className='flex flex-col items-center mt-6'>
                         <p className='text-md mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl'>
                             Crée ton premier groupe et invite tes amis !
                         </p>
                         <Button>
-                            <a type='button' href='/creating-groups'>
-                                Créer un groupe
-                            </a>
+                            <Link href='/creating-groups'>Créer un groupe</Link>
                         </Button>
                     </div>
                 ) : (

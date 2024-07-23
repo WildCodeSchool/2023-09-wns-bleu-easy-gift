@@ -147,7 +147,7 @@ export default async function initAvatars() {
     })
 
     const elephant = Avatar.create({
-        name: 'Avatar caricature kawaii de bébé elephant',
+        name: 'Avatar caricature kawaii de bébé éléphant',
         type: 'profil',
         url: 'https://ucarecdn.com/65f237f2-af48-41c9-a62c-8615a24fa885/-/preview/1000x1000/',
     })

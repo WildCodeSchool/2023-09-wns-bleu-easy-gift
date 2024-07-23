@@ -41,6 +41,7 @@ export default function Navbar() {
             >
                 {/* Burger Icon for Mobile Screens */}
                 <button
+                    aria-label='Ouvrir ou fermer la navigation'
                     onClick={() => setMenuOpen(!isMenuOpen)}
                     className='md:hidden'
                 >
@@ -57,21 +58,24 @@ export default function Navbar() {
                             d='M4 6h16M4 12h16M4 18h16'
                         />
                     </svg>
-                    <span className='sr-only'>Ouvrir ou fermer le menu</span>
                 </button>
 
                 <div
                     className='space-y-1 flex justify-center items-center hover:cursor-pointer'
                     onClick={handleLogoClick}
                 >
-                    <img
-                        src='/images/logo/logo-easy-gift-tablet.png'
-                        alt="Logo d'easy-gift"
-                        className='mr-2'
-                    />
-                    <h1 className='font-rubik text-2xl text-primaryBlue font-bold'>
+                    <Link
+                        href='/'
+                        className='font-rubik text-2xl text-primaryBlue font-bold flex items-center justify-between'
+                        aria-label='Lien vers la page d’accueil'
+                    >
+                        <img
+                            src='/images/logo/logo-easy-gift-tablet.png'
+                            alt="Logo d'easy-gift"
+                            className='mr-2'
+                        />
                         Easy Gift
-                    </h1>
+                    </Link>
                 </div>
 
                 {/* Links for Larger Screens */}
@@ -107,6 +111,7 @@ export default function Navbar() {
                     <button
                         onClick={() => setMenuOpen(false)}
                         className='self-end'
+                        aria-label='Fermer la navigation'
                     >
                         <svg
                             className='h-6 w-6'
@@ -121,7 +126,6 @@ export default function Navbar() {
                                 d='M6 18L18 6M6 6l12 12'
                             />
                         </svg>
-                        <span className='sr-only'>Fermer le menu</span>
                     </button>
                     <Link href='/mon-profil' onClick={closeMenu}>
                         Mon profil
@@ -130,21 +134,18 @@ export default function Navbar() {
                         Mes groupes
                     </Link>
                     <Link href='#' onClick={closeMenu}>
-                        Mes chats
-                    </Link>
-                    <Link href='#' onClick={closeMenu}>
-                        Link 3
+                        Mes discussions
                     </Link>
                     {!isConnected && (
                         <>
                             <Button className='shadow-md'>
                                 <Link onClick={closeMenu} href='/auth/login'>
-                                    Login
+                                    Se connecter
                                 </Link>
                             </Button>
                             <Button className='shadow-md'>
                                 <Link onClick={closeMenu} href='/auth/login'>
-                                    Sign up
+                                    S'enregistrer
                                 </Link>
                             </Button>
                         </>
@@ -157,10 +158,10 @@ export default function Navbar() {
                     {!isConnected && (
                         <>
                             <Button className='shadow-md'>
-                                <Link href='/auth/login'>Login</Link>
+                                <Link href='/auth/login'>Se connecter</Link>
                             </Button>
                             <Button className='shadow-md'>
-                                <Link href='/auth/login'>Sign up</Link>
+                                <Link href='/auth/login'>S'enregistrer</Link>
                             </Button>
                         </>
                     )}

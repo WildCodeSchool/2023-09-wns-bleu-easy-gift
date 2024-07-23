@@ -12,6 +12,7 @@ query GetGroupById($groupId: Int!) {
                 avatar {
                     id
                     url
+                    name
                 }
                 email
                 pseudo
@@ -20,6 +21,7 @@ query GetGroupById($groupId: Int!) {
         avatar {
             id
             url
+            name
         }
     }
 }
