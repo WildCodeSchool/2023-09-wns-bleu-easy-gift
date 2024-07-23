@@ -1,12 +1,12 @@
 subscription addNewMessage($discussionId: Float!) {
-  newMessage(discussionId: $discussionId) {
-id
-    content
-    user {
-      id
-      pseudo
+    newMessage(discussionId: $discussionId) {
+        id
+        content
+        user {
+            id
+            pseudo
+        }
+        created_at
+        modified_at
     }
-    created_at
-    modified_at
-  }
 }
