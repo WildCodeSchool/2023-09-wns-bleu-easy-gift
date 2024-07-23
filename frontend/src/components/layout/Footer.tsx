@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
+import Typography from '../Typography'
 
 const icons = [
     {
@@ -37,9 +38,13 @@ export default function Footer() {
                     />
                     <div>
                         <Link href='/'>
-                            <h1 className='font-rubik text-lg text-bgPrimary'>
+                        {/* CHANGED */}
+                        <Typography type='h1' className='font-rubik text-lg text-bgPrimary'>
+                            Easy Gift
+                        </Typography>
+                            {/* <h1 className='font-rubik text-lg text-bgPrimary'>
                                 Easy Gift
-                            </h1>
+                            </h1> */}
                         </Link>
                     </div>
                 </div>

@@ -17,6 +17,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import GroupCard from '@/components/GroupCard'
 import FakeDataGroups from '@/components/group/fakeDataGroups'
+import Typography from '@/components/Typography'
 
 export default function Home() {
     const router = useRouter()
@@ -114,7 +115,9 @@ export default function Home() {
                     Crée ton groupe
                 </h2>
                 <article className='w-4/5 sm:max-w-xl 2xl:ml-36 4xl:ml-52 lg:order-3'>
-                    <p className='mb-8 text-lg md:mb-10 md:text-xl  2xl:text-2xl 2xl:pt-12'>
+                {/* CHANGED */}
+                        <Typography type="p" className='mb-8 text-lg md:mb-10 md:text-xl  2xl:text-2xl 2xl:pt-12'>
+                    {/* <p className='mb-8 text-lg md:mb-10 md:text-xl  2xl:text-2xl 2xl:pt-12'> */}
                         Fini les "oups,... tu n'as rien entendu !"🤭
                         <br />
                         Parce que chez Easy Gift on aime les surprises, on a
@@ -131,7 +134,8 @@ export default function Home() {
                             secrètes pour chaque membre
                         </b>
                         .
-                    </p>
+                        </Typography>
+                    {/* </p> */}
                     <Button
                         onClick={handleButtonClick}
                         className='text-base h-9 mb-28 rounded-md px-3 shadow-lg shadow-slate-400 md:h-11 md:text-lg md:px-8 lg:mb-8 2xl:h-14 2xl:px-10 2xl:text-2xl'
@@ -175,7 +179,10 @@ export default function Home() {
                     </CarouselNext>
                 </Carousel>
             </section>
-            <section className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto w-4/5 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>
+            {/* CHANGED */}
+            <section  className=' flex justify-center items-center mx-6 mb-6'
+            // className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto px-6 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'
+            >
                 {(!isConnected ||
                     (isConnected && groups && groups?.length < 1)) && (
                     <span>

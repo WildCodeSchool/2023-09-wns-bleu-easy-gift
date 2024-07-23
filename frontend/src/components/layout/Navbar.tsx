@@ -5,6 +5,7 @@ import Logout from '../Logout'
 import { checkUserConnected } from '@/utils/checkConnection'
 import { maxWidthScreen } from '@/constants/styles'
 import { useRouter } from 'next/router'
+import Typography from '../Typography'
 
 export default function Navbar() {
     const [isMenuOpen, setMenuOpen] = useState(false)
@@ -68,9 +69,13 @@ export default function Navbar() {
                         alt="Logo d'easy-gift"
                         className='mr-2'
                     />
-                    <h1 className='font-rubik text-2xl text-primaryBlue font-bold'>
+                    {/* CHANGED */}
+                        <Typography type='h1' className='font-rubik text-2xl text-primaryBlue font-bold'>
+                            Easy Gift
+                        </Typography>
+                    {/* <h1 className='font-rubik text-2xl text-primaryBlue font-bold'>
                         Easy Gift
-                    </h1>
+                    </h1> */}
                 </div>
 
                 {/* Links for Larger Screens */}
