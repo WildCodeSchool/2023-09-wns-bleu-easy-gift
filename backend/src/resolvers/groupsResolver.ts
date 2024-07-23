@@ -278,6 +278,7 @@ class GroupsResolver {
 
         Object.assign(groupToUpdate, data)
         await groupToUpdate.save()
+
         return Group.findOne({
             where: { id },
             relations: [
