@@ -12,8 +12,6 @@ export default async function middleware(request: NextRequest) {
     const { cookies } = request
     const token = cookies.get('token')
 
-    console.log('Middleware token', token)
-
     return await checkToken(token?.value, request)
 }
 
@@ -55,8 +53,7 @@ async function checkToken(token: string | undefined, request: NextRequest) {
         }
         return NextResponse.redirect(new URL('/auth/login', request.url))
     } catch (err) {
-        console.log('%c⧭', 'color: #e50000', err)
-        console.log('ERROR')
+        console.error('%c⧭', 'color: #e50000', err);
         if (request.nextUrl.pathname.startsWith('/auth/login')) {
             response = NextResponse.next()
         } else {

@@ -14,7 +14,6 @@ export default function Logout() {
             router.push('/').then(() => {
                 window.location.reload()
             })
-
         },
         onError: error => {
             toast.error(`Erreur lors de la déconnexion: ${error.message}`)
@@ -30,7 +29,11 @@ export default function Logout() {
     }
 
     return (
-        <Button variant={'destructive'} onClick={() => logout()}>
+        <Button
+            variant={'destructive'}
+            className='bg-primaryRed'
+            onClick={() => logout()}
+        >
             Se déconnecter
         </Button>
     )

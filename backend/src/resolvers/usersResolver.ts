@@ -48,8 +48,6 @@ export async function createUser({
         avatar: avatar !== undefined ? avatar : randomProfilAvatar,
     }).save()
 
-    console.log('________________ new user', newUser)
-
     return newUser
 }
 
@@ -84,7 +82,6 @@ class UsersResolver {
         })
 
         await user.save()
-
         return user
     }
 
@@ -104,14 +101,9 @@ class UsersResolver {
 
     @Query(() => ResponseMessage)
     async login(@Arg('infos') infos: InputLogin, @Ctx() ctx: MyContext) {
-        console.log('_______________________infos', infos)
-
         const user = await findUserByEmail(infos.email)
-        console.log('_______________________user connected infos', infos)
 
         if (!user) {
-            console.log('_______________________user not found', infos)
-
             throw new GraphQLError(`Veuillez vérifier vos informations`)
         }
 
@@ -119,7 +111,6 @@ class UsersResolver {
             user.password,
             infos.password
         )
-        console.log('_______________________isPasswordValid', isPasswordValid)
 
         const responseMessage = new ResponseMessage()
         if (isPasswordValid) {

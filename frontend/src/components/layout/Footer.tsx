@@ -27,7 +27,7 @@ const icons = [
 
 export default function Footer() {
     return (
-        <footer className='w-full bg-red600 h-48'>
+        <footer className='w-full bg-red600 h-48 relative bottom-0 left-0 right-0'>
             <div className='flex justify-center flex-col h-full'>
                 <div className='space-y-1 flex justify-center items-center w-full mt-3'>
                     <img

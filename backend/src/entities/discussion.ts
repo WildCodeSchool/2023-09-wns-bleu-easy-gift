@@ -1,7 +1,6 @@
 import { Field, Int, ObjectType, InputType } from 'type-graphql'
 import {
     BaseEntity,
-    Column,
     Entity,
     PrimaryGeneratedColumn,
     CreateDateColumn,
@@ -10,7 +9,6 @@ import {
     JoinTable,
     ManyToMany,
     ManyToOne,
-    OneToOne,
 } from 'typeorm'
 import { Group } from './group'
 import { Message } from './message'
