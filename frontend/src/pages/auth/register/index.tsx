@@ -43,7 +43,6 @@ function Register() {
         const formData = new FormData(e.currentTarget)
 
         const data = Object.fromEntries(formData)
-        console.log('data register', data)
         register({
             variables: {
                 data: {
@@ -61,8 +60,6 @@ function Register() {
     const errorMessages = getConstraints(
         error?.graphQLErrors[0].extensions.validationErrors
     )
-
-    console.log(error?.graphQLErrors)
 
     return (
         <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>

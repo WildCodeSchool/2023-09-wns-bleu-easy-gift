@@ -30,7 +30,7 @@ export type Discussion = {
   group: Group;
   id: Scalars['Int'];
   modified_at: Scalars['String'];
-  name: Scalars['String'];
+  userDiscussion: User;
   users: Array<User>;
 };
 
@@ -43,6 +43,13 @@ export type Group = {
   modified_at: Scalars['String'];
   name: Scalars['String'];
   userToGroups: Array<UserToGroup>;
+};
+
+export type GroupDiscussionsResponse = {
+  __typename?: 'GroupDiscussionsResponse';
+  discussions: Array<Discussion>;
+  groupAvatarUrl: Scalars['String'];
+  groupName: Scalars['String'];
 };
 
 export type InputLogin = {
@@ -162,8 +169,9 @@ export type ObjectId = {
 
 export type Query = {
   __typename?: 'Query';
+  getDiscussionById: Discussion;
   getDiscussions: Array<Discussion>;
-  getDiscussionsByGroupIdWithoutCtxUser: Array<Discussion>;
+  getDiscussionsByGroupIdWithoutCtxUser: GroupDiscussionsResponse;
   getGroupById: Group;
   getMessagesByDisscution: Array<Message>;
   getUserByToken: User;
@@ -178,6 +186,11 @@ export type Query = {
   userGroups: Array<Group>;
   users: Array<User>;
   usersToGroups: Array<UserToGroup>;
+};
+
+
+export type QueryGetDiscussionByIdArgs = {
+  discussionId: Scalars['Float'];
 };
 
 
@@ -239,6 +252,7 @@ export type User = {
   avatar?: Maybe<Avatar>;
   birthday?: Maybe<Scalars['DateTimeISO']>;
   created_at: Scalars['String'];
+  discussions: Array<Discussion>;
   email: Scalars['String'];
   id: Scalars['Int'];
   modified_at: Scalars['String'];
@@ -315,7 +329,7 @@ export type CreateMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number, name: string } } };
+export type CreateMessageMutation = { __typename?: 'Mutation', createMessage: { __typename?: 'Message', id: number, content: string, created_at: string, modified_at: string, user: { __typename?: 'User', id: number, pseudo: string }, discussion: { __typename?: 'Discussion', id: number } } };
 
 export type GroupAvatarsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -596,7 +610,6 @@ export const CreateMessageDocument = gql`
     }
     discussion {
       id
-      name
     }
     created_at
     modified_at

@@ -12,8 +12,6 @@ export default async function middleware(request: NextRequest) {
     const { cookies } = request
     const token = cookies.get('token')
 
-    console.log('Middleware token', token)
-
     return await checkToken(token?.value, request)
 }
 

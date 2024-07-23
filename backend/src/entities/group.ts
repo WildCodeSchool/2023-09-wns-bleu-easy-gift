@@ -13,7 +13,6 @@ import { ObjectType, Field, Int, InputType } from 'type-graphql'
 import {
     ArrayMinSize,
     ArrayNotEmpty,
-    IsArray,
     IsDateString,
     IsEmail,
     Length,

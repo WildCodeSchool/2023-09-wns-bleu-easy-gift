@@ -31,7 +31,6 @@ export default function ModalUpdateGroup({
         e.preventDefault()
         const formData = new FormData(e.target as HTMLFormElement)
         const formJSON: any = Object.fromEntries(formData.entries())
-        console.log(formJSON)
 
         updateGroup({
             variables: {
