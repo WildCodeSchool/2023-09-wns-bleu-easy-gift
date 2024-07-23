@@ -97,3 +97,17 @@ export class UpdateGroupInput {
     @IsDateString({}, { message: "La date de l'évenement doit être définie" })
     event_date?: string
 }
+
+@InputType()
+export class addNewMemberToGroup {
+    @Field(() => [String])
+    @ArrayNotEmpty({ message: 'Il faut au minimum 1 email à ajouter' })
+    @IsEmail(
+        {},
+        {
+            each: true,
+            message: 'Le groupe doit contenir des adresses Emails valides',
+        }
+    )
+    emailUsers: string[]
+}

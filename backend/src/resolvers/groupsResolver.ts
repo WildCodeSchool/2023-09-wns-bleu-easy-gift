@@ -8,7 +8,12 @@ import {
     Int,
 } from 'type-graphql'
 import { GraphQLError } from 'graphql'
-import { Group, NewGroupInput, UpdateGroupInput } from '../entities/group'
+import {
+    Group,
+    NewGroupInput,
+    UpdateGroupInput,
+    addNewMemberToGroup,
+} from '../entities/group'
 import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
 import { MyContext } from '..'
 import { createUser, findUserByEmail } from './usersResolver'
@@ -16,7 +21,10 @@ import { createUser, findUserByEmail } from './usersResolver'
 import mailer from '../mailer'
 
 import { Avatar } from '../entities/avatar'
-import { createGroupDiscussions } from './discussionsResolver'
+import {
+    addGroupDiscussions,
+    createGroupDiscussions,
+} from './discussionsResolver'
 import { User } from '../entities/user'
 import { In } from 'typeorm'
 
@@ -270,6 +278,113 @@ class GroupsResolver {
 
         Object.assign(groupToUpdate, data)
         await groupToUpdate.save()
+        return Group.findOne({
+            where: { id },
+            relations: [
+                'avatar',
+                'userToGroups',
+                'userToGroups.user',
+                'userToGroups.user.avatar',
+            ],
+        })
+    }
+
+    @Mutation(() => Group)
+    async addNewMembersToGroup(
+        @Arg('groupId') id: number,
+        @Arg('data', { validate: true }) data: addNewMemberToGroup,
+        @Ctx() ctx: MyContext
+    ) {
+        const user = ctx.user || undefined
+        if (typeof user === 'undefined')
+            throw new GraphQLError('Connecte toi pour editer le groupe')
+
+        const groupToUpdate = await Group.findOne({
+            where: { id },
+            relations: ['userToGroups', 'userToGroups.user'],
+        })
+
+        if (!groupToUpdate) throw new GraphQLError("Le groupe n'existe pas")
+
+        const groupAdmin = groupToUpdate.userToGroups
+            .filter(user => user.is_admin)
+            .map(user => user.user_id)
+
+        if (!groupAdmin.includes(user?.id))
+            throw new GraphQLError('Tu dois être un administrateur du groupe')
+
+        const actualMailsMembers = groupToUpdate.userToGroups.map(
+            value => value.user.email
+        )
+        const futureMailsMembers = data.emailUsers
+
+        const newGroupUsers = futureMailsMembers.map(async value => {
+            if (value === ctx.user?.email) return
+
+            if (actualMailsMembers.includes(value)) return
+
+            const isUser = await findUserByEmail(value)
+            if (isUser) {
+                await createUserToGroup({
+                    group_id: id,
+                    user_id: isUser.id,
+                    is_admin: false,
+                })
+                try {
+                    // await mailer.sendMail({
+                    //     subject: `Bienvenue sur le groupe ${groupToUpdate.name} !`,
+                    //     to: value,
+                    //     from: 'crazygift24@gmail.com',
+                    //     text: `Bienvenue dans le groupe ${groupToUpdate.name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
+                    //     Connecte toi vite pour commencer à discuter : http://localhost:3000/group/${id}`,
+                    // })
+                    return isUser
+                } catch (error) {
+                    throw new GraphQLError("Erreur d'envoi de mail")
+                }
+            }
+
+            const pseudo = value.split('@')[0]
+
+            const password = 'Test@1234' // TODO
+
+            const email = value
+
+            const newUser = await createUser({ pseudo, email, password })
+
+            await createUserToGroup({
+                group_id: id,
+                user_id: newUser.id,
+                is_admin: false,
+            })
+
+            try {
+                // await mailer.sendMail({
+                //     subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                //     to: value,
+                //     from: 'crazygift24@gmail.com',
+                //     text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
+                //      Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
+                //       : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                // })
+
+                return newUser
+            } catch (error) {
+                throw new GraphQLError("Erreur d'envoi de mail new user")
+            }
+        })
+
+        await Promise.all(newGroupUsers).then(async groupUsers => {
+            // Cause of the check in the usermailsList, email !== ctx.user?.email must return undefined
+            const filteredGroupUsers = groupUsers.filter(
+                user => user !== undefined
+            )
+            await addGroupDiscussions({
+                newUsers: filteredGroupUsers as User[],
+                groupId: id,
+            })
+        })
+
         return Group.findOne({
             where: { id },
             relations: [
