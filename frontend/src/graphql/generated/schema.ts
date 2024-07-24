@@ -367,7 +367,9 @@ export type GetGroupByIdQueryVariables = Exact<{
 }>;
 
 
+
 export type GetGroupByIdQuery = { __typename?: 'Query', getGroupById: { __typename?: 'Group', id: number, name: string, created_at: string, event_date?: string | null, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, user_id: number, group_id: number, user: { __typename?: 'User', email: string, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string, name: string } | null } }>, avatar: { __typename?: 'Avatar', id: number, url: string, name: string } } };
+
 
 export type GetMessagesByDisscutionQueryVariables = Exact<{
   discussionId: Scalars['Float'];
@@ -824,7 +826,9 @@ export const GetGroupByIdDocument = gql`
         avatar {
           id
           url
+
           name
+
         }
         email
         pseudo
@@ -833,7 +837,9 @@ export const GetGroupByIdDocument = gql`
     avatar {
       id
       url
+
       name
+
     }
   }
 }
