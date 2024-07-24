@@ -1,5 +1,4 @@
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from '@/graphql/generated/schema'
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 type MenuDiscussionsProps = {
     isMenuHidden: boolean
@@ -21,7 +20,6 @@ const MenuDiscussions = ({
         })
 
     const dataOnDiscussions = data?.getDiscussionsByGroupIdWithoutCtxUser
-    console.log(data)
 
     if (loading) return <div>Chargement...</div>
     if (error) return <div>Oups, une erreur est survenue</div>

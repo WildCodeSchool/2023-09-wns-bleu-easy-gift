@@ -41,6 +41,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
     const displayedUsers = showAll
         ? group.userToGroups
         : group.userToGroups.slice(0, 7)
+
     return (
         <div className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px]'>
             <div className='flex flex-col p-5 shadow-sm rounded-t-lg gap-3'>
@@ -104,7 +105,11 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                 </div>
                 <div className='flex justify-end'>
                     <Button className='shadow-md'>
-                        <Link href={link}>Discussions</Link>
+                        <Link
+                            href={`/group-discussion/${group.id}/discussion/${1}`}
+                        >
+                            Discussions
+                        </Link>
                     </Button>
                     <Button className='shadow-md'>
                         <Link href={link}>Consulter</Link>

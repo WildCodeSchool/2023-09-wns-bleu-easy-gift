@@ -13,6 +13,9 @@ query getMessagesByDisscution(
         user {
             id
             pseudo
+            avatar {
+                url
+            }
         }
         created_at
         modified_at

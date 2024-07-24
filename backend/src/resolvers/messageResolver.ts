@@ -24,7 +24,7 @@ class MessageResolver {
         return await Message.find({
             where: { discussion: { id: discussionId } },
             order: { created_at: 'ASC' },
-            relations: ['user'],
+            relations: ['user', 'user.avatar'],
             take: limit,
             skip: offset,
         })
@@ -38,7 +38,10 @@ class MessageResolver {
     ): Promise<Message> {
         const message = new Message()
         message.content = content
-        message.user = await User.findOneOrFail({ where: { id: userId } })
+        message.user = await User.findOneOrFail({
+            where: { id: userId },
+            relations: ['avatar'],
+        })
         message.discussion = await Discussion.findOneOrFail({
             where: { id: discussionId },
         })
