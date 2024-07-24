@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from '@/graphql/generated/schema'
+import { checkUserConnected } from '@/utils/checkConnection'
 
 interface Avatar {
     __typename?: 'Avatar'
@@ -35,12 +37,24 @@ interface GroupComponentProps {
 }
 export default function MyGroup({ group, link }: GroupComponentProps) {
     const [showAll, setShowAll] = useState(false)
+    const isConnected = checkUserConnected()
+
     const handleToggle = () => {
         setShowAll(!showAll)
     }
+
+    const { data, loading, error } =
+        useGetDiscussionsByGroupIdWithoutCtxUserQuery({
+            variables: { groupId: group.id },
+        })
+
     const displayedUsers = showAll
         ? group.userToGroups
         : group.userToGroups.slice(0, 7)
+
+    const discussionId =
+        data?.getDiscussionsByGroupIdWithoutCtxUser.discussions[0]?.id
+
     return (
         <article className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px]'>
             <div className='flex flex-col p-5 shadow-sm rounded-t-lg gap-3'>
@@ -102,14 +116,22 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                         )}
                     </div>
                 </div>
-                <div className='flex justify-end'>
-                    <Button>
-                        <Link href={link}>Discussions</Link>
-                    </Button>
-                    <Button>
-                        <Link href={link}>Consulter</Link>
-                    </Button>
-                </div>
+
+                {isConnected && (
+                    <div className='flex justify-between'>
+                        <Button>
+                            <Link
+                                href={`/group-discussions/${group.id}/discussion/${discussionId}`}
+                            >
+                                Discussion
+                            </Link>
+                        </Button>
+                        <Button>
+                            <Link href={link}>Consulter</Link>
+                        </Button>
+                    </div>
+                )}
+
             </div>
         </article>
     )
