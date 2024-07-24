@@ -1,7 +1,6 @@
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from '@/graphql/generated/schema'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import axios from 'axios'
 
 type MenuDiscussionsProps = {
     isMenuHidden: boolean
@@ -9,26 +8,31 @@ type MenuDiscussionsProps = {
 }
 
 type DiscussionType = {
-    __typename?: "Discussion" | undefined;
-    id: number;
+    __typename?: 'Discussion' | undefined
+    id: number
     userDiscussion: {
-        __typename?: "User" | undefined;
-        pseudo: string;
-        id: number;
-        avatar?: {
-            __typename?: "Avatar" | undefined;
-            url: string;
-        } | null | undefined;
-    };
-};
+        __typename?: 'User' | undefined
+        pseudo: string
+        id: number
+        avatar?:
+            | {
+                  __typename?: 'Avatar' | undefined
+                  url: string
+              }
+            | null
+            | undefined
+    }
+}
 
 const MenuDiscussions = ({
     isMenuHidden,
     toggleMenu,
 }: MenuDiscussionsProps) => {
-    const router = useRouter();
-    const { groupId, search } = router.query;
-    const [searchValue, setSearchValue] = useState<string>(search as string || '');
+    const router = useRouter()
+    const { groupId, search } = router.query
+    const [searchValue, setSearchValue] = useState<string>(
+        (search as string) || ''
+    )
 
     const { data, loading, error } =
         useGetDiscussionsByGroupIdWithoutCtxUserQuery({
@@ -37,13 +41,11 @@ const MenuDiscussions = ({
         })
     const dataOnDiscussions = data?.getDiscussionsByGroupIdWithoutCtxUser
 
-    let matchingDiscussions: any[] = [];
-    let otherDiscussions: any[] = [];
-
+    let matchingDiscussions: any[] = []
+    let otherDiscussions: any[] = []
 
     function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-
-        setSearchValue(e.target.value);
+        setSearchValue(e.target.value)
 
         router.push(
             {
@@ -52,28 +54,36 @@ const MenuDiscussions = ({
             },
             undefined,
             { shallow: true }
-        );
+        )
     }
 
-    if (error) return <div>Oups, une erreur est survenue</div>;
-    if (!data || !dataOnDiscussions) return <div>Groupe introuvable</div>;
+    if (error) return <div>Oups, une erreur est survenue</div>
+    if (!data || !dataOnDiscussions) return <div>Groupe introuvable</div>
 
     if (searchValue.length >= 2) {
-        matchingDiscussions = dataOnDiscussions.discussions.filter(
-            (discussion) => discussion.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase())
-        );
+        matchingDiscussions = dataOnDiscussions.discussions.filter(discussion =>
+            discussion.userDiscussion.pseudo
+                .toLowerCase()
+                .includes(searchValue.toLowerCase())
+        )
 
         otherDiscussions = dataOnDiscussions.discussions.filter(
-            (discussion) => !discussion.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase())
-        );
+            discussion =>
+                !discussion.userDiscussion.pseudo
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase())
+        )
     }
-
 
     return (
         <nav
-            className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start transition-all duration-1000 ease-in-out ${isMenuHidden ? 'w-0 max-w-0 overflow-hidden -translate-x-full opacity-25' : 'w-full'
-                } md:pb-6 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start ${isMenuHidden ? 'md:w-0 md:max-w-0' : 'md:w-5/12'
-                }`}
+            className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start transition-all duration-1000 ease-in-out ${
+                isMenuHidden
+                    ? 'w-0 max-w-0 overflow-hidden -translate-x-full opacity-25'
+                    : 'w-full'
+            } md:pb-6 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start ${
+                isMenuHidden ? 'md:w-0 md:max-w-0' : 'md:w-5/12'
+            }`}
         >
             <div className='w-4/5 mx-auto h-36 flex flex-shrink-0 flex-wrap justify-between items-center md:min-h-40 md:w-11/12 lg:w-4/5'>
                 <div className='basis-5/6 flex justify-start items-center h-14'>
@@ -122,20 +132,21 @@ const MenuDiscussions = ({
                     <input
                         type='search'
                         className='w-full h-full rounded-3xl shadow-lg pl-9 outline-slate-200 outline-2 outline '
-                        placeholder="Trouve la discussion de...."
+                        placeholder='Trouve la discussion de....'
                         value={searchValue}
                         onChange={handleSearchChange}
                     />
                 </div>
             </div>
             <ul className='w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 mt-8 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow md:justify-start'>
-                {!searchValue && (
+                {!searchValue &&
                     dataOnDiscussions.discussions.map((discussion, index) => (
                         <li
-                            className={`w-full h-16 rounded-full ${index === 0
-                                ? 'bg-red400 shadow-md border-red500 md:mb-12'
-                                : 'bg-blue200 hover:border-primaryBlue'
-                                } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
+                            className={`w-full h-16 rounded-full ${
+                                index === 0
+                                    ? 'bg-red400 shadow-md border-red500 md:mb-12'
+                                    : 'bg-blue200 hover:border-primaryBlue'
+                            } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
                             key={index}
                         >
                             <a
@@ -144,11 +155,15 @@ const MenuDiscussions = ({
                             >
                                 <div className='relative mr-3 w-12 h-12'>
                                     <img
-                                        src={discussion.userDiscussion?.avatar?.url}
-                                        className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0
-                                            ? 'border-red500'
-                                            : 'border-primaryBlue'
-                                            }`}
+                                        src={
+                                            discussion.userDiscussion?.avatar
+                                                ?.url
+                                        }
+                                        className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${
+                                            index === 0
+                                                ? 'border-red500'
+                                                : 'border-primaryBlue'
+                                        }`}
                                         alt='Avatar of the user'
                                     />
                                 </div>
@@ -164,14 +179,12 @@ const MenuDiscussions = ({
                                 </div>
                             </a>
                         </li>
-                    ))
-                )
-                }
-                {searchValue && (
+                    ))}
+                {searchValue &&
                     matchingDiscussions.map((discussion, index) => (
                         <li
-                            className="w-full h-16 rounded-full bg-red400 shadow-md border-red500 md:mb-12
-                                hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300"
+                            className='w-full h-16 rounded-full bg-red400 shadow-md border-red500 md:mb-12
+                                hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300'
                             key={index}
                         >
                             <a
@@ -180,17 +193,17 @@ const MenuDiscussions = ({
                             >
                                 <div className='relative mr-3 w-12 h-12'>
                                     <img
-                                        src={discussion.userDiscussion?.avatar?.url}
-                                        className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4
-                                            border-red500"
-
+                                        src={
+                                            discussion.userDiscussion?.avatar
+                                                ?.url
+                                        }
+                                        className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4
+                                            border-red500'
                                         alt='Avatar of the user'
                                     />
                                 </div>
                                 <div className='self-center flex flex-wrap w-3/4'>
-                                    <h2
-                                        className="text-xl text-white"
-                                    >
+                                    <h2 className='text-xl text-white'>
                                         {discussion.userDiscussion.pseudo}
                                     </h2>
                                     {/* <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
@@ -199,15 +212,12 @@ const MenuDiscussions = ({
                                 </div>
                             </a>
                         </li>
-                    ))
-                )
-                }
-                {searchValue && (
-
+                    ))}
+                {searchValue &&
                     otherDiscussions.map((discussion, index) => (
                         <li
-                            className="w-full h-16 rounded-full bg-blue200 hover:border-primaryBlue
-                                hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300"
+                            className='w-full h-16 rounded-full bg-blue200 hover:border-primaryBlue
+                                hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300'
                             key={index}
                         >
                             <a
@@ -216,15 +226,16 @@ const MenuDiscussions = ({
                             >
                                 <div className='relative mr-3 w-12 h-12'>
                                     <img
-                                        src={discussion.userDiscussion?.avatar?.url}
-                                        className="absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue"
+                                        src={
+                                            discussion.userDiscussion?.avatar
+                                                ?.url
+                                        }
+                                        className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue'
                                         alt='Avatar of the user'
                                     />
                                 </div>
                                 <div className='self-center flex flex-wrap w-3/4'>
-                                    <h2
-                                        className="text-xl text-primaryBlue font-semibold"
-                                    >
+                                    <h2 className='text-xl text-primaryBlue font-semibold'>
                                         {discussion.userDiscussion.pseudo}
                                     </h2>
                                     {/* <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
@@ -233,8 +244,7 @@ const MenuDiscussions = ({
                                 </div>
                             </a>
                         </li>
-                    ))
-                )}
+                    ))}
             </ul>
 
             <div className='w-4/5 mx-auto self-start flex flex-grow justify-end items-start shadow-[1px_-7px_8px_-8px_theme(colors.slate.400)] md:shadow-none md:max-h-20'>
