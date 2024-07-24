@@ -12,8 +12,6 @@ import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 import { MyContext } from '..'
-import { UserToGroup } from '../entities/userToGroup'
-import { Avatar } from '../entities/avatar'
 
 async function createDiscussion({
     // name,
