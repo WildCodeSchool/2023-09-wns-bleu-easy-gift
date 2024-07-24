@@ -4,15 +4,7 @@ import {
     GetGroupByIdDocument,
     useAddNewMembersToGroupMutation,
 } from '@/graphql/generated/schema'
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { ChangeEvent, FormEvent, useState } from 'react'
-=======
-import { FormEvent } from 'react'
->>>>>>> fce11e9 (front fonctionnel)
-=======
-import { ChangeEvent, FormEvent, useState } from 'react'
->>>>>>> 73187f7 (add members ok)
 import { useRouter } from 'next/router'
 import { getConstraints } from '@/lib/utils'
 import { toast } from 'react-toastify'
@@ -27,10 +19,6 @@ interface ModalUpdateGroupProps {
     onClose: () => void
     group?: Group
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 73187f7 (add members ok)
 
 const iconStar = {
     id: 'star',
@@ -42,11 +30,6 @@ const iconTrash = {
     path: 'M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5',
     viewBox: '0 0 16 16',
 }
-<<<<<<< HEAD
-=======
->>>>>>> fce11e9 (front fonctionnel)
-=======
->>>>>>> 73187f7 (add members ok)
 export default function ModalUpdateGroup({
     onClose,
     group,
@@ -54,29 +37,14 @@ export default function ModalUpdateGroup({
     const router = useRouter()
     const [updateMembers, { error }] = useAddNewMembersToGroupMutation()
     const groupId = typeof group?.id === 'number' ? group?.id : 0
-<<<<<<< HEAD
-<<<<<<< HEAD
     const [email, setEmail] = useState<string>('')
     const [emails, setEmails] = useState<string[]>([])
-=======
->>>>>>> fce11e9 (front fonctionnel)
-=======
-    const [email, setEmail] = useState<string>('')
-    const [emails, setEmails] = useState<string[]>([])
->>>>>>> 73187f7 (add members ok)
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const formData = new FormData(e.target as HTMLFormElement)
         const formJSON: any = Object.fromEntries(formData.entries())
-<<<<<<< HEAD
-<<<<<<< HEAD
         formJSON.emailUsers = emails
-=======
->>>>>>> fce11e9 (front fonctionnel)
-=======
-        formJSON.emailUsers = emails
->>>>>>> 73187f7 (add members ok)
 
         updateMembers({
             variables: {
@@ -103,10 +71,6 @@ export default function ModalUpdateGroup({
             })
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 73187f7 (add members ok)
     const handleAddEmail = () => {
         if (email && !emails.includes(email)) {
             setEmails([...emails, email])
@@ -120,11 +84,6 @@ export default function ModalUpdateGroup({
         setEmails(emails.filter(email => email !== emailToRemove))
     }
 
-<<<<<<< HEAD
-=======
->>>>>>> fce11e9 (front fonctionnel)
-=======
->>>>>>> 73187f7 (add members ok)
     const errorMessages = getConstraints(
         error?.graphQLErrors[0].extensions.validationErrors
     )
@@ -147,10 +106,6 @@ export default function ModalUpdateGroup({
                     <label className='block text-gray-700'>
                         Email du nouveau membre
                     </label>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 73187f7 (add members ok)
                     <div className='flex flex-wrap lg:justify-between items-center'>
                         <Input
                             type='mail'
@@ -168,17 +123,6 @@ export default function ModalUpdateGroup({
                             +
                         </Button>
                     </div>
-<<<<<<< HEAD
-=======
-                    <Input
-                        type='mail'
-                        name='emailUsers'
-                        placeholder='nouveau@membre.fr'
-                        className='mt-1 w-full p-2 border border-gray-300 rounded'
-                    />
->>>>>>> fce11e9 (front fonctionnel)
-=======
->>>>>>> 73187f7 (add members ok)
                 </div>
                 <div className='mb-4'>
                     {errorMessages &&
@@ -195,10 +139,6 @@ export default function ModalUpdateGroup({
                             )
                         )}
                 </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 73187f7 (add members ok)
                 {emails.length > 0 && (
                     <div className='flex mb-4 flex-wrap gap-4'>
                         {emails.map((email, index) => (
@@ -230,11 +170,6 @@ export default function ModalUpdateGroup({
                         ))}
                     </div>
                 )}
-<<<<<<< HEAD
-=======
->>>>>>> fce11e9 (front fonctionnel)
-=======
->>>>>>> 73187f7 (add members ok)
                 <div>
                     <Button
                         type='submit'
