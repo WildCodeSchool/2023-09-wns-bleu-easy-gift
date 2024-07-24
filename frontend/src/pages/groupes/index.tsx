@@ -3,7 +3,7 @@ import { useUserGroupsQuery } from '../../graphql/generated/schema'
 import GroupCard from '@/components/GroupCard'
 import { useState } from 'react'
 import Head from 'next/head'
-import { Link } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Profile() {
     const { data, loading, error } = useUserGroupsQuery({
