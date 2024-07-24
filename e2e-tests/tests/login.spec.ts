@@ -25,7 +25,7 @@ test("has a valid user name", async ({ page }) => {
   await page.goto("http://localhost:3000/auth/login");
   await page.getByTestId("login-email").fill(emailToCheck);
   await page.getByTestId("login-password").fill(passwordToCheck);
-  await page.getByRole("button", { name: "Se connecter" }).click();
+  await page.getByTestId("login-button").click();
   await page.waitForTimeout(5000);
   const disconnectButton = page.getByRole("button", {
     name: "Se déconnecter",

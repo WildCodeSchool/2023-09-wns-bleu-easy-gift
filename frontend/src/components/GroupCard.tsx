@@ -56,7 +56,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
         data?.getDiscussionsByGroupIdWithoutCtxUser.discussions[0]?.id
 
     return (
-        <div className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px]'>
+        <article className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px]'>
             <div className='flex flex-col p-5 shadow-sm rounded-t-lg gap-3'>
                 <img
                     src={group.avatar.url}
@@ -90,7 +90,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                                 <img
                                     src={user.user.avatar?.url}
                                     className='w-10 h-10 rounded-full border-solid border-2 border-primaryRed transition ease-in-out hover:-translate-y-1 hover:scale-120 duration-300'
-                                    alt='Avatar of the user'
+                                    alt={user.user.avatar?.name}
                                     title={user.user.pseudo}
                                 />
                                 <div className='opacity-0 w-28 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 bottom-full left-1/2 transform -translate-x-1/2 mb-2 pointer-events-none'>
@@ -116,21 +116,23 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                         )}
                     </div>
                 </div>
+
                 {isConnected && (
                     <div className='flex justify-between'>
-                        <Button className='shadow-md'>
+                        <Button>
                             <Link
                                 href={`/group-discussions/${group.id}/discussion/${discussionId}`}
                             >
                                 Discussion
                             </Link>
                         </Button>
-                        <Button className='shadow-md'>
+                        <Button>
                             <Link href={link}>Consulter</Link>
                         </Button>
                     </div>
                 )}
+
             </div>
-        </div>
+        </article>
     )
 }

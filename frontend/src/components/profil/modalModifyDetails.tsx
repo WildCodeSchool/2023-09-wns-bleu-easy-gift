@@ -120,23 +120,29 @@ export default function ModalModifyDetails({
 
                         <div className='flex justify-center'>
                             <form className='gap-2' onSubmit={onConfirm}>
-                                <Input
-                                    id='pseudo'
-                                    type='text'
-                                    name='pseudo'
-                                    label='Choisissez un nouveau pseudo'
-                                    value={pseudo}
-                                    onChange={e => setPseudo(e.target.value)}
-                                />
+                                <label htmlFor='pseudo'>
+                                    <Input
+                                        id='pseudo'
+                                        type='text'
+                                        name='pseudo'
+                                        label='Choisissez un nouveau pseudo'
+                                        value={pseudo}
+                                        onChange={e =>
+                                            setPseudo(e.target.value)
+                                        }
+                                    />
+                                </label>
 
-                                <Input
-                                    id='email'
-                                    type='email'
-                                    name='email'
-                                    label='Modifier votre email'
-                                    value={email}
-                                    onChange={e => setEmail(e.target.value)}
-                                />
+                                <label htmlFor='email'>
+                                    <Input
+                                        id='email'
+                                        type='email'
+                                        name='email'
+                                        label='Modifier votre email'
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)}
+                                    />
+                                </label>
                                 <div className='mb-4'>
                                     {errorMessages &&
                                         errorMessages.map((item, index) =>

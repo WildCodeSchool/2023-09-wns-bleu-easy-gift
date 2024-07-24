@@ -104,7 +104,7 @@ class UsersResolver {
         const user = await findUserByEmail(infos.email)
 
         if (!user) {
-            throw new GraphQLError(`User doesn't exist`)
+            throw new GraphQLError(`Veuillez vérifier vos informations`)
         }
 
         const isPasswordValid = await argon2.verify(
@@ -136,7 +136,7 @@ class UsersResolver {
     @Query(() => ResponseMessage)
     async testAuthorized() {
         const responseMessage = new ResponseMessage()
-        responseMessage.message = 'Tu es arrive a cette query'
+        responseMessage.message = 'Tu es arrivé a cette query'
         responseMessage.success = true
         return responseMessage
     }
