@@ -20,6 +20,10 @@ import Cookies from 'cookies'
 import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
 import mailer from '../mailer'
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const url = process.env.SITE_URL || 'http://localhost:3000'
 
 export async function findUserByEmail(email: string) {
     return await User.findOne({
@@ -105,7 +109,7 @@ class UsersResolver {
         const user = await findUserByEmail(infos.email)
 
         if (!user) {
-            throw new GraphQLError(`User doesn't exist`)
+            throw new GraphQLError(`Veuillez vérifier vos informations`)
         }
 
         const isPasswordValid = await argon2.verify(
@@ -137,7 +141,7 @@ class UsersResolver {
     @Query(() => ResponseMessage)
     async testAuthorized() {
         const responseMessage = new ResponseMessage()
-        responseMessage.message = 'Tu es arrive a cette query'
+        responseMessage.message = 'Tu es arrivé a cette query'
         responseMessage.success = true
         return responseMessage
     }
@@ -281,7 +285,7 @@ class UsersResolver {
         user.token = resetToken
         await user.save()
 
-        const resetUrl = `http://localhost:3000/auth/reset-password?token=${resetToken}`
+        const resetUrl = `${url}/auth/reset-password?token=${resetToken}`
         const message = `
             <h1>Vous avez demandé une réinitialisation du mot de passe</h1>
             <p>Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe:</p>

@@ -12,6 +12,7 @@ interface UserComponentProps {
             avatar?: {
                 id: number
                 url: string
+                name: string
             } | null
         }
     }
@@ -24,7 +25,7 @@ export default function ProfileCard({ userToGroup }: UserComponentProps) {
                 <img
                     src={userToGroup.user.avatar?.url}
                     className='w-10 h-10 rounded-full border-solid border-2 border-primaryRed'
-                    alt='Avatar of the user'
+                    alt={userToGroup.user.avatar?.name}
                     title={userToGroup.user?.pseudo}
                 />
                 <div>

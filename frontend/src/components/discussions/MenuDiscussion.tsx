@@ -1,18 +1,20 @@
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from '@/graphql/generated/schema'
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+
 type MenuDiscussionsProps = {
     isMenuHidden: boolean
     toggleMenu: () => void
+    setSelectedDiscussionId: (id: number) => void
 }
 
 const MenuDiscussions = ({
     isMenuHidden,
     toggleMenu,
+    setSelectedDiscussionId,
 }: MenuDiscussionsProps) => {
     const router = useRouter()
-    // const groupId = Number(router.query.groupId);
-    const groupId = 12 // A remplacer par la ligne ci-dessus
+    const groupId = Number(router.query.groupId)
 
     const { data, loading, error } =
         useGetDiscussionsByGroupIdWithoutCtxUserQuery({
@@ -27,68 +29,6 @@ const MenuDiscussions = ({
     if (!data || !data.getDiscussionsByGroupIdWithoutCtxUser) {
         return <div>Groupe introuvable</div>
     }
-
-    /*
-    const group = {
-      "id": 1,
-      "name": "anniversaire",
-      "userToGroups": [
-        {
-          "user": {
-            "pseudo": "Pierre",
-            "avatar": {
-              "url": "https://ucarecdn.com/bb05bd7d-e0cc-49b1-867b-36aa9ff245f2/-/preview/1000x1000/"
-            },
-            "id": 1
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Dorothée",
-            "avatar": {
-              "url": "https://ucarecdn.com/74347f17-c04e-4e57-aafd-fc518ebd332e/-/preview/1000x1000/"
-            },
-            "id": 8
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Alliaume",
-            "avatar": {
-              "url": "https://ucarecdn.com/4efb4fd3-382c-4734-86ae-23eb62594036/-/preview/1000x1000/"
-            },
-            "id": 7
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Guilhemine",
-            "avatar": {
-              "url": "https://ucarecdn.com/f3546ab4-0edd-4470-90b9-f604c84266e1/-/preview/1000x1000/"
-            },
-            "id": 9
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Cyriaque",
-            "avatar": {
-              "url": "https://ucarecdn.com/beb1818b-3726-4a90-9db0-563b8a2671c1/-/preview/1000x1000/"
-            },
-            "id": 11
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Chilpéric",
-            "avatar": {
-              "url": "https://ucarecdn.com/9dab743e-7860-4603-850f-64e5c344ae1a/-/preview/1000x1000/"
-            },
-            "id": 10
-          }
-        }
-      ]
-    } */
 
     return (
         <nav
@@ -156,9 +96,13 @@ const MenuDiscussions = ({
                         } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
                         key={index}
                     >
-                        <a
+                        {' '}
+                        <Link
+                            href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
                             className='h-full flex items-center justify-start'
-                            href={`/group/${groupId}/discussion/${discussion.userDiscussion.id}`}
+                            onClick={() =>
+                                setSelectedDiscussionId(discussion.id)
+                            }
                         >
                             <div className='relative mr-3 w-12 h-12'>
                                 <img
@@ -181,7 +125,7 @@ const MenuDiscussions = ({
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 </p> */}
                             </div>
-                        </a>
+                        </Link>
                     </li>
                 ))}
             </ul>
