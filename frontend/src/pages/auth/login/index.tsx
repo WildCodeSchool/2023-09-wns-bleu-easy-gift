@@ -50,55 +50,63 @@ function Login() {
             })
         }
     }
-    return (
-        <>
-            <Head>
-                <title>Page de création de compte - Easy Gift</title>
-            </Head>
-            <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
-                    Connexion
-                </h1>
-                <form
-                    className='flex flex-col items-center gap-2'
-                    onSubmit={handleSubmit}
+    return
+    ;<>
+        <Head>
+            <title>Page de création de compte - Easy Gift</title>
+        </Head>
+        <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
+            <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+                Connexion
+            </h1>
+            <form
+                className='flex flex-col items-center gap-2'
+                onSubmit={handleSubmit}
+            >
+                <label className='mb-3'>
+                    Email
+                    <Input
+                        data-testid='login-email'
+                        id='email'
+                        type='email'
+                        name='email'
+                    />
+                </label>
+                <label>
+                    Mot de passe
+                    <Input
+                        data-testid='login-password'
+                        id='password'
+                        type='password'
+                        name='password'
+                    />
+                </label>
+                <Button
+                    data-testid='login-button'
+                    type='submit'
+                    className='mt-6'
                 >
-                    <label className='mb-3'>
-                        Email
-                        <Input
-                            data-testid='login-email'
-                            id='email'
-                            type='email'
-                            name='email'
-                        />
-                    </label>
-                    <label>
-                        Mot de passe
-                        <Input
-                            data-testid='login-password'
-                            id='password'
-                            type='password'
-                            name='password'
-                        />
-                    </label>
-                    <Button
-                        data-testid='login-button'
-                        type='submit'
-                        className='mt-6'
-                    >
-                        {'Se connecter'}
-                    </Button>
+                    {'Se connecter'}
+                </Button>
 
+                <Link
+                    href={'/auth/register'}
+                    className='text-blue-600 hover:underline mt-4'
+                >
+                    Pas encore de compte ?
+                </Link>
+
+                <Button variant={'link'}>
                     <Link
-                        href={'/auth/register'}
-                        className='text-blue-600 hover:underline mt-4'
+                        href={'/auth/forgot-password'}
+                        className='text-blue-600'
                     >
-                        Pas encore de compte ?
+                        Oublié votre mot de passe?
                     </Link>
-                </form>
-            </section>
-        </>
-    )
+                </Button>
+            </form>
+        </section>
+    </>
 }
 
 export default Login
