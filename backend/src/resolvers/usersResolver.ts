@@ -19,6 +19,11 @@ import { MyContext } from '..'
 import Cookies from 'cookies'
 import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
+import mailer from '../mailer'
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const url = process.env.SITE_URL || 'http://localhost:3000'
 
 export async function findUserByEmail(email: string) {
     return await User.findOne({
@@ -104,7 +109,7 @@ class UsersResolver {
         const user = await findUserByEmail(infos.email)
 
         if (!user) {
-            throw new GraphQLError(`User doesn't exist`)
+            throw new GraphQLError(`Veuillez vérifier vos informations`)
         }
 
         const isPasswordValid = await argon2.verify(
@@ -136,7 +141,7 @@ class UsersResolver {
     @Query(() => ResponseMessage)
     async testAuthorized() {
         const responseMessage = new ResponseMessage()
-        responseMessage.message = 'Tu es arrive a cette query'
+        responseMessage.message = 'Tu es arrivé a cette query'
         responseMessage.success = true
         return responseMessage
     }
@@ -263,6 +268,64 @@ class UsersResolver {
         responseMessage.success = true
         responseMessage.message = 'Mot de passe modifié avec succès'
 
+        return responseMessage
+    }
+    @Mutation(() => ResponseMessage)
+    async forgotPassword(
+        @Arg('email') email: string
+    ): Promise<ResponseMessage> {
+        const user = await User.findOne({ where: { email } })
+        const responseMessage = new ResponseMessage()
+        if (!user) {
+            responseMessage.success = false
+            responseMessage.message = 'Email non trouvé'
+            return responseMessage
+        }
+        const resetToken = crypto.randomBytes(32).toString('hex')
+        user.token = resetToken
+        await user.save()
+
+        const resetUrl = `${url}/auth/reset-password?token=${resetToken}`
+        const message = `
+            <h1>Vous avez demandé une réinitialisation du mot de passe</h1>
+            <p>Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe:</p>
+            <a href="${resetUrl}">${resetUrl}</a>
+        `
+        try {
+            await mailer.sendMail({
+                to: email,
+                from: 'crazygift24@gmail.com',
+                subject: 'Réinitialisation du mot de passe',
+                html: message,
+            })
+            responseMessage.success = true
+            responseMessage.message = 'Email envoyé avec succès'
+        } catch (err) {
+            console.error("Erreur lors de l'envoi de l'email:", err)
+            responseMessage.success = false
+            responseMessage.message = "Erreur lors de l'envoi de l'email"
+        }
+        return responseMessage
+    }
+    @Mutation(() => ResponseMessage)
+    async resetPassword(
+        @Arg('token') token: string,
+        @Arg('newPassword') newPassword: string
+    ): Promise<ResponseMessage> {
+        const user = await User.findOne({ where: { token } })
+        const responseMessage = new ResponseMessage()
+        if (!user) {
+            responseMessage.success = false
+            responseMessage.message = 'Token invalide'
+            return responseMessage
+        }
+
+        user.password = newPassword
+        user.token = null
+        await user.save()
+
+        responseMessage.success = true
+        responseMessage.message = 'Mot de passe réinitialisé avec succès'
         return responseMessage
     }
 }

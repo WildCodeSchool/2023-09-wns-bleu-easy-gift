@@ -41,6 +41,7 @@ export default function Navbar() {
             >
                 {/* Burger Icon for Mobile Screens */}
                 <button
+                    aria-label='Ouvrir ou fermer la navigation'
                     onClick={() => setMenuOpen(!isMenuOpen)}
                     className='md:hidden'
                 >
@@ -63,14 +64,18 @@ export default function Navbar() {
                     className='space-y-1 flex justify-center items-center hover:cursor-pointer'
                     onClick={handleLogoClick}
                 >
-                    <img
-                        src='/images/logo/logo-easy-gift-tablet.png'
-                        alt="Logo d'easy-gift"
-                        className='mr-2'
-                    />
-                    <h1 className='font-rubik text-2xl text-primaryBlue font-bold'>
+                    <Link
+                        href='/'
+                        className='font-rubik text-2xl text-primaryBlue font-bold flex items-center justify-between'
+                        aria-label='Lien vers la page d’accueil'
+                    >
+                        <img
+                            src='/images/logo/logo-easy-gift-tablet.png'
+                            alt="Logo d'easy-gift"
+                            className='mr-2'
+                        />
                         Easy Gift
-                    </h1>
+                    </Link>
                 </div>
 
                 {/* Links for Larger Screens */}
@@ -81,12 +86,7 @@ export default function Navbar() {
                     >
                         Mes groupes
                     </Link>
-                    <Link
-                        href='/discussions'
-                        className={`font-semibold ${currentPath === '/discussions' ? 'underline' : ''}`}
-                    >
-                        Mes discussions
-                    </Link>
+
                     <Link
                         href='/mon-profil'
                         className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}
@@ -106,6 +106,7 @@ export default function Navbar() {
                     <button
                         onClick={() => setMenuOpen(false)}
                         className='self-end'
+                        aria-label='Fermer la navigation'
                     >
                         <svg
                             className='h-6 w-6'
@@ -128,21 +129,18 @@ export default function Navbar() {
                         Mes groupes
                     </Link>
                     <Link href='#' onClick={closeMenu}>
-                        Mes chats
-                    </Link>
-                    <Link href='#' onClick={closeMenu}>
-                        Link 3
+                        Mes discussions
                     </Link>
                     {!isConnected && (
                         <>
-                            <Button className='shadow-md'>
+                            <Button>
                                 <Link onClick={closeMenu} href='/auth/login'>
-                                    Login
+                                    Se connecter
                                 </Link>
                             </Button>
-                            <Button className='shadow-md'>
+                            <Button>
                                 <Link onClick={closeMenu} href='/auth/login'>
-                                    Sign up
+                                    S'enregistrer
                                 </Link>
                             </Button>
                         </>
@@ -154,11 +152,11 @@ export default function Navbar() {
                 <div className={`hidden md:flex md:flex-row gap-2`}>
                     {!isConnected && (
                         <>
-                            <Button className='shadow-md'>
-                                <Link href='/auth/login'>Login</Link>
+                            <Button>
+                                <Link href='/auth/login'>Se connecter</Link>
                             </Button>
-                            <Button className='shadow-md'>
-                                <Link href='/auth/login'>Sign up</Link>
+                            <Button>
+                                <Link href='/auth/login'>S'enregistrer</Link>
                             </Button>
                         </>
                     )}

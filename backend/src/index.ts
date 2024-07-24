@@ -90,7 +90,7 @@ schema.then(async schema => {
                         )
                         user = await findUserByEmail(verify.payload.email)
                     } catch (error) {
-                        console.log('Error during JWT verification, ', error)
+                        console.error('Error during JWT verification, ', error)
                     }
                 }
                 return { req, res, user }
