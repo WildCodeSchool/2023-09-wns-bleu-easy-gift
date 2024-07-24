@@ -88,12 +88,7 @@ export default function Navbar() {
                     >
                         Mes groupes
                     </Link>
-                    <Link
-                        href='/discussions'
-                        className={`font-semibold ${currentPath === '/discussions' ? 'underline' : ''}`}
-                    >
-                        Mes discussions
-                    </Link>
+
                     <Link
                         href='/mon-profil'
                         className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}

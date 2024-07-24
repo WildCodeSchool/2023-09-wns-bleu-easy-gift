@@ -98,6 +98,7 @@ export type Message = {
 export type Mutation = {
   __typename?: 'Mutation';
   addNewGroup: Group;
+  addNewMembersToGroup: Group;
   createMessage: Message;
   register: UserWithoutPassword;
   registrationWithToken: UserWithoutPassword;
@@ -111,6 +112,12 @@ export type Mutation = {
 
 export type MutationAddNewGroupArgs = {
   data: NewGroupInput;
+};
+
+
+export type MutationAddNewMembersToGroupArgs = {
+  data: AddNewMemberToGroup;
+  groupId: Scalars['Float'];
 };
 
 
@@ -293,6 +300,10 @@ export type UserWithoutPasswordAvatar = {
   pseudo: Scalars['String'];
 };
 
+export type AddNewMemberToGroup = {
+  emailUsers: Array<Scalars['String']>;
+};
+
 export type UpdateAvatarMutationVariables = Exact<{
   data: InputUpdateAvatar;
 }>;
@@ -314,6 +325,14 @@ export type AddNewGroupMutationVariables = Exact<{
 
 
 export type AddNewGroupMutation = { __typename?: 'Mutation', addNewGroup: { __typename?: 'Group', id: number, name: string, event_date?: string | null, avatar: { __typename?: 'Avatar', id: number, name: string } } };
+
+export type AddNewMembersToGroupMutationVariables = Exact<{
+  data: AddNewMemberToGroup;
+  groupId: Scalars['Float'];
+}>;
+
+
+export type AddNewMembersToGroupMutation = { __typename?: 'Mutation', addNewMembersToGroup: { __typename?: 'Group', created_at: string, event_date?: string | null, id: number, name: string, avatar: { __typename?: 'Avatar', id: number, url: string }, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, group_id: number, user_id: number, user: { __typename?: 'User', birthday?: any | null, email: string, id: number, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string } | null } }> } };
 
 export type AddNewMessageSubscriptionVariables = Exact<{
   discussionId: Scalars['Float'];
@@ -348,7 +367,9 @@ export type GetGroupByIdQueryVariables = Exact<{
 }>;
 
 
+
 export type GetGroupByIdQuery = { __typename?: 'Query', getGroupById: { __typename?: 'Group', id: number, name: string, created_at: string, event_date?: string | null, userToGroups: Array<{ __typename?: 'UserToGroup', is_admin: boolean, user_id: number, group_id: number, user: { __typename?: 'User', email: string, pseudo: string, avatar?: { __typename?: 'Avatar', id: number, url: string, name: string } | null } }>, avatar: { __typename?: 'Avatar', id: number, url: string, name: string } } };
+
 
 export type GetMessagesByDisscutionQueryVariables = Exact<{
   discussionId: Scalars['Float'];
@@ -569,6 +590,62 @@ export function useAddNewGroupMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddNewGroupMutationHookResult = ReturnType<typeof useAddNewGroupMutation>;
 export type AddNewGroupMutationResult = Apollo.MutationResult<AddNewGroupMutation>;
 export type AddNewGroupMutationOptions = Apollo.BaseMutationOptions<AddNewGroupMutation, AddNewGroupMutationVariables>;
+export const AddNewMembersToGroupDocument = gql`
+    mutation AddNewMembersToGroup($data: addNewMemberToGroup!, $groupId: Float!) {
+  addNewMembersToGroup(data: $data, groupId: $groupId) {
+    avatar {
+      id
+      url
+    }
+    created_at
+    event_date
+    id
+    name
+    userToGroups {
+      is_admin
+      group_id
+      user_id
+      user {
+        avatar {
+          id
+          url
+        }
+        birthday
+        email
+        id
+        pseudo
+      }
+    }
+  }
+}
+    `;
+export type AddNewMembersToGroupMutationFn = Apollo.MutationFunction<AddNewMembersToGroupMutation, AddNewMembersToGroupMutationVariables>;
+
+/**
+ * __useAddNewMembersToGroupMutation__
+ *
+ * To run a mutation, you first call `useAddNewMembersToGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddNewMembersToGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addNewMembersToGroupMutation, { data, loading, error }] = useAddNewMembersToGroupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      groupId: // value for 'groupId'
+ *   },
+ * });
+ */
+export function useAddNewMembersToGroupMutation(baseOptions?: Apollo.MutationHookOptions<AddNewMembersToGroupMutation, AddNewMembersToGroupMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddNewMembersToGroupMutation, AddNewMembersToGroupMutationVariables>(AddNewMembersToGroupDocument, options);
+      }
+export type AddNewMembersToGroupMutationHookResult = ReturnType<typeof useAddNewMembersToGroupMutation>;
+export type AddNewMembersToGroupMutationResult = Apollo.MutationResult<AddNewMembersToGroupMutation>;
+export type AddNewMembersToGroupMutationOptions = Apollo.BaseMutationOptions<AddNewMembersToGroupMutation, AddNewMembersToGroupMutationVariables>;
 export const AddNewMessageDocument = gql`
     subscription addNewMessage($discussionId: Float!) {
   newMessage(discussionId: $discussionId) {
@@ -749,7 +826,9 @@ export const GetGroupByIdDocument = gql`
         avatar {
           id
           url
+
           name
+
         }
         email
         pseudo
@@ -758,7 +837,9 @@ export const GetGroupByIdDocument = gql`
     avatar {
       id
       url
+
       name
+
     }
   }
 }

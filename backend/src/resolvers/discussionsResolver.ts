@@ -12,8 +12,6 @@ import { User } from '../entities/user'
 import { Group } from '../entities/group'
 import { GraphQLError } from 'graphql'
 import { MyContext } from '..'
-import { UserToGroup } from '../entities/userToGroup'
-import { Avatar } from '../entities/avatar'
 
 async function createDiscussion({
     // name,
@@ -61,6 +59,58 @@ export async function createGroupDiscussions({
             })
         })
     )
+}
+export async function addGroupDiscussions({
+    newUsers,
+    groupId,
+}: {
+    newUsers: User[]
+    groupId: number
+}) {
+    const group = await Group.findOne({
+        where: { id: groupId },
+        relations: ['discussions', 'discussions.users'],
+    })
+    const discussionsIds = group?.discussions.map(discussion => {
+        return discussion.id
+    })
+
+    if (discussionsIds) {
+        discussionsIds?.forEach(async id => {
+            const discussion = await Discussion.findOneOrFail({
+                where: { id },
+                relations: ['userDiscussion', 'users'],
+            })
+            const actualUsers = discussion?.users
+            const newDiscussionUsers = actualUsers?.concat(newUsers)
+
+            discussion.users = newDiscussionUsers
+            await discussion.save()
+        })
+    }
+    newUsers.forEach(async currentUser => {
+        const userDiscussion = currentUser
+        const newDiscussion = Discussion.create({ userDiscussion })
+        const group = await Group.findOne({
+            where: { id: groupId },
+            relations: ['userToGroups', 'userToGroups.user'],
+        })
+
+        if (!group) throw new GraphQLError(`Can't find group `)
+
+        const groupUsers = group.userToGroups.map(utg => utg.user)
+        const participantUsers = groupUsers
+            .map(user => {
+                if (currentUser.id === user.id) return
+                return user
+            })
+            .filter(user => user !== undefined)
+
+        newDiscussion.group = group
+        newDiscussion.users = participantUsers as User[]
+
+        return await newDiscussion.save()
+    })
 }
 
 @Resolver(Discussion)
