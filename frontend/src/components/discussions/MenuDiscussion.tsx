@@ -8,15 +8,29 @@ type MenuDiscussionsProps = {
     toggleMenu: () => void
 }
 
+type DiscussionType = {
+    __typename?: "Discussion" | undefined;
+    id: number;
+    userDiscussion: {
+        __typename?: "User" | undefined;
+        pseudo: string;
+        id: number;
+        avatar?: {
+            __typename?: "Avatar" | undefined;
+            url: string;
+        } | null | undefined;
+    };
+};
+
 const MenuDiscussions = ({
     isMenuHidden,
     toggleMenu,
 }: MenuDiscussionsProps) => {
-
     const router = useRouter();
     const { groupId, search } = router.query;
     const [searchValue, setSearchValue] = useState(search || "");
-    // const groupId = 12 // A remplacer quand on aura le groupId
+    const [isSearching, setIsSearching] = useState(false);
+    const [displayedDiscussions, setDisplayedDiscussions] = useState<DiscussionType[]>([]);
 
     const { data, loading, error } =
         useGetDiscussionsByGroupIdWithoutCtxUserQuery({
@@ -26,39 +40,42 @@ const MenuDiscussions = ({
     const dataOnDiscussions = data?.getDiscussionsByGroupIdWithoutCtxUser
 
     function submitSearch() {
-        router.push({
-            pathname: router.pathname,
-            query: { ...router.query, search: searchValue },
-        });
-    }
+        setIsSearching(true);
 
-    // const groupId = Number(router.query.groupId);
+        setTimeout(() => {
+            const sortedDiscussions = searchValue
+                ? [...(dataOnDiscussions?.discussions ?? [])].sort((a, b) => {
+                    const aMatch = Array.isArray(searchValue)
+                        ? searchValue.join("").toLowerCase().includes(a.userDiscussion.pseudo.toLowerCase())
+                        : a.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase());
+                    const bMatch = Array.isArray(searchValue)
+                        ? searchValue.join("").toLowerCase().includes(b.userDiscussion.pseudo.toLowerCase())
+                        : b.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase());
+                    if (aMatch && !bMatch) return -1;
+                    if (!aMatch && bMatch) return 1;
+                    return 0;
+                })
+                : dataOnDiscussions?.discussions ?? [];
+
+            setDisplayedDiscussions(sortedDiscussions);
+            setIsSearching(false);
+
+            // Mise à jour de l'URL
+            router.push({
+                pathname: router.pathname,
+                query: { ...router.query, search: searchValue },
+            }, undefined, { shallow: true });
+        }, 1000);
+    }
 
     useEffect(() => {
-        if (search) {
-            setSearchValue(search);
+        if (dataOnDiscussions) {
+            setDisplayedDiscussions(dataOnDiscussions.discussions);
         }
-    }, [search]);
+    }, [dataOnDiscussions]);
 
-
-    if (error) return <div>Oups, une erreur est survenue</div>
-    if (!data || !data.getDiscussionsByGroupIdWithoutCtxUser) {
-        return <div>Groupe introuvable</div>
-    }
-
-    const discussionsToDisplay = searchValue
-        ? [...(dataOnDiscussions?.discussions ?? [])].sort((a, b) => {
-            const aMatch = Array.isArray(searchValue)
-                ? searchValue.join("").toLowerCase().includes(a.userDiscussion.pseudo.toLowerCase())
-                : a.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase());
-            const bMatch = Array.isArray(searchValue)
-                ? searchValue.join("").toLowerCase().includes(b.userDiscussion.pseudo.toLowerCase())
-                : b.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase());
-            if (aMatch && !bMatch) return -1;
-            if (!aMatch && bMatch) return 1;
-            return 0;
-        })
-        : dataOnDiscussions?.discussions ?? [];
+    if (error) return <div>Oups, une erreur est survenue</div>;
+    if (!data || !dataOnDiscussions) return <div>Groupe introuvable</div>;
 
     return (
         <nav
@@ -74,7 +91,7 @@ const MenuDiscussions = ({
                     />
                     <h1
                         className='text-4xl md:text-2xl xl:text-4xl 2xl:text-5xl font-bold text-primaryBlue inline-block
-      ml-4 self-center'
+                        ml-4 self-center'
                     >
                         {dataOnDiscussions?.groupName}
                     </h1>
@@ -97,7 +114,7 @@ const MenuDiscussions = ({
                         </svg>
                     </button>
                 </div>
-                <div className='basis-full h-11 2xl:h-12'>
+                <div className='basis-full h-11 2xl:h-12 relative'>
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
                         width='16'
@@ -111,56 +128,64 @@ const MenuDiscussions = ({
                     </svg>
                     <input
                         type='search'
-                        className='w-full h-full rounded-3xl shadow-lg pl-9 outline-slate-200 outline-2 outline '
-                        placeholder="Pour trouver tes copains... c'est ici"
+                        className='w-11/12 h-full rounded-3xl shadow-lg pl-9 outline-slate-200 outline-2 outline '
+                        placeholder="Pour trouver tes copains..."
+                        value={searchValue}
                         onChange={(e) => setSearchValue(e.target.value)}
                     />
                     <button
                         type='button'
-                        className='relative z-10 top-[30px] right-[2px] ml-3 mt-3.5 bg-primaryBlue text-white px-4 py-2 rounded-lg'
-                        onClick={() => { submitSearch }}
+                        className='absolute min-w-20 h-full z-10 top-[30px] right-[2px] ml-3 bg-primaryBlue text-white px-4 rounded-l-sm rounded-r-3xl shadow-lg'
+                        onClick={submitSearch}
+                        disabled={isSearching}
                     >
-                        Valider
+                        {isSearching ? 'Recherche...' : 'Valider'}
                     </button>
                 </div>
             </div>
-            <ul className='w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 mt-8 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow md:justify-start'>
-                {discussionsToDisplay.map((discussion, index) => (
-                    <li
-                        className={`w-full h-16 rounded-full ${index === 0
-                            ? 'bg-red400 shadow-md border-red500 md:mb-12'
-                            : 'bg-blue200 hover:border-primaryBlue'
-                            } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
-                        key={index}
-                    >
-                        <a
-                            className='h-full flex items-center justify-start'
-                            href={`/group/${groupId}/discussion/${discussion.userDiscussion.id}`}
-                        >
-                            <div className='relative mr-3 w-12 h-12'>
-                                <img
-                                    src={discussion.userDiscussion?.avatar?.url}
-                                    className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0
-                                        ? 'border-red500'
-                                        : 'border-primaryBlue'
-                                        }`}
-                                    alt='Avatar of the user'
-                                />
-                            </div>
-                            <div className='self-center flex flex-wrap w-3/4'>
-                                <h2
-                                    className={`text-xl ${index === 0 ? 'text-white' : 'text-primaryBlue font-semibold'}`}
+            {isSearching ? (
+                <div className='h-full w-full flex items-center justify-center'>Recherche en cours...</div>
+            ) : (
+                <ul className='w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 mt-8 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow md:justify-start'>
+                    {
+                        displayedDiscussions.map((discussion, index) => (
+                            <li
+                                className={`w-full h-16 rounded-full ${index === 0
+                                    ? 'bg-red400 shadow-md border-red500 md:mb-12'
+                                    : 'bg-blue200 hover:border-primaryBlue'
+                                    } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
+                                key={index}
+                            >
+                                <a
+                                    className='h-full flex items-center justify-start'
+                                    href={`/group/${groupId}/discussion/${discussion.userDiscussion.id}`}
                                 >
-                                    {discussion.userDiscussion.pseudo}
-                                </h2>
-                                {/* <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </p> */}
-                            </div>
-                        </a>
-                    </li>
-                ))}
-            </ul>
+                                    <div className='relative mr-3 w-12 h-12'>
+                                        <img
+                                            src={discussion.userDiscussion?.avatar?.url}
+                                            className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0
+                                                ? 'border-red500'
+                                                : 'border-primaryBlue'
+                                                }`}
+                                            alt='Avatar of the user'
+                                        />
+                                    </div>
+                                    <div className='self-center flex flex-wrap w-3/4'>
+                                        <h2
+                                            className={`text-xl ${index === 0 ? 'text-white' : 'text-primaryBlue font-semibold'}`}
+                                        >
+                                            {discussion.userDiscussion.pseudo}
+                                        </h2>
+                                        {/* <p className={`truncate text-sm ${index === 0 ? "text-white" : "text-primaryBlue"} font-semibold w-min`}>
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                        </p> */}
+                                    </div>
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            )}
             <div className='w-4/5 mx-auto self-start flex flex-grow justify-end items-start shadow-[1px_-7px_8px_-8px_theme(colors.slate.400)] md:shadow-none md:max-h-20'>
                 <div className='flex justify-end mt-4 lg:self-end'>
                     <img src='' alt='' />
