@@ -132,6 +132,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                     </div>
                 )}
 
+
             </div>
         </article>
     )
