@@ -1,6 +1,8 @@
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from '@/graphql/generated/schema'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import axios from 'axios'
+
 type MenuDiscussionsProps = {
     isMenuHidden: boolean
     toggleMenu: () => void
@@ -10,86 +12,53 @@ const MenuDiscussions = ({
     isMenuHidden,
     toggleMenu,
 }: MenuDiscussionsProps) => {
-    const router = useRouter()
-    // const groupId = Number(router.query.groupId);
-    const groupId = 12 // A remplacer par la ligne ci-dessus
+
+    const router = useRouter();
+    const { groupId, search } = router.query;
+    const [searchValue, setSearchValue] = useState(search || "");
+    // const groupId = 12 // A remplacer quand on aura le groupId
 
     const { data, loading, error } =
         useGetDiscussionsByGroupIdWithoutCtxUserQuery({
-            variables: { groupId },
+            variables: { groupId: Number(12) },
             fetchPolicy: 'cache-and-network',
         })
-
     const dataOnDiscussions = data?.getDiscussionsByGroupIdWithoutCtxUser
-    console.log(data)
 
-    if (loading) return <div>Chargement...</div>
+    function submitSearch() {
+        router.push({
+            pathname: router.pathname,
+            query: { ...router.query, search: searchValue },
+        });
+    }
+
+    // const groupId = Number(router.query.groupId);
+
+    useEffect(() => {
+        if (search) {
+            setSearchValue(search);
+        }
+    }, [search]);
+
+
     if (error) return <div>Oups, une erreur est survenue</div>
     if (!data || !data.getDiscussionsByGroupIdWithoutCtxUser) {
         return <div>Groupe introuvable</div>
     }
 
-    /*
-    const group = {
-      "id": 1,
-      "name": "anniversaire",
-      "userToGroups": [
-        {
-          "user": {
-            "pseudo": "Pierre",
-            "avatar": {
-              "url": "https://ucarecdn.com/bb05bd7d-e0cc-49b1-867b-36aa9ff245f2/-/preview/1000x1000/"
-            },
-            "id": 1
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Dorothée",
-            "avatar": {
-              "url": "https://ucarecdn.com/74347f17-c04e-4e57-aafd-fc518ebd332e/-/preview/1000x1000/"
-            },
-            "id": 8
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Alliaume",
-            "avatar": {
-              "url": "https://ucarecdn.com/4efb4fd3-382c-4734-86ae-23eb62594036/-/preview/1000x1000/"
-            },
-            "id": 7
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Guilhemine",
-            "avatar": {
-              "url": "https://ucarecdn.com/f3546ab4-0edd-4470-90b9-f604c84266e1/-/preview/1000x1000/"
-            },
-            "id": 9
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Cyriaque",
-            "avatar": {
-              "url": "https://ucarecdn.com/beb1818b-3726-4a90-9db0-563b8a2671c1/-/preview/1000x1000/"
-            },
-            "id": 11
-          }
-        },
-        {
-          "user": {
-            "pseudo": "Chilpéric",
-            "avatar": {
-              "url": "https://ucarecdn.com/9dab743e-7860-4603-850f-64e5c344ae1a/-/preview/1000x1000/"
-            },
-            "id": 10
-          }
-        }
-      ]
-    } */
+    const discussionsToDisplay = searchValue
+        ? [...(dataOnDiscussions?.discussions ?? [])].sort((a, b) => {
+            const aMatch = Array.isArray(searchValue)
+                ? searchValue.join("").toLowerCase().includes(a.userDiscussion.pseudo.toLowerCase())
+                : a.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase());
+            const bMatch = Array.isArray(searchValue)
+                ? searchValue.join("").toLowerCase().includes(b.userDiscussion.pseudo.toLowerCase())
+                : b.userDiscussion.pseudo.toLowerCase().includes(searchValue.toLowerCase());
+            if (aMatch && !bMatch) return -1;
+            if (!aMatch && bMatch) return 1;
+            return 0;
+        })
+        : dataOnDiscussions?.discussions ?? [];
 
     return (
         <nav
@@ -105,7 +74,7 @@ const MenuDiscussions = ({
                     />
                     <h1
                         className='text-4xl md:text-2xl xl:text-4xl 2xl:text-5xl font-bold text-primaryBlue inline-block
-          ml-4 self-center'
+      ml-4 self-center'
                     >
                         {dataOnDiscussions?.groupName}
                     </h1>
@@ -144,17 +113,24 @@ const MenuDiscussions = ({
                         type='search'
                         className='w-full h-full rounded-3xl shadow-lg pl-9 outline-slate-200 outline-2 outline '
                         placeholder="Pour trouver tes copains... c'est ici"
+                        onChange={(e) => setSearchValue(e.target.value)}
                     />
+                    <button
+                        type='button'
+                        className='relative z-10 top-[30px] right-[2px] ml-3 mt-3.5 bg-primaryBlue text-white px-4 py-2 rounded-lg'
+                        onClick={() => { submitSearch }}
+                    >
+                        Valider
+                    </button>
                 </div>
             </div>
             <ul className='w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 mt-8 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow md:justify-start'>
-                {dataOnDiscussions?.discussions.map((discussion, index) => (
+                {discussionsToDisplay.map((discussion, index) => (
                     <li
-                        className={`w-full h-16 rounded-full ${
-                            index === 0
-                                ? 'bg-red400 shadow-md border-red500 md:mb-12'
-                                : 'bg-blue200 hover:border-primaryBlue'
-                        } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
+                        className={`w-full h-16 rounded-full ${index === 0
+                            ? 'bg-red400 shadow-md border-red500 md:mb-12'
+                            : 'bg-blue200 hover:border-primaryBlue'
+                            } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
                         key={index}
                     >
                         <a
@@ -164,11 +140,10 @@ const MenuDiscussions = ({
                             <div className='relative mr-3 w-12 h-12'>
                                 <img
                                     src={discussion.userDiscussion?.avatar?.url}
-                                    className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${
-                                        index === 0
-                                            ? 'border-red500'
-                                            : 'border-primaryBlue'
-                                    }`}
+                                    className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0
+                                        ? 'border-red500'
+                                        : 'border-primaryBlue'
+                                        }`}
                                     alt='Avatar of the user'
                                 />
                             </div>
