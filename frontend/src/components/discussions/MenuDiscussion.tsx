@@ -1,10 +1,12 @@
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from '@/graphql/generated/schema'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 type MenuDiscussionsProps = {
     isMenuHidden: boolean
     toggleMenu: () => void
+    setSelectedDiscussionId: (id: number) => void
 }
 
 type DiscussionType = {
@@ -15,18 +17,19 @@ type DiscussionType = {
         pseudo: string
         id: number
         avatar?:
-            | {
-                  __typename?: 'Avatar' | undefined
-                  url: string
-              }
-            | null
-            | undefined
+        | {
+            __typename?: 'Avatar' | undefined
+            url: string
+        }
+        | null
+        | undefined
     }
 }
 
 const MenuDiscussions = ({
     isMenuHidden,
     toggleMenu,
+    setSelectedDiscussionId
 }: MenuDiscussionsProps) => {
     const router = useRouter()
     const { groupId, search } = router.query
@@ -77,13 +80,11 @@ const MenuDiscussions = ({
 
     return (
         <nav
-            className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start transition-all duration-1000 ease-in-out ${
-                isMenuHidden
-                    ? 'w-0 max-w-0 overflow-hidden -translate-x-full opacity-25'
-                    : 'w-full'
-            } md:pb-6 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start ${
-                isMenuHidden ? 'md:w-0 md:max-w-0' : 'md:w-5/12'
-            }`}
+            className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start transition-all duration-1000 ease-in-out ${isMenuHidden
+                ? 'w-0 max-w-0 overflow-hidden -translate-x-full opacity-25'
+                : 'w-full'
+                } md:pb-6 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start ${isMenuHidden ? 'md:w-0 md:max-w-0' : 'md:w-5/12'
+                }`}
         >
             <div className='w-4/5 mx-auto h-36 flex flex-shrink-0 flex-wrap justify-between items-center md:min-h-40 md:w-11/12 lg:w-4/5'>
                 <div className='basis-5/6 flex justify-start items-center h-14'>
@@ -142,16 +143,19 @@ const MenuDiscussions = ({
                 {!searchValue &&
                     dataOnDiscussions.discussions.map((discussion, index) => (
                         <li
-                            className={`w-full h-16 rounded-full ${
-                                index === 0
-                                    ? 'bg-red400 shadow-md border-red500 md:mb-12'
-                                    : 'bg-blue200 hover:border-primaryBlue'
-                            } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
+                            className={`w-full h-16 rounded-full ${index === 0
+                                ? 'bg-red400 shadow-md border-red500 md:mb-12'
+                                : 'bg-blue200 hover:border-primaryBlue'
+                                } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
                             key={index}
                         >
-                            <a
+
+                            <Link
+                                href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
                                 className='h-full flex items-center justify-start'
-                                href={`/group/${groupId}/discussion/${discussion.userDiscussion.id}`}
+                                onClick={() =>
+                                    setSelectedDiscussionId(discussion.id)
+                                }
                             >
                                 <div className='relative mr-3 w-12 h-12'>
                                     <img
@@ -159,11 +163,10 @@ const MenuDiscussions = ({
                                             discussion.userDiscussion?.avatar
                                                 ?.url
                                         }
-                                        className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${
-                                            index === 0
-                                                ? 'border-red500'
-                                                : 'border-primaryBlue'
-                                        }`}
+                                        className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${index === 0
+                                            ? 'border-red500'
+                                            : 'border-primaryBlue'
+                                            }`}
                                         alt='Avatar of the user'
                                     />
                                 </div>
@@ -177,7 +180,8 @@ const MenuDiscussions = ({
                                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                         </p> */}
                                 </div>
-                            </a>
+                            </Link>
+
                         </li>
                     ))}
                 {searchValue &&
@@ -187,10 +191,14 @@ const MenuDiscussions = ({
                                 hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300'
                             key={index}
                         >
-                            <a
+                            <Link
+                                href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
                                 className='h-full flex items-center justify-start'
-                                href={`/group/${groupId}/discussion/${discussion.userDiscussion.id}`}
+                                onClick={() =>
+                                    setSelectedDiscussionId(discussion.id)
+                                }
                             >
+
                                 <div className='relative mr-3 w-12 h-12'>
                                     <img
                                         src={
@@ -198,7 +206,7 @@ const MenuDiscussions = ({
                                                 ?.url
                                         }
                                         className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4
-                                            border-red500'
+                                        border-red500'
                                         alt='Avatar of the user'
                                     />
                                 </div>
@@ -210,7 +218,8 @@ const MenuDiscussions = ({
                                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                     </p> */}
                                 </div>
-                            </a>
+                            </Link>
+
                         </li>
                     ))}
                 {searchValue &&
@@ -220,10 +229,14 @@ const MenuDiscussions = ({
                                 hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300'
                             key={index}
                         >
-                            <a
+                            <Link
+                                href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
                                 className='h-full flex items-center justify-start'
-                                href={`/group/${groupId}/discussion/${discussion.userDiscussion.id}`}
+                                onClick={() =>
+                                    setSelectedDiscussionId(discussion.id)
+                                }
                             >
+
                                 <div className='relative mr-3 w-12 h-12'>
                                     <img
                                         src={
@@ -242,7 +255,8 @@ const MenuDiscussions = ({
                                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                                         </p> */}
                                 </div>
-                            </a>
+                            </Link>
+
                         </li>
                     ))}
             </ul>
