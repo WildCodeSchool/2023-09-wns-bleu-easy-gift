@@ -76,8 +76,12 @@ function Login() {
                         name='password'
                     />
                 </label>
-                <Button type='submit' className='mt-6'>
-                    {'Valider'}
+                <Button
+                    data-testid='login-button'
+                    type='submit'
+                    className='mt-6'
+                >
+                    {'Se connecter'}
                 </Button>
                 <Button variant={'link'}>
                     <Link href={'/auth/register'} className='text-blue-600'>
