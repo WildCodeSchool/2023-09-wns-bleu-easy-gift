@@ -27,6 +27,10 @@ import {
 } from './discussionsResolver'
 import { User } from '../entities/user'
 import { In } from 'typeorm'
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const url = process.env.SITE_URL || 'http://localhost:3000'
 
 export async function findGroupByName(name: string) {
     return await Group.findOneBy({ name })
@@ -180,7 +184,7 @@ class GroupsResolver {
                         to: email,
                         from: 'crazygift24@gmail.com',
                         text: `Bienvenue dans le groupe ${name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
-                        Connecte toi vite pour commencer à discuter : http://localhost:3000/group/${newGroup.id}`,
+                        Connecte toi vite pour commencer à discuter : ${url}/group/${newGroup.id}`,
                     })
                     return isUser
                 } catch (error) {
@@ -207,7 +211,7 @@ class GroupsResolver {
                     from: 'crazygift24@gmail.com',
                     text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
                      Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
-                      : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                      : ${url}/confirm-participation?token=${newUser.token}`,
                 })
 
                 return newUser
@@ -337,7 +341,7 @@ class GroupsResolver {
                         to: value,
                         from: 'crazygift24@gmail.com',
                         text: `Bienvenue dans le groupe ${groupToUpdate.name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
-                        Connecte toi vite pour commencer à discuter : http://localhost:3000/group/${id}`,
+                        Connecte toi vite pour commencer à discuter : ${url}/group/${id}`,
                     })
                     return isUser
                 } catch (error) {
@@ -366,7 +370,7 @@ class GroupsResolver {
                     from: 'crazygift24@gmail.com',
                     text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
                      Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
-                      : http://localhost:3000/confirm-participation?token=${newUser.token}`,
+                      : ${url}/confirm-participation?token=${newUser.token}`,
                 })
 
                 return newUser
