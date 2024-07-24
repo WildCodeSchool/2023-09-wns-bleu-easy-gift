@@ -84,6 +84,14 @@ function Login() {
                         Pas encore de compte ?
                     </Link>
                 </Button>
+                <Button variant={'link'}>
+                    <Link
+                        href={'/auth/forgot-password'}
+                        className='text-blue-600'
+                    >
+                        Oublié votre mot de passe?
+                    </Link>
+                </Button>
             </form>
         </section>
     )
