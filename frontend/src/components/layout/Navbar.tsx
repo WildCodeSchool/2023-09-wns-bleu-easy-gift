@@ -81,21 +81,25 @@ export default function Navbar() {
                 </div>
 
                 {/* Links for Larger Screens */}
-                <div className={`hidden md:flex md:flex-row gap-4`}>
-                    <Link
-                        href='/groupes'
-                        className={`font-semibold ${currentPath === '/groupes' ? 'underline' : ''}`}
-                    >
-                        Mes groupes
-                    </Link>
+                {isConnected && (
+                    <>
+                        <div className={`hidden md:flex md:flex-row gap-4`}>
+                            <Link
+                                href='/groupes'
+                                className={`font-semibold ${currentPath === '/groupes' ? 'underline' : ''}`}
+                            >
+                                Mes groupes
+                            </Link>
 
-                    <Link
-                        href='/mon-profil'
-                        className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}
-                    >
-                        Mon profil
-                    </Link>
-                </div>
+                            <Link
+                                href='/mon-profil'
+                                className={`font-semibold ${currentPath === '/mon-profil' ? 'underline' : ''}`}
+                            >
+                                Mon profil
+                            </Link>
+                        </div>
+                    </>
+                )}
 
                 {/* Side Drawer for Mobile Screens */}
                 <div
@@ -107,7 +111,7 @@ export default function Navbar() {
                     {/* Close Button */}
                     <button
                         onClick={() => setMenuOpen(false)}
-                        className='self-end'
+                        className='self-end md:hidden'
                         aria-label='Fermer la navigation'
                     >
                         <svg
@@ -124,15 +128,17 @@ export default function Navbar() {
                             />
                         </svg>
                     </button>
-                    <Link href='/mon-profil' onClick={closeMenu}>
-                        Mon profil
-                    </Link>
-                    <Link href='#' onClick={closeMenu}>
-                        Mes groupes
-                    </Link>
-                    <Link href='#' onClick={closeMenu}>
-                        Mes discussions
-                    </Link>
+                    {isConnected && (
+                        <>
+                            <Link href='/mon-profil' onClick={closeMenu}>
+                                Mon profil
+                            </Link>
+                            <Link href='#' onClick={closeMenu}>
+                                Mes groupes
+                            </Link>
+                        </>
+                    )}
+
                     {!isConnected && (
                         <>
                             <Button>
@@ -141,7 +147,7 @@ export default function Navbar() {
                                 </Link>
                             </Button>
                             <Button>
-                                <Link onClick={closeMenu} href='/auth/login'>
+                                <Link onClick={closeMenu} href='/auth/register'>
                                     S'enregistrer
                                 </Link>
                             </Button>
@@ -158,7 +164,7 @@ export default function Navbar() {
                                 <Link href='/auth/login'>Se connecter</Link>
                             </Button>
                             <Button>
-                                <Link href='/auth/login'>S'enregistrer</Link>
+                                <Link href='/auth/register'>S'enregistrer</Link>
                             </Button>
                         </>
                     )}
