@@ -15,7 +15,7 @@ export default nodemailer.createTransport(
               port: parseInt(process.env.SMTP_PORT as string) as
                   | number
                   | undefined,
-              secure: true, // Use `true` for port 465, `false` for all other ports
+              secure: false, // Use `true` for port 465, `false` for all other ports
               auth: {
                   user: process.env.SMTP_USER as string | undefined,
                   pass: process.env.SMTP_PASSWORD as string | undefined,
