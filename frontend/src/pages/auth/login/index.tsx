@@ -51,9 +51,9 @@ function Login() {
     }
     return (
         <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen'>
-            <h1 className='text-xl md:text-2xl 2xl:text-3xl font-bold text-primaryBlue lg:mb-8'>
+            <h2 className='text-xl md:text-2xl 2xl:text-3xl font-bold text-primaryBlue lg:mb-8'>
                 Connexion
-            </h1>
+            </h2>
             <form
                 className='flex flex-col items-center gap-2 lg:h-3/5'
                 onSubmit={handleSubmit}
@@ -83,21 +83,17 @@ function Login() {
                 >
                     {'Se connecter'}
                 </Button>
-                <Button
-                    className='mb-2 lg:mb-4'
-                    variant={'link'}>
-                    <Link href={'/auth/register'} className='text-blue-600'>
-                        Pas encore de compte ?
-                    </Link>
-                </Button>
-                <Button variant={'link'}>
-                    <Link
-                        href={'/auth/forgot-password'}
-                        className='text-blue-600'
-                    >
-                        Oublié votre mot de passe?
-                    </Link>
-                </Button>
+
+                <Link href={'/auth/register'} className='text-blue-600 mb-2 lg:mb-4'>
+                    Pas encore de compte ?
+                </Link>
+
+                <Link
+                    href={'/auth/forgot-password'}
+                    className='text-blue-600 hover:underline'
+                >
+                    J'ai oublié mon mot de passe 🤭
+                </Link>
             </form>
         </section>
     )

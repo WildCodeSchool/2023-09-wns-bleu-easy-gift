@@ -1,10 +1,7 @@
 import ModalModifyAvatar from '@/components/profil/modalModifyAvatar'
 import ModalModifyDetails from '@/components/profil/modalModifyDetails'
 import ModalModifyPassword from '@/components/profil/ModalModifyPassword'
-import {
-    useUserGroupsQuery,
-    useGetUserInfosQuery,
-} from '../../graphql/generated/schema'
+import { useGetUserInfosQuery } from '../../graphql/generated/schema'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useState } from 'react'
@@ -17,25 +14,15 @@ export default function Profile() {
     const [isModalPasswordOpen, setIsModalPasswordOpen] = useState(false)
 
     const {
-        data: groupsData,
-        loading: groupsLoading,
-        error: groupsError,
-    } = useUserGroupsQuery()
-    const {
         data: userData,
         loading: userLoading,
         error: userError,
     } = useGetUserInfosQuery()
 
     const user = userData?.getUserInfos
-    // const groups = groupsData?.userGroups;
     const avatarId = user?.avatar?.id
 
-    if (groupsLoading || userLoading) return <h1>Loading...</h1>
-    if (groupsError) {
-        toast.error(groupsError.message)
-        return <h1>Error: {groupsError.message}</h1>
-    }
+    if (userLoading) return <h1>Loading...</h1>
     if (userError) {
         toast.error(userError.message)
         return <h1>Error: {userError.message}</h1>

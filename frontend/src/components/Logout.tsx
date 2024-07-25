@@ -22,7 +22,6 @@ export default function Logout() {
     })
 
     const isConnected = checkUserConnected()
-    console.log('status is connected', isConnected)
 
     if (!isConnected) {
         return null

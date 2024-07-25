@@ -9,7 +9,6 @@ import 'react-toastify/dist/ReactToastify.css'
 
 export default function App({ Component, pageProps }: AppProps) {
     const [isClient, setIsClient] = useState(false)
-    const [user, setUser] = useState(null)
 
     useEffect(() => {
         setIsClient(true)
