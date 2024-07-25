@@ -51,25 +51,25 @@ function ResetPassword() {
                 >
                     <label className='mb-3' htmlFor='password'>
                         Nouveau mot de passe
+                        <Input
+                            type='password'
+                            id='password'
+                            name='password'
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
                     </label>
-                    <Input
-                        type='password'
-                        id='password'
-                        name='password'
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
 
                     <label className='mb-3' htmlFor='confirm-password'>
                         Confirmez le mot de passe
+                        <Input
+                            type='password'
+                            id='confirm-password'
+                            name='confirmPassword'
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                        />
                     </label>
-                    <Input
-                        type='password'
-                        id='confirm-password'
-                        name='confirmPassword'
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                    />
 
                     <Button type='submit' className='mt-9 mb-5 lg:mb-8'>
                         {'Réinitialiser'}
