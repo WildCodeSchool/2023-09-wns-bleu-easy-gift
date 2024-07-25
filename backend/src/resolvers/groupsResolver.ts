@@ -18,7 +18,7 @@ import { UserToGroup, NewGroupUserInput } from '../entities/userToGroup'
 import { MyContext } from '..'
 import { createUser, findUserByEmail } from './usersResolver'
 
-import mailer from '../mailer'
+import sendMail from '../mailer'
 
 import { Avatar } from '../entities/avatar'
 import {
@@ -144,16 +144,10 @@ class GroupsResolver {
         if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
 
         const { name, emailUsers, event_date } = data
-        const group = await findGroupByName(name)
         const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
         const randomGroupAvatar =
             groupAvatars[Math.floor(Math.random() * groupAvatars.length)]
 
-        if (group) {
-            throw new GraphQLError(
-                `Group already exist, fait pas trop le malin.`
-            )
-        }
         const newGroup = await createGroup(name, event_date)
 
         if (randomGroupAvatar) {
@@ -179,14 +173,32 @@ class GroupsResolver {
                     is_admin: false,
                 })
                 try {
+                    // console.log('DANS INVITATION MAIL')
+                    // console.log('TO', email)
+                    // await mailer.sendMail({
+                    //     subject: `Bienvenue sur le groupe ${name} !`,
+                    //     to: email,
+                    //     from: 'crazygift24@gmail.com',
+                    //     text: `Bienvenue dans le groupe ${name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
+                    //     Connecte toi vite pour commencer à discuter : ${url}/group/${newGroup.id}`,
+                    // })
+                    // return isUser
+
                     console.log('DANS INVITATION MAIL')
                     console.log('TO', email)
-                    await mailer.sendMail({
-                        subject: `Bienvenue sur le groupe ${name} !`,
-                        to: email,
-                        from: 'crazygift24@gmail.com',
-                        text: `Bienvenue dans le groupe ${name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
-                        Connecte toi vite pour commencer à discuter : ${url}/group/${newGroup.id}`,
+                    await sendMail({
+                        Messages: [
+                            {
+                                Subject: `Bienvenue sur le groupe ${name} !`,
+                                To: [{ Email: email, Name: name }],
+                                From: {
+                                    Email: 'crazygift24@gmail.com',
+                                    Name: 'Crazy',
+                                },
+                                TextPart: `Bienvenue dans le groupe ${name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
+                            Connecte toi vite pour commencer à discuter : ${url}/group/${newGroup.id}`,
+                            },
+                        ],
                     })
                     return isUser
                 } catch (error) {
@@ -211,13 +223,28 @@ class GroupsResolver {
             try {
                 console.log('DANS creation MAIL')
                 console.log('TO', email)
-                await mailer.sendMail({
-                    subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
-                    to: email,
-                    from: 'crazygift24@gmail.com',
-                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
-                     Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
-                      : ${url}/confirm-participation?token=${newUser.token}`,
+                // await mailer.sendMail({
+                //     subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                //     to: email,
+                //     from: 'crazygift24@gmail.com',
+                //     text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
+                //      Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
+                //       : ${url}/confirm-participation?token=${newUser.token}`,
+                // })
+                await sendMail({
+                    Messages: [
+                        {
+                            Subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                            To: [{ Email: email, Name: name }],
+                            From: {
+                                Email: 'crazygift24@gmail.com',
+                                Name: 'Crazy',
+                            },
+                            TextPart: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${name}.
+                                 Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
+                                  : ${url}/confirm-participation?token=${newUser.token}`,
+                        },
+                    ],
                 })
 
                 return newUser
@@ -344,12 +371,26 @@ class GroupsResolver {
                     is_admin: false,
                 })
                 try {
-                    await mailer.sendMail({
-                        subject: `Bienvenue sur le groupe ${groupToUpdate.name} !`,
-                        to: value,
-                        from: 'crazygift24@gmail.com',
-                        text: `Bienvenue dans le groupe ${groupToUpdate.name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
-                        Connecte toi vite pour commencer à discuter : ${url}/group/${id}`,
+                    // await mailer.sendMail({
+                    //     subject: `Bienvenue sur le groupe ${groupToUpdate.name} !`,
+                    //     to: value,
+                    //     from: 'crazygift24@gmail.com',
+                    //     text: `Bienvenue dans le groupe ${groupToUpdate.name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
+                    //     Connecte toi vite pour commencer à discuter : ${url}/group/${id}`,
+                    // })
+                    await sendMail({
+                        Messages: [
+                            {
+                                Subject: `Bienvenue sur le groupe ${groupToUpdate.name} !`,
+                                To: [{ Email: value, Name: isUser.pseudo }],
+                                From: {
+                                    Email: 'crazygift24@gmail.com',
+                                    Name: 'Crazy',
+                                },
+                                TextPart: `Bienvenue dans le groupe ${groupToUpdate.name}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
+                                    Connecte toi vite pour commencer à discuter : ${url}/group/${id}`,
+                            },
+                        ],
                     })
                     return isUser
                 } catch (error) {
@@ -372,13 +413,28 @@ class GroupsResolver {
             })
 
             try {
-                await mailer.sendMail({
-                    subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
-                    to: value,
-                    from: 'crazygift24@gmail.com',
-                    text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
-                     Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
-                      : ${url}/confirm-participation?token=${newUser.token}`,
+                // await mailer.sendMail({
+                //     subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                //     to: value,
+                //     from: 'crazygift24@gmail.com',
+                //     text: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
+                //      Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
+                //       : ${url}/confirm-participation?token=${newUser.token}`,
+                // })
+                await sendMail({
+                    Messages: [
+                        {
+                            Subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
+                            To: [{ Email: value, Name: newUser.pseudo }],
+                            From: {
+                                Email: 'crazygift24@gmail.com',
+                                Name: 'CrazyGift',
+                            },
+                            TextPart: `Bienvenue sur EasyGift ${pseudo}, ${ctx.user?.pseudo} vient de t'ajouter au groupe d'échange de cadeau : ${groupToUpdate.name}.
+                                 Une action de ta part est requise, pour confirmer ton inscription au groupe, clique sur le lien suivant
+                                  : ${url}/confirm-participation?token=${newUser.token}`,
+                        },
+                    ],
                 })
 
                 return newUser

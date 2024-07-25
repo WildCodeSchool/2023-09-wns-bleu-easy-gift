@@ -31,7 +31,7 @@ export default function Profile() {
     return (
         <>
             <Head>
-                <title>Page mon profil - Easy Gift</title>
+                <title>Mon profil - Easy Gift</title>
             </Head>
             <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
                 <div className='lg:h-3/5'>
@@ -96,19 +96,6 @@ export default function Profile() {
                         </Button>
                     </div>
                 </div>
-
-                {/* <h2 className="mb-8 mt-10 text-2xl md:mb-3 md:text-4xl font-bold text-primaryBlue">Mes groupes</h2>
-        <p className="mb-9 text-lg text-justify md:mb-10 md:text-xl">Accède à tes groupes Easy Gift.</p>
-        <ul>
-          {groups?.map((group) => (
-            <>
-              <div key={group.id}>
-                <p>{group.name}</p>
-                <img src={group.avatar.url} className="w-32 h-32" alt="Avatar for the group" />
-              </div>
-            </>
-          ))}
-        </ul> */}
             </section>
 
             {isModalAvatarOpen && (

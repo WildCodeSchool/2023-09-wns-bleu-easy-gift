@@ -97,22 +97,27 @@ export default function ModalModifyPassword({
 
                         <div className='flex justify-center'>
                             <form className='gap-2' onSubmit={onConfirm}>
+                                <label htmlFor='oldPassword'>
+                                    Entrez votre ancien mot de passe
+                                </label>
                                 <Input
                                     id='oldPassword'
                                     type='password'
                                     name='oldPassword'
-                                    label='Ancien mot de passe'
                                     value={oldPassword}
                                     onChange={e =>
                                         setOldPassword(e.target.value)
                                     }
+                                    className='mb-6'
                                 />
 
+                                <label htmlFor='newPassword'>
+                                    Entrez votre nouveau mot de passe
+                                </label>
                                 <Input
                                     id='newPassword'
                                     type='password'
                                     name='newPassword'
-                                    label='Nouveau mot de passe'
                                     value={newPassword}
                                     onChange={e =>
                                         setNewPassword(e.target.value)

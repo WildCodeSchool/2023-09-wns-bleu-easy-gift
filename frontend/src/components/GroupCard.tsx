@@ -61,7 +61,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                 <img
                     src={group.avatar.url}
                     alt={group.avatar.name}
-                    className='rounded-t-lg'
+                    className='w-full h-[180px] object-cover rounded-t-lg'
                 />
                 <div className='font-bold text-xl'>Groupe {group.name}</div>
                 {group.event_date && (

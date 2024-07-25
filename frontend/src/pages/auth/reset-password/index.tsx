@@ -39,7 +39,7 @@ function ResetPassword() {
     return (
         <>
             <Head>
-                <title>Page de connexion à mon compte - Easy Gift</title>
+                <title>Modification du mot de passe - Easy Gift</title>
             </Head>
             <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
                 <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
@@ -49,25 +49,25 @@ function ResetPassword() {
                     className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
-                    <label className='mb-3' htmlFor='password'>
+                    <label className='mb-3'>
                         Nouveau mot de passe
                         <Input
                             type='password'
-                            id='password'
                             name='password'
                             value={password}
                             onChange={e => setPassword(e.target.value)}
+                            required
                         />
                     </label>
 
-                    <label className='mb-3' htmlFor='confirm-password'>
+                    <label className='mb-3'>
                         Confirmez le mot de passe
                         <Input
                             type='password'
-                            id='confirm-password'
                             name='confirmPassword'
                             value={confirmPassword}
                             onChange={e => setConfirmPassword(e.target.value)}
+                            required
                         />
                     </label>
 
