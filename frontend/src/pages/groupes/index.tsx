@@ -49,9 +49,9 @@ export default function Profile() {
                     </div>
 
                     <div
-                        className="flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-6 xl:max-w-[1500px] xl:grid-cols-4 mt-12"
+                        className="flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-8 lg:gap xl:max-w-[1500px] xl:grid-cols-4 2xl:gap-y-10"
                     >
-                        <label className='w-full inline-flex items-center self-end cursor-pointer lg:col-span-3 xl:col-span-4'>
+                        <label className='w-full inline-flex items-center  justify-end cursor-pointer  lg:col-start-2 lg:col-end-4 xl:col-start-4 xl:col-end-5'>
                             <input
                                 type='checkbox'
                                 onClick={handleAllGroups}
