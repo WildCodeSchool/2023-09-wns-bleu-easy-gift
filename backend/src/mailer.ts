@@ -11,15 +11,20 @@ export default nodemailer.createTransport(
               ignoreTLS: true,
           }
         : {
-              service: 'gmail',
               host: process.env.SMTP_HOST as string | undefined,
+              logger: true,
+              debug: true,
               port: parseInt(process.env.SMTP_PORT as string) as
                   | number
                   | undefined,
-              secure: false, // Use `true` for port 465, `false` for all other ports
+              secure: true, // Use `true` for port 465, `false` for all other ports
               auth: {
                   user: process.env.SMTP_USER as string | undefined,
                   pass: process.env.SMTP_PASSWORD as string | undefined,
+              },
+              tls: {
+                  // Do not fail on invalid certs
+                  rejectUnauthorized: false,
               },
           }
 )
