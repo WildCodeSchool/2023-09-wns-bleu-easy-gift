@@ -131,8 +131,6 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                         </Button>
                     </div>
                 )}
-
-
             </div>
         </article>
     )
