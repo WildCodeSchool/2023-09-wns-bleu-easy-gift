@@ -1,15 +1,16 @@
 import { useUserData } from '@/context/userContext'
-import { Message as MessageType } from '@/graphql/generated/schema'
-import { getDateFromTimeStamp } from '@/utils/date'
+import { GetMessagesByDisscutionQuery } from '@/graphql/generated/schema'
 import Image from 'next/image'
 import React from 'react'
 
-function Message({ message }: { message: MessageType }) {
+function Message({
+    message,
+}: {
+    message: GetMessagesByDisscutionQuery['getMessagesByDisscution'][0]
+}) {
     const { userData } = useUserData()
-    const messageDate = getDateFromTimeStamp({
-        timestamp: message.created_at,
-        format: 'hh:mm',
-    })
+    // const messageDate = new Date(message.created_at)
+    // console.log('messageDate', new Date(1721828473944))
     const userAvatar = message.user.avatar?.url || ''
     const currentUserId = userData?.id || ''
 
@@ -26,7 +27,7 @@ function Message({ message }: { message: MessageType }) {
                     className='rounded-full absolute -top-3 -left-3'
                 />
                 <div className='w-full flex justify-end'>
-                    <p className='text-sm'>{messageDate}</p>
+                    {/* <p className='text-sm'>{messageDate}</p> */}
                 </div>
                 <div>{message.content}</div>
             </div>

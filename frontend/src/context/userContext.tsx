@@ -1,4 +1,4 @@
-import { useGetUserInfosQuery, UserInfos } from '@/graphql/generated/schema'
+import { useGetUserInfosQuery } from '@/graphql/generated/schema'
 import React, { createContext, useContext } from 'react'
 
 const userContext = createContext<{

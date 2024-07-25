@@ -16,7 +16,7 @@ export class Avatar extends BaseEntity {
     @Field(() => Int)
     id: number
 
-    @Column({ length: 30 })
+    @Column({ length: 150 })
     @Field()
     name: string
 

@@ -76,7 +76,11 @@ function Login() {
                         name='password'
                     />
                 </label>
-                <Button type='submit' className='mt-6'>
+                <Button
+                    data-testid='login-button'
+                    type='submit'
+                    className='mt-6'
+                >
                     {'Se connecter'}
                 </Button>
                 <Button variant={'link'}>

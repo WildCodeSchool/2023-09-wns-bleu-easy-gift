@@ -70,16 +70,23 @@ function Index() {
 
     useEffect(() => {
         if (messagesContainerRef.current) {
+            //@ts-ignore
             messagesContainerRef.current.scrollTop =
+                //@ts-ignore
                 messagesContainerRef.current.scrollHeight
         }
     }, [messages])
+
+    if (loading) return <div>Loading...</div>
+
+    if (error) return <div>Error: {error.message}</div>
 
     return (
         <div className='w-full h-screen flex items-start justify-end'>
             <div className='w-2/3 h-4/6 relative mt-16 mx-10 p-3 bg-slate-200 rounded-lg'>
                 <ul
                     className='absolute bottom-0 w-full max-h-full overflow-y-scroll gap-4 flex-col flex right-1 '
+                    //@ts-ignore
                     ref={messagesContainerRef}
                 >
                     {messages.map(message => (

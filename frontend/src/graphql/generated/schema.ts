@@ -447,10 +447,11 @@ export type GetGroupByIdQuery = {
                     __typename?: 'Avatar'
                     id: number
                     url: string
+                    name: string
                 } | null
             }
         }>
-        avatar: { __typename?: 'Avatar'; id: number; url: string }
+        avatar: { __typename?: 'Avatar'; id: number; url: string; name: string }
     }
 }
 
@@ -1102,6 +1103,8 @@ export const GetGroupByIdDocument = gql`
                     avatar {
                         id
                         url
+
+                        name
                     }
                     email
                     pseudo
@@ -1110,6 +1113,8 @@ export const GetGroupByIdDocument = gql`
             avatar {
                 id
                 url
+
+                name
             }
         }
     }
