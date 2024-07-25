@@ -29,7 +29,7 @@ export default function GroupCreated() {
                     Voir la liste des groupes
                 </Button>
             </div>
-            <p className='text-green-600 mt-4'>Succès</p>
+            <p className='text-green-700 mt-4'>Succès</p>
             <p>Les invitations ont été envoyées à vos participants !</p>
         </div>
     )

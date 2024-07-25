@@ -133,7 +133,7 @@ export default function Navbar() {
                             <Link href='/mon-profil' onClick={closeMenu}>
                                 Mon profil
                             </Link>
-                            <Link href='#' onClick={closeMenu}>
+                            <Link href='/groupes' onClick={closeMenu}>
                                 Mes groupes
                             </Link>
                         </>
