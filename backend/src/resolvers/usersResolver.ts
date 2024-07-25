@@ -21,6 +21,7 @@ import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
 import mailer from '../mailer'
 import * as dotenv from 'dotenv'
+import sendMail from '../mailer'
 dotenv.config()
 
 const url = process.env.SITE_URL || 'http://localhost:3000'
@@ -297,11 +298,24 @@ class UsersResolver {
             <a href="${resetUrl}">${resetUrl}</a>
         `
         try {
-            await mailer.sendMail({
-                to: email,
-                from: 'crazygift24@gmail.com',
-                subject: 'Réinitialisation du mot de passe',
-                html: message,
+            // await mailer.sendMail({
+            //     to: email,
+            //     from: 'crazygift24@gmail.com',
+            //     subject: 'Réinitialisation du mot de passe',
+            //     html: message,
+            // })
+            await sendMail({
+                Messages: [
+                    {
+                        Subject: 'Réinitialisation du mot de passe',
+                        To: [{ Email: email, Name: user.pseudo }],
+                        From: {
+                            Email: 'crazygift24@gmail.com',
+                            Name: 'CrazyGift',
+                        },
+                        HTMLPart: message,
+                    },
+                ],
             })
             responseMessage.success = true
             responseMessage.message = 'Email envoyé avec succès'
