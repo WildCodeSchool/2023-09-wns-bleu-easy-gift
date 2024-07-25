@@ -20,37 +20,38 @@ export default function Profile() {
     }
 
     return (
-        <>
-            <Head>
-                <title>Page mes groupes - Easy Gift</title>
-            </Head>
-            <section className='flex flex-col gap-6 pb-6 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
-                    Mes groupes{' '}
-                    {data?.userGroups ? `(${data.userGroups.length})` : '(0)'}
-                </h1>
-                {data?.userGroups?.length === 0 ? (
-                    <div className='flex flex-col items-center mt-6'>
-                        <p className='text-md mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl'>
-                            Crée ton premier groupe et invite tes amis !
+
+        <section className='w-full h-full flex-grow flex flex-col  gap-6 pb-6 my-10 justify-center items-center lg:min-h-screen lg:my-12 2xl:my-20'>
+            <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
+                Mes groupes{' '}
+                {data?.userGroups ? `(${data.userGroups.length})` : '(0)'}
+            </h1>
+            {data?.userGroups?.length === 0 ? (
+                <div className='flex flex-col items-center mt-6'>
+                    <p className='text-md mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl'>
+                        Crée ton premier groupe et invite tes amis !
+                    </p>
+                    <Button>
+                        <Link href='/creating-groups'>Créer un groupe</Link>
+                    </Button>
+                </div>
+            ) : (
+                <>
+                    <div className={'flex flex-col justify-between items-center mb-5'}>
+                        <p className='text-md 2xl:text-xl mb-3'>
+                            Accède à tes groupes Easy Gift.
                         </p>
                         <Button>
-                            <Link href='/creating-groups'>Créer un groupe</Link>
+                            <a type='button' href='/creating-groups'>
+                                Ajouter un groupe
+                            </a>
                         </Button>
                     </div>
-                ) : (
-                    <>
-                        <div className={'flex justify-between items-center'}>
-                            <p className='text-md 2xl:text-xl'>
-                                Accède à tes groupes Easy Gift.
-                            </p>
-                            <Button>
-                                <a type='button' href='/creating-groups'>
-                                    Ajouter un groupe
-                                </a>
-                            </Button>
-                        </div>
-                        <label className='inline-flex items-center cursor-pointer'>
+
+                    <div
+                        className="flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-6 xl:max-w-[1500px] xl:grid-cols-4 mt-12"
+                    >
+                        <label className='w-full inline-flex items-center self-end cursor-pointer lg:col-span-3 xl:col-span-4'>
                             <input
                                 type='checkbox'
                                 onClick={handleAllGroups}
@@ -61,35 +62,27 @@ export default function Profile() {
                                 Tous les groupes
                             </span>
                         </label>
-                        <div
-                            className={`flex flex-wrap gap-6 justify-center lg:justify-evenly ${
-                                data?.userGroups?.length &&
-                                data.userGroups.length > 2
-                                    ? 'justify-between'
-                                    : 'xl:justify-evenly'
-                            }`}
-                        >
-                            {data?.userGroups &&
-                                data.userGroups.map(group => {
-                                    if (!group.event_date) {
-                                        return null
-                                    }
-                                    const eventDate = new Date(group.event_date)
-                                    if (!allGroups && eventDate < today) {
-                                        return null
-                                    }
-                                    return (
-                                        <GroupCard
-                                            key={group.id}
-                                            group={group}
-                                            link={`/group/${group.id}`}
-                                        />
-                                    )
-                                })}
-                        </div>
-                    </>
-                )}
-            </section>
-        </>
+                        {data?.userGroups &&
+                            data.userGroups.map(group => {
+                                if (!group.event_date) {
+                                    return null
+                                }
+                                const eventDate = new Date(group.event_date)
+                                if (!allGroups && eventDate < today) {
+                                    return null
+                                }
+                                return (
+                                    <GroupCard
+                                        key={group.id}
+                                        group={group}
+                                        link={`/group/${group.id}`}
+                                    />
+                                )
+                            })}
+                    </div>
+                </>
+            )}
+        </section>
+
     )
 }

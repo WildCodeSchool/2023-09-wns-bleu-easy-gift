@@ -64,7 +64,7 @@ function Register() {
 
     return (
         <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
-            <h1 className='text-xl md:text-2xl 2xl:text-3xl font-bold text-primaryBlue lg:mb-8'>
+            <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
                 Inscription
             </h1>
             {errorMessages &&
