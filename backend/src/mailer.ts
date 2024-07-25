@@ -11,6 +11,7 @@ export default nodemailer.createTransport(
               ignoreTLS: true,
           }
         : {
+              service: 'gmail',
               host: process.env.SMTP_HOST as string | undefined,
               port: parseInt(process.env.SMTP_PORT as string) as
                   | number
