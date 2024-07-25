@@ -29,11 +29,14 @@ const EspaceDiscussion = ({
         ? parseInt(discussionId as string, 10)
         : null
 
-    const { data, refetch, fetchMore } = useGetMessagesByDisscutionQuery({
+    const { fetchMore, refetch } = useGetMessagesByDisscutionQuery({
         variables: {
             discussionId: selectedDiscussionId || 0,
             limit,
             offset,
+        },
+        onCompleted(data) {
+            setMessages(data.getMessagesByDisscution)
         },
     })
 
@@ -51,23 +54,30 @@ const EspaceDiscussion = ({
     })
 
     useEffect(() => {
-        if (data?.getMessagesByDisscution) {
-            if (subscriptionData?.newMessage) {
-                setMessages(prev => [
-                    ...prev,
-                    ...data.getMessagesByDisscution,
-                    subscriptionData.newMessage,
-                ])
+        // if (data?.getMessagesByDisscution) {
+        //     if (subscriptionData?.newMessage) {
+        //         setMessages(prev => [
+        //             ...prev,
+        //             ...data.getMessagesByDisscution,
+        //             subscriptionData.newMessage,
+        //         ])
 
-                return
-                // return [
-                //     ...data.getMessagesByDisscution,
-                //     subscriptionData.newMessage,
-                // ]
-            }
-            setMessages(prev => [...prev, ...data.getMessagesByDisscution])
+        //         return
+        //         // return [
+        //         //     ...data.getMessagesByDisscution,
+        //         //     subscriptionData.newMessage,
+        //         // ]
+        //     }
+        //     setMessages(prev => [...prev, ...data.getMessagesByDisscution])
+        // }
+        if (subscriptionData?.newMessage) {
+            setMessages(prev => [...prev, subscriptionData.newMessage])
         }
-    }, [data, subscriptionData])
+    }, [subscriptionData])
+
+    // useEffect(() => {
+    //     // setMessages([])
+    // }, [selectedDiscussionId])
 
     const getMore = async () => {
         setOffset(prevOffset => prevOffset + limit)
@@ -94,6 +104,17 @@ const EspaceDiscussion = ({
                     userId: parseInt(userData?.id || '0', 10),
                     content,
                 },
+                // refetchQueries: [
+                //     {
+                //         query: GetMessagesByDisscutionDocument,
+                //         variables: {
+                //             discussionId: selectedDiscussionId || 0,
+                //             limit,
+                //             offset,
+                //         },
+                //     },
+                // ],
+                // awaitRefetchQueries: true,
             })
             setContent('')
             handleScrollToBottom()
