@@ -79,7 +79,7 @@ export default function Home() {
             <Head>
                 <title>Page d'accueil - Easy Gift</title>
             </Head>
-            <section className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto w-4/5 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>
+            <section className='my-10 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center mx-auto w-4/5 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>
                 <div className='hidden relative w-full order-2 md:block md:max-w-4xl md:min-w-96 lg:mb-24 lg:order-1 lg:max-w-xl:min-h-130 lg:max-w-lg 2xl:max-w-4xl'>
                     <Image
                         src='/images/img-pages/hero-img.png'
@@ -113,8 +113,10 @@ export default function Home() {
                     </Button>
                 </div>
             </section>
-            <section className='mb-28 mx-auto min-h-175 h-full bg-indigo-50 flex flex-col justify-center items-center sm:min-h-160 md:min-h-170 lg:pt-20 lg:pb-16 lg:flex-wrap lg:flex-row lg:mb-32 lg:content-center lg:justify-around lg:min-h-140 2xl:pt-0 xl:pb-0 2xl:items-start 2xl:justify-center 2xl:mb-20 2xl:content-end 2xl:min-h-150 2xl:flex-row'>
-                <h2 className='w-4/5 text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl lg:w-full lg:mb-14 font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-28'>
+            <section className='w-full mb-28 mx-auto min-h-175 h-full bg-indigo-50 flex flex-col justify-center items-center sm:min-h-160 md:min-h-170  md:mb-14 lg:pt-20 lg:pb-16 lg:flex-wrap lg:flex-row lg:content-center lg:justify-around lg:min-h-140 2xl:pt-0 xl:pb-0 2xl:items-start 2xl:justify-center 2xl:content-end 2xl:min-h-150 2xl:flex-row'>
+                <h2 className='w-4/5 text-xl mb-8  sm:text-center
+                 md:text-2xl lg:text-4xl xl:text-5xl font-bold  lg:mb-14 lg:w-full 2xl:mt-0 2xl:mb-28 text-primaryRed'>
+
                     Crée ton groupe
                 </h2>
                 <article className='w-4/5 sm:max-w-xl 2xl:ml-36 4xl:ml-52 lg:order-3'>
@@ -179,42 +181,48 @@ export default function Home() {
                     </CarouselNext>
                 </Carousel>
             </section>
-            <section className='mb-16 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center my-0 mx-auto w-4/5 md:mt-10 md:mb-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:mb-44 lg:max-w-7xl xl:mb-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:mb-40'>
+            <section className='w-full h-full flex-grow flex flex-col  gap-6 pb-6 my-10 justify-center items-center lg:min-h-screen md:my-12 2xl:my-20'>
                 {(!isConnected ||
                     (isConnected && groups && groups?.length < 1)) && (
-                    <span>
-                        <h2 className='w-4/5 text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl lg:w-full lg:mb-14 font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-28'>
-                            Retrouve tes groupes
-                        </h2>
-                        <p className='mb-8 text-lg md:mb-10 md:text-xl  2xl:text-2xl 2xl:pt-12'>
-                            Une fois que tu auras créé ou rejoint un groupe,
-                            retrouve-le ici !
-                        </p>
-                        <div className='flex flex-wrap gap-6 justify-evenly'>
-                            <GroupCard key='1' group={group1} link={link1} />
-                            <GroupCard key='1' group={group2} link={link2} />
-                            <GroupCard key='1' group={group3} link={link3} />
+
+                        <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-[1500px]'>
+                            <h2 className='w-full flex-grow text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-12'>
+                                Retrouve tes groupes
+                            </h2>
+                            <p className='mb-8 text-lg md:mb-10 md:text-xl  2xl:text-2xl 2xl:pt-12 lg:mb-14 '>
+                                Une fois que tu auras créé ou rejoint un groupe,
+                                retrouve-le ici !
+                            </p>
+                            <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1500px]'>
+                                <GroupCard key='1' group={group1} link={link1}
+                                />
+                                <GroupCard key='2' group={group2} link={link2} />
+                                <GroupCard key='3' group={group3} link={link3} />
+                            </div>
                         </div>
-                    </span>
-                )}
+                    )}
+
+
 
                 {isConnected && groups && groups.length > 0 && (
-                    <span>
-                        <h2 className='w-4/5 text-3xl text-primaryRed mb-8  sm:text-center md:mb-10 md:text-4xl lg:w-full font-bold 2xl:mt-16 2xl:text-5xl'>
+                    <div className="flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-8 lg:gap xl:max-w-[1500px] xl:grid-cols-4 2xl:gap-y-10">
+                        <h2 className='w-full h-full text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl lg:col-start-1 lg:col-end-4 xl:col-start-1 xl:col-end-5 font-bold 2xl:text-5xl 2xl:mt-0 2xl:mb-12 align-middle'>
                             Mes groupes
                         </h2>
-                        <div className='flex flex-wrap gap-6 justify-evenly'>
-                            {groups.map(group => (
-                                <GroupCard
-                                    key={group.id}
-                                    group={group}
-                                    link={`/group/${group.id}`}
-                                />
-                            ))}
-                        </div>
-                    </span>
+
+                        {groups.map(group => (
+                            <GroupCard
+                                key={group.id}
+                                group={group}
+                                link={`/group/${group.id}`}
+                            />
+                        ))}
+
+                    </div>
                 )}
-            </section>
+
+
+            </section >
         </>
     )
 }
