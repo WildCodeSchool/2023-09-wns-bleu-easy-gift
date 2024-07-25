@@ -19,8 +19,6 @@ export default function Navbar() {
         router.push('/')
     }
 
-    console.log('isConnected from nav', isConnected)
-
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (
