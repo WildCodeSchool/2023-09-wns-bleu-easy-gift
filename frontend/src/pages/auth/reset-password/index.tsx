@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/router'
 import { useResetPasswordMutation } from '@/graphql/generated/schema'
 import { toast } from 'react-toastify'
+import Head from 'next/head'
 
 function ResetPassword() {
     const router = useRouter()
@@ -36,37 +37,46 @@ function ResetPassword() {
     }
 
     return (
-        <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-            <h2 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
-                Réinitialiser le mot de passe
-            </h2>
-            <form
-                className='flex flex-col items-center gap-2'
-                onSubmit={handleSubmit}
-            >
-                <label className='mb-3'>
-                    Nouveau mot de passe
+        <>
+            <Head>
+                <title>Page de connexion à mon compte - Easy Gift</title>
+            </Head>
+            <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
+                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+                    Réinitialiser le mot de passe
+                </h1>
+                <form
+                    className='flex flex-col items-start gap-2'
+                    onSubmit={handleSubmit}
+                >
+                    <label className='mb-3' htmlFor='password'>
+                        Nouveau mot de passe
+                    </label>
                     <Input
                         type='password'
+                        id='password'
                         name='password'
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
-                </label>
-                <label className='mb-3'>
-                    Confirmer le mot de passe
+
+                    <label className='mb-3' htmlFor='confirm-password'>
+                        Confirmez le mot de passe
+                    </label>
                     <Input
                         type='password'
+                        id='confirm-password'
                         name='confirmPassword'
                         value={confirmPassword}
                         onChange={e => setConfirmPassword(e.target.value)}
                     />
-                </label>
-                <Button type='submit' className='mt-6'>
-                    {'Réinitialiser'}
-                </Button>
-            </form>
-        </section>
+
+                    <Button type='submit' className='mt-6'>
+                        {'Réinitialiser'}
+                    </Button>
+                </form>
+            </section>
+        </>
     )
 }
 

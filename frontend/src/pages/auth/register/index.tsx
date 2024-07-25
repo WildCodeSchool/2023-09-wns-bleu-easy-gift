@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { getConstraints } from '@/lib/utils'
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
+import Head from 'next/head'
 
 function Register() {
     const router = useRouter()
@@ -62,44 +63,49 @@ function Register() {
     )
 
     return (
-        <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-            <h2 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
-                Inscription
-            </h2>
-            {errorMessages &&
-                errorMessages.map((item, index) =>
-                    Object.values(item).map((value: any, valueIndex) => (
-                        <p
-                            key={`${index}-${valueIndex}`}
-                            className='text-red-500 mt-2'
-                        >
-                            {value}
-                        </p>
-                    ))
-                )}
-            {error && <p className='text-red-500'>{errorMessage}</p>}
-            <form
-                className='flex flex-col items-center gap-2'
-                onSubmit={handleSubmit}
-            >
-                <label className='mb-3'>
-                    Pseudo
-                    <Input type='text' name='pseudo' />
-                </label>
-                <label className='mb-3'>
-                    Email <span className='text-red-500'>*</span>
-                    <Input type='email' name='email' />
-                </label>
-                <label>
-                    Mot de passe <span className='text-red-500'>*</span>
-                    <Input type='password' name='password' />
-                </label>
-                <Button type='submit' className='mt-6'>
-                    {'Valider'}
-                </Button>
-                <p className='text-red-500 mt-4'>* Champs obligatoires</p>
-            </form>
-        </section>
+        <>
+            <Head>
+                <title>Page de création de compte - Easy Gift</title>
+            </Head>
+            <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
+                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+                    Inscription
+                </h1>
+                {errorMessages &&
+                    errorMessages.map((item, index) =>
+                        Object.values(item).map((value: any, valueIndex) => (
+                            <p
+                                key={`${index}-${valueIndex}`}
+                                className='text-red-500 mt-2'
+                            >
+                                {value}
+                            </p>
+                        ))
+                    )}
+                {error && <p className='text-red-600'>{errorMessage}</p>}
+                <form
+                    className='flex flex-col items-center gap-2'
+                    onSubmit={handleSubmit}
+                >
+                    <label className='mb-3'>
+                        Pseudo
+                        <Input type='text' name='pseudo' />
+                    </label>
+                    <label className='mb-3'>
+                        Email <span className='text-red-600'>*</span>
+                        <Input type='email' name='email' />
+                    </label>
+                    <label>
+                        Mot de passe <span className='text-red-600'>*</span>
+                        <Input type='password' name='password' />
+                    </label>
+                    <Button type='submit' className='mt-6'>
+                        {'Valider'}
+                    </Button>
+                    <p className='text-red-600 mt-4'>* Champs obligatoires</p>
+                </form>
+            </section>
+        </>
     )
 }
 
