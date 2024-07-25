@@ -12,6 +12,8 @@ export default nodemailer.createTransport(
           }
         : {
               service: 'gmail',
+              logger: true,
+              debug: true,
               host: process.env.SMTP_HOST as string | undefined,
               port: parseInt(process.env.SMTP_PORT as string) as
                   | number
@@ -20,6 +22,9 @@ export default nodemailer.createTransport(
               auth: {
                   user: process.env.SMTP_USER as string | undefined,
                   pass: process.env.SMTP_PASSWORD as string | undefined,
+              },
+              tls: {
+                  rejectUnauthorized: true,
               },
           }
 )
