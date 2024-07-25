@@ -22,7 +22,7 @@ export default function Profile() {
     return (
         <>
             <Head>
-                <title>Page mes groupes - Easy Gift</title>
+                <title>Mes groupes - Easy Gift</title>
             </Head>
             <section className='flex flex-col gap-6 pb-6 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
                 <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>

@@ -81,7 +81,7 @@ export default function CreatingGroups() {
     return (
         <>
             <Head>
-                <title>Page d'accueil - Easy Gift</title>
+                <title>Page de création d'un groupe - Easy Gift</title>
             </Head>
             <div className='min-h-screen flex flex-col justify-center items-center'>
                 <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue mb-10'>

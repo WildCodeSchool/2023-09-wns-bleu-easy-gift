@@ -146,6 +146,7 @@ class UsersResolver {
         return responseMessage
     }
 
+    @Authorized()
     @Query(() => UserInfos)
     async getUserInfos(@Ctx() ctx: MyContext) {
         if (!ctx.user) {
@@ -183,6 +184,7 @@ class UsersResolver {
         return responseMessage
     }
 
+    @Authorized()
     @Mutation(() => UserWithoutPassword)
     async updateUser(
         @Arg('data', { validate: true }) data: InputUpdateUser,
@@ -213,6 +215,8 @@ class UsersResolver {
             pseudo: user.pseudo,
         }
     }
+
+    @Authorized()
     @Mutation(() => UserWithoutPasswordAvatar)
     async updateAvatar(
         @Arg('data') data: InputUpdateAvatar,
@@ -270,6 +274,7 @@ class UsersResolver {
 
         return responseMessage
     }
+
     @Mutation(() => ResponseMessage)
     async forgotPassword(
         @Arg('email') email: string
@@ -307,6 +312,7 @@ class UsersResolver {
         }
         return responseMessage
     }
+
     @Mutation(() => ResponseMessage)
     async resetPassword(
         @Arg('token') token: string,
