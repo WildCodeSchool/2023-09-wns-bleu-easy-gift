@@ -9,11 +9,8 @@ import Head from 'next/head'
 
 function Register() {
     const router = useRouter()
-    // const [register, { data, error }] = useRegisterUserMutation({
-    //     onCompleted: () => {
-    //         router.push('/auth/login')
-    //     },
-    // })
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
     const [register, { error }] = useRegisterUserMutation({
         onCompleted: data => {
             if (data) {
@@ -31,7 +28,6 @@ function Register() {
             toast.error(`Erreur lors de l'inscription: ${error.message}`)
         },
     })
-    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
     useEffect(() => {
         if (error) {
@@ -65,24 +61,28 @@ function Register() {
     return (
         <>
             <Head>
-                <title>Page de création de compte - Easy Gift</title>
+                <title>Création de mon compte - Easy Gift</title>
             </Head>
             <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
                 <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
                     Inscription
                 </h1>
-                {errorMessages &&
-                    errorMessages.map((item, index) =>
-                        Object.values(item).map((value: any, valueIndex) => (
-                            <p
-                                key={`${index}-${valueIndex}`}
-                                className='text-red-500 mt-2'
-                            >
-                                {value}
-                            </p>
-                        ))
-                    )}
-                {error && <p className='text-red-600'>{errorMessage}</p>}
+                <div>
+                    {errorMessages &&
+                        errorMessages.map((item, index) =>
+                            Object.values(item).map(
+                                (value: any, valueIndex) => (
+                                    <p
+                                        key={`${index}-${valueIndex}`}
+                                        className='text-red-600'
+                                    >
+                                        {value}
+                                    </p>
+                                )
+                            )
+                        )}
+                </div>
+
                 <form
                     className='flex flex-col items-center gap-2'
                     onSubmit={handleSubmit}
@@ -93,11 +93,11 @@ function Register() {
                     </label>
                     <label className='mb-3'>
                         Email <span className='text-red-600'>*</span>
-                        <Input type='email' name='email' />
+                        <Input type='email' name='email' required />
                     </label>
                     <label>
                         Mot de passe <span className='text-red-600'>*</span>
-                        <Input type='password' name='password' />
+                        <Input type='password' name='password' required />
                     </label>
                     <Button type='submit' className='mt-6'>
                         {'Valider'}

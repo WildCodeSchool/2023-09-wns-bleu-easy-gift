@@ -23,7 +23,10 @@ function ForgotPassword() {
     return (
         <>
             <Head>
-                <title>Page de connexion à mon compte - Easy Gift</title>
+                <title>
+                    Oubli du mot de passe, envoi d'un email de réinitialisation
+                    - Easy Gift
+                </title>
             </Head>
             <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
                 <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
@@ -43,6 +46,7 @@ function ForgotPassword() {
                             name='email'
                             value={email}
                             onChange={e => setEmail(e.target.value)}
+                            required
                         />
                     </label>
                     <Button type='submit' className='mt-5' disabled={loading}>

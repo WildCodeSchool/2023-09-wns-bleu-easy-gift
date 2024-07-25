@@ -9,6 +9,7 @@ import Head from 'next/head'
 
 function Login() {
     const router = useRouter()
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [login, { data, error }] = useLoginLazyQuery()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -39,6 +40,12 @@ function Login() {
         e.preventDefault()
         const formData = new FormData(e.currentTarget)
         const loginData = Object.fromEntries(formData) as InputLogin
+        loginData.email = loginData.email.trim()
+        loginData.password = loginData.password.trim()
+        if (!loginData.email || !loginData.password) {
+            setErrorMessage('Veuillez renseigner tous les champs')
+            return
+        }
         if (loginData.email && loginData.password) {
             await login({
                 variables: {
@@ -50,15 +57,21 @@ function Login() {
             })
         }
     }
+
     return (
         <>
             <Head>
-                <title>Page de connexion à mon compte - Easy Gift</title>
+                <title>Connexion à mon compte - Easy Gift</title>
             </Head>
             <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
                 <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
                     Connexion
                 </h1>
+                <div>
+                    {errorMessage && (
+                        <p className='text-red-600'>{errorMessage}</p>
+                    )}
+                </div>
                 <form
                     className='flex flex-col items-center gap-2'
                     onSubmit={handleSubmit}
@@ -70,6 +83,7 @@ function Login() {
                             id='email'
                             type='email'
                             name='email'
+                            required
                         />
                     </label>
                     <label>
@@ -79,6 +93,7 @@ function Login() {
                             id='password'
                             type='password'
                             name='password'
+                            required
                         />
                     </label>
                     <Button

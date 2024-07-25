@@ -2,11 +2,8 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@layer base {
-    @font-face {
-        font-family: 'Rubik';
-        src: url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-    }
+body {
+    font-family: 'Rubik', sans-serif;
 }
 
 @layer base {

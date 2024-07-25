@@ -144,16 +144,10 @@ class GroupsResolver {
         if (!ctx.user) throw new GraphQLError("No JWT, t'es crazy (gift)")
 
         const { name, emailUsers, event_date } = data
-        const group = await findGroupByName(name)
         const groupAvatars = await Avatar.find({ where: { type: 'generic' } })
         const randomGroupAvatar =
             groupAvatars[Math.floor(Math.random() * groupAvatars.length)]
 
-        if (group) {
-            throw new GraphQLError(
-                `Group already exist, fait pas trop le malin.`
-            )
-        }
         const newGroup = await createGroup(name, event_date)
 
         if (randomGroupAvatar) {

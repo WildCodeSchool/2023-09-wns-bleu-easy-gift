@@ -1,7 +1,5 @@
-import { Inter } from 'next/font/google'
 import React, { use } from 'react'
 import { Button } from '@/components/ui/button'
-import MyGroups from '@/components/MyGroups'
 import Image from 'next/image'
 import {
     Carousel,
@@ -83,11 +81,11 @@ export default function Home() {
                 <div className='hidden relative w-full order-2 md:block md:max-w-4xl md:min-w-96 lg:mb-24 lg:order-1 lg:max-w-xl:min-h-130 lg:max-w-lg 2xl:max-w-4xl'>
                     <Image
                         src='/images/img-pages/hero-img.png'
-                        alt='hero of the page'
-                        layout='responsive'
+                        alt="Photo d'une femme recevant un cadeaux"
                         width={963}
                         height={712}
-                        priority={false}
+                        priority={true}
+                        style={{ objectFit: 'cover' }}
                     />
                 </div>
                 <div className='h-auto mb-9 sm:max-w-2xl md:w-2/2 md:max-w-3xl lg:mb-0 lg:max-w-lg 2xl:max-w-2xl'>
@@ -192,8 +190,8 @@ export default function Home() {
                         </p>
                         <div className='flex flex-wrap gap-6 justify-evenly'>
                             <GroupCard key='1' group={group1} link={link1} />
-                            <GroupCard key='1' group={group2} link={link2} />
-                            <GroupCard key='1' group={group3} link={link3} />
+                            <GroupCard key='2' group={group2} link={link2} />
+                            <GroupCard key='3' group={group3} link={link3} />
                         </div>
                     </span>
                 )}

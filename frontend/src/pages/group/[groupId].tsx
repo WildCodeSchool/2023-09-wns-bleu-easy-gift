@@ -40,7 +40,7 @@ export default function GroupDetails() {
     return (
         <div>
             <Head>
-                <title>Page du groupe {group?.name} - Easy Gift</title>
+                <title>Groupe {group?.name} - Easy Gift</title>
             </Head>
             <div className='flex flex-col justify-between align-center text-left mb-5'>
                 <div className='flex flex-col gap-3 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>

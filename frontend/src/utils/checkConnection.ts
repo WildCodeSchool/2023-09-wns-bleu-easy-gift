@@ -7,3 +7,12 @@ export const checkUserConnected = () => {
     }
     return false
 }
+
+export const connectedUserEmail = () => {
+    const cookies = Cookies
+    const emailCookie = cookies.get('email')
+    if (emailCookie) {
+        return emailCookie
+    }
+    return false
+}

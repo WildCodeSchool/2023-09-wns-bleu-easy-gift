@@ -39,7 +39,7 @@ function ResetPassword() {
     return (
         <>
             <Head>
-                <title>Page de connexion à mon compte - Easy Gift</title>
+                <title>Modification du mot de passe - Easy Gift</title>
             </Head>
             <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
                 <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
@@ -49,27 +49,27 @@ function ResetPassword() {
                     className='flex flex-col items-start gap-2'
                     onSubmit={handleSubmit}
                 >
-                    <label className='mb-3' htmlFor='password'>
+                    <label className='mb-3'>
                         Nouveau mot de passe
+                        <Input
+                            type='password'
+                            name='password'
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            required
+                        />
                     </label>
-                    <Input
-                        type='password'
-                        id='password'
-                        name='password'
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
 
-                    <label className='mb-3' htmlFor='confirm-password'>
+                    <label className='mb-3'>
                         Confirmez le mot de passe
+                        <Input
+                            type='password'
+                            name='confirmPassword'
+                            value={confirmPassword}
+                            onChange={e => setConfirmPassword(e.target.value)}
+                            required
+                        />
                     </label>
-                    <Input
-                        type='password'
-                        id='confirm-password'
-                        name='confirmPassword'
-                        value={confirmPassword}
-                        onChange={e => setConfirmPassword(e.target.value)}
-                    />
 
                     <Button type='submit' className='mt-6'>
                         {'Réinitialiser'}
