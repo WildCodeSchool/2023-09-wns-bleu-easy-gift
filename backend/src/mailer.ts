@@ -1,3 +1,5 @@
+//-------------------SMTP
+
 // import nodemailer from 'nodemailer'
 // import * as dotenv from 'dotenv'
 // dotenv.config()
@@ -28,6 +30,8 @@
 //               },
 //           }
 // }
+
+//--------------------HTTP
 
 import * as dotenv from 'dotenv'
 dotenv.config()
