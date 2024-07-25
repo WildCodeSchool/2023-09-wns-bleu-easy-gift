@@ -50,10 +50,10 @@ function Login() {
         }
     }
     return (
-        <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen'>
-            <h2 className='text-xl md:text-2xl 2xl:text-3xl font-bold text-primaryBlue lg:mb-8'>
+        <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
+            <h1 className='text-xl md:text-2xl 2xl:text-3xl font-bold text-primaryBlue lg:mb-8'>
                 Connexion
-            </h2>
+            </h1>
             <form
                 className='flex flex-col items-center gap-2 lg:h-3/5'
                 onSubmit={handleSubmit}
