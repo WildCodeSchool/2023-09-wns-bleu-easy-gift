@@ -8,6 +8,8 @@ import {
 import Message from './Message'
 import { useUserData } from '@/context/userContext'
 import { useRouter } from 'next/router'
+import { useIntersectionObserver } from '@/hook/useIntersectionObserver'
+import { Button } from '../ui/button'
 
 const EspaceDiscussion = ({
     isMenuHidden,
@@ -24,19 +26,28 @@ const EspaceDiscussion = ({
     const [messages, setMessages] = useState<
         GetMessagesByDisscutionQuery['getMessagesByDisscution']
     >([])
+    const [canShowIntersector, setCanShowIntersector] = useState(false)
+    const [canGetMore, setCanGetMore] = useState(true)
+    const { isIntersecting, ref } = useIntersectionObserver({
+        threshold: 0.5,
+    })
+
+    const [isGettingMore, setIsGettingMore] = useState(false)
 
     const selectedDiscussionId = discussionId
         ? parseInt(discussionId as string, 10)
         : null
 
-    const { fetchMore, refetch } = useGetMessagesByDisscutionQuery({
+    const { data, fetchMore, refetch } = useGetMessagesByDisscutionQuery({
         variables: {
             discussionId: selectedDiscussionId || 0,
             limit,
             offset,
         },
-        onCompleted(data) {
-            setMessages(data.getMessagesByDisscution)
+        onCompleted: data => {
+            if (data.getMessagesByDisscution.length === 0)
+                return setCanGetMore(false)
+            setCanGetMore(true)
         },
     })
 
@@ -44,55 +55,56 @@ const EspaceDiscussion = ({
         variables: {
             discussionId: selectedDiscussionId || 0,
         },
-        // onComplete() {
-        //     refetch({
-        //         discussionId: selectedDiscussionId || 0,
-        //         limit,
-        //         offset,
-        //     })
-        // },
     })
 
     useEffect(() => {
-        // if (data?.getMessagesByDisscution) {
-        //     if (subscriptionData?.newMessage) {
-        //         setMessages(prev => [
-        //             ...prev,
-        //             ...data.getMessagesByDisscution,
-        //             subscriptionData.newMessage,
-        //         ])
-
-        //         return
-        //         // return [
-        //         //     ...data.getMessagesByDisscution,
-        //         //     subscriptionData.newMessage,
-        //         // ]
-        //     }
-        //     setMessages(prev => [...prev, ...data.getMessagesByDisscution])
-        // }
-        if (subscriptionData?.newMessage) {
+        if (data?.getMessagesByDisscution && !subscriptionData?.newMessage) {
+            setMessages(prev => {
+                const allMessages = [...data.getMessagesByDisscution, ...prev]
+                const mapMessages = new Map()
+                for (const message of allMessages) {
+                    mapMessages.set(message.id, message)
+                }
+                return Array.from(mapMessages.values()).sort((a, b) => {
+                    return a.created_at > b.created_at ? 1 : -1
+                })
+            })
+        }
+        if (
+            subscriptionData?.newMessage &&
+            subscriptionData.newMessage.user.id !==
+                parseInt(userData?.id || '0', 10)
+        ) {
             setMessages(prev => [...prev, subscriptionData.newMessage])
         }
-    }, [subscriptionData])
-
-    // useEffect(() => {
-    //     // setMessages([])
-    // }, [selectedDiscussionId])
+    }, [subscriptionData, data])
 
     const getMore = async () => {
         setOffset(prevOffset => prevOffset + limit)
+        setIsGettingMore(true)
         try {
             await fetchMore({
                 variables: {
                     discussionId: selectedDiscussionId || 0,
                     limit,
-                    offset,
+                    offset: offset + limit,
                 },
             })
+
+            setTimeout(() => {
+                setIsGettingMore(false)
+            }, 2000)
         } catch (error) {
             console.error('Error fetching more messages:', error)
         }
     }
+
+    useEffect(() => {
+        if (isIntersecting) {
+            handleScrollContainer('step')
+            getMore()
+        }
+    }, [isIntersecting])
 
     const [createMessage] = useCreateMessageMutation()
 
@@ -104,116 +116,79 @@ const EspaceDiscussion = ({
                     userId: parseInt(userData?.id || '0', 10),
                     content,
                 },
-                // refetchQueries: [
-                //     {
-                //         query: GetMessagesByDisscutionDocument,
-                //         variables: {
-                //             discussionId: selectedDiscussionId || 0,
-                //             limit,
-                //             offset,
-                //         },
-                //     },
-                // ],
-                // awaitRefetchQueries: true,
+                onCompleted: data => {
+                    setMessages(prev => [...prev, data.createMessage])
+                },
             })
-            setContent('')
-            handleScrollToBottom()
         } catch (error) {
             console.error('Error sending message:', error)
         }
     }
 
+    const handleScrollContainer = (off: 'all' | 'step') => {
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop =
+                off === 'all'
+                    ? messagesContainerRef.current.scrollHeight
+                    : messagesContainerRef.current.scrollTop + 100
+        }
+    }
+
+    useEffect(() => {
+        if (isGettingMore) return
+        setCanShowIntersector(false)
+        if (messages.length) {
+            setTimeout(() => {
+                return setCanShowIntersector(true)
+            }, 500)
+        }
+        handleScrollContainer('all')
+    }, [messages])
+
     const messagesContainerRef = useRef<React.LegacyRef<HTMLUListElement>>(null)
 
     useMemo(() => {
+        setMessages([])
+        setOffset(0)
         refetch()
     }, [discussionId])
-
-    // useEffect(() => {
-    //     if (messagesContainerRef.current) {
-    //         //@ts-ignore
-    //         messagesContainerRef.current.scrollTop =
-    //             //@ts-ignore
-    //             messagesContainerRef.current.scrollHeight
-    //     }
-    // }, [messages])
-
-    const handleScrollToBottom = () => {
-        //@ts-ignore
-        messagesContainerRef.current.scrollTop =
-            //@ts-ignore
-            messagesContainerRef.current.scrollHeight
-    }
-
-    // useEffect(() => {
-    //     if (!messagesContainerRef.current) return
-
-    //     messagesContainerRef.current.addEventListener('scroll', () => {
-    //         if (messagesContainerRef.current.scrollTop < 20) {
-    //             getMore()
-    //         }
-    //     })
-
-    //     return () => {
-    //         messagesContainerRef.current.removeEventListener('scroll', () => {})
-    //     }
-    // }, [])
-
-    // const handleScroll = () => {
-    //     if (messagesContainerRef.current) {
-    //         const { scrollTop, scrollHeight, clientHeight } =
-    //             messagesContainerRef.current
-    //         if (scrollTop === 0) {
-    //             setOffset(prevOffset => prevOffset + limit)
-    //         }
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     if (messagesContainerRef.current) {
-    //         messagesContainerRef.current.addEventListener(
-    //             'scroll',
-    //             handleScroll
-    //         )
-    //     }
-    //     return () => {
-    //         if (messagesContainerRef.current) {
-    //             messagesContainerRef.current.removeEventListener(
-    //                 'scroll',
-    //                 handleScroll
-    //             )
-    //         }
-    //     }
-    // }, [])
 
     return (
         <div
             className={`hidden md:w-7/12 md:flex md:flex-grow md:justify-center md:items-center transition-all duration-1000 ease-in-out ${isMenuHidden ? 'md:w-full' : 'md:w-12/12'}`}
         >
-            {/* w-full h-screen flex items-start justify-end */}
-            <button onClick={getMore}>GET MORE</button>
             <div
                 className={`hidden h-full md:w-7/12 md:flex md:flex-grow md:justify-center md:items-center transition-all duration-1000 ease-in-out ${isMenuHidden ? 'md:w-full' : 'md:w-12/12'}`}
             >
                 <div className='w-full h-full relative mx-10 p-3 bg-slate-200 rounded-lg'>
                     <ul
-                        className='absolute bottom-10 pb-5 pt-20 w-full max-h-full overflow-y-scroll gap-4 flex-col flex right-1 '
+                        className='  absolute bottom-10 pb-5 pt-20 w-full max-h-full overflow-y-scroll gap-4 flex-col flex right-1 '
                         //@ts-ignore
                         ref={messagesContainerRef}
                     >
+                        {canShowIntersector && canGetMore ? (
+                            <div
+                                ref={ref}
+                                className='absolute w-full h-2/5 p-3'
+                            />
+                        ) : (
+                            <p className='font-semibold w-full text-center pb-4'>
+                                Début de la discussion
+                            </p>
+                        )}
                         {messages.map(message => (
                             <Message key={message.id} message={message} />
                         ))}
                     </ul>
 
-                    <div className='absolute bottom-0 flex w-full items-center justify-evenly '>
+                    <div className='absolute bottom-0 flex w-full items-center justify-evenly p-3'>
                         <input
                             className='w-3/6 p-2 rounded-md'
                             type='text'
                             value={content}
                             onChange={e => setContent(e.target.value)}
                         />
-                        <button onClick={handleSendMessage}>Send</button>
+                        <Button disabled={!content.length}>Envoyer</Button>
                     </div>
                 </div>
             </div>

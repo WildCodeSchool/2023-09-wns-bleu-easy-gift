@@ -21,13 +21,6 @@ class MessageResolver {
         @Arg('limit', () => Int, { defaultValue: 10 }) limit: number,
         @Arg('offset', () => Int, { defaultValue: 0 }) offset: number
     ): Promise<Message[]> {
-        // return await Message.find({
-        //     where: { discussion: { id: discussionId } },
-        //     order: { created_at: 'ASC' },
-        //     relations: ['user', 'user.avatar'],
-        //     take: limit,
-        //     skip: offset,
-        // })
         const messages = await Message.find({
             where: { discussion: { id: discussionId } },
             order: { created_at: 'DESC' },
@@ -36,7 +29,6 @@ class MessageResolver {
             skip: offset,
         })
 
-        // Réordonner les messages en ordre croissant
         messages.reverse()
 
         return messages

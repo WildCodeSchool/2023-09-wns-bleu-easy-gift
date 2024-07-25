@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { createPortal } from 'react-dom'
 import ModalModifyAvatar from '@/components/profil/modalModifyAvatar'
 import Head from 'next/head'
+import { formatTimestamp } from '@/utils/date'
 
 export default function GroupDetails() {
     const router = useRouter()
@@ -26,11 +27,6 @@ export default function GroupDetails() {
     if (error) return <h1>Erreur : {error.message}</h1>
 
     const group = data?.getGroupById
-
-    const formatDate = (timestamp: string | number | undefined): string => {
-        const date = new Date(Number(timestamp))
-        return date.toLocaleDateString() // Customize the format as needed
-    }
 
     const eventDate =
         group && group.event_date ? new Date(group.event_date) : undefined
@@ -105,7 +101,7 @@ export default function GroupDetails() {
                                             Créé le
                                         </p>
                                         <p className='text-base'>
-                                            {formatDate(group?.created_at)}
+                                            {formatTimestamp(group?.created_at)}
                                         </p>
                                     </div>
                                     <Separator />

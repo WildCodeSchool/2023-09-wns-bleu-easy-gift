@@ -1,5 +1,6 @@
 import { useGetUserInfosQuery } from '@/graphql/generated/schema'
-import React, { createContext, useContext } from 'react'
+import { checkUserConnected } from '@/utils/checkConnection'
+import React, { createContext, useContext, useEffect } from 'react'
 
 const userContext = createContext<{
     userData:
@@ -29,9 +30,16 @@ export const UserDataProvider = ({
         data,
         loading: userLoading,
         error: userError,
+        refetch,
     } = useGetUserInfosQuery()
 
+    const isConnected = checkUserConnected()
+
     const userData = data?.getUserInfos
+
+    useEffect(() => {
+        refetch()
+    }, [isConnected])
 
     return (
         <userContext.Provider value={{ userData }}>
