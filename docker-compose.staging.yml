@@ -20,6 +20,11 @@ services:
       DB_USER: ${DB_USER-postgres}
       SECRET_KEY: ${SECRET_KEY:-changeme}
       NODE_ENV: ${NODE_ENV:-production}
+      SMTP_HOST: ${SMTP_HOST:-production}
+      SMTP_PORT: ${SMTP_PORT:-production}
+      SMTP_USER: ${SMTP_USER:-production}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-production}
+      EMAIL_FROM: crazygift24@gmail.com
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-changeme}
     stop_grace_period: 0s
     depends_on:
