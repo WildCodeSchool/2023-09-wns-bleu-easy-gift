@@ -1,0 +1,15 @@
+subscription addNewMessage($discussionId: Float!) {
+    newMessage(discussionId: $discussionId) {
+        id
+        content
+        user {
+            id
+            pseudo
+            avatar {
+                url
+            }
+        }
+        created_at
+        modified_at
+    }
+}

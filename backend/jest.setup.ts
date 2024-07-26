@@ -19,7 +19,7 @@ export async function execute(
     variableValues?: Maybe<{
         readonly [variable: string]: unknown
     }>,
-    contextValue = {},
+    contextValue = {}
 ) {
     return await graphql({
         schema,

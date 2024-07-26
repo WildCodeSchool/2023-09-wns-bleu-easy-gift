@@ -1,0 +1,26 @@
+mutation createMessage(
+    $discussionId: Float!
+    $userId: Float!
+    $content: String!
+) {
+    createMessage(
+        discussionId: $discussionId
+        userId: $userId
+        content: $content
+    ) {
+        id
+        content
+        user {
+            id
+            pseudo
+            avatar {
+                url
+            }
+        }
+        discussion {
+            id
+        }
+        created_at
+        modified_at
+    }
+}

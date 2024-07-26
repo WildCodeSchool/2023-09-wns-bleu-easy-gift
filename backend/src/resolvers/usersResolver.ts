@@ -1,10 +1,7 @@
 import { Resolver, Query, Arg, Mutation, Ctx, Authorized } from 'type-graphql'
-// import { Not } from 'typeorm'
 import { GraphQLError } from 'graphql'
-// import { validate } from 'class-validator'
 import {
     User,
-    // NewUserInput,
     UserWithoutPassword,
     UserWithoutPasswordAvatar,
     InputRegister,
@@ -14,6 +11,7 @@ import {
     InputRegistrationWithToken,
     InputUpdateUser,
     InputUpdateAvatar,
+    InputUpdatePassword,
 } from '../entities/user'
 import * as argon2 from 'argon2'
 import { SignJWT } from 'jose'
@@ -21,25 +19,19 @@ import { MyContext } from '..'
 import Cookies from 'cookies'
 import { Avatar } from '../entities/avatar'
 import crypto from 'crypto'
+import mailer from '../mailer'
+import * as dotenv from 'dotenv'
+import sendMail from '../mailer'
+dotenv.config()
+
+const url = process.env.SITE_URL || 'http://localhost:3000'
 
 export async function findUserByEmail(email: string) {
-    return await User.findOneBy({ email })
+    return await User.findOne({
+        where: { email },
+        relations: ['avatar', 'userToGroups.user', 'userToGroups.group'],
+    })
 }
-
-// async function createUser({ pseudo, email, password }: InputRegister) {
-//     // Générer un identifiant d'avatar aléatoire entre 1 et 31
-//     const randomAvatarId = Math.floor(Math.random() * 31) + 1
-
-//     // Récupérer l'avatar correspondant à l'ID aléatoire
-//     const avatar = await Avatar.findOne({ where: { id: randomAvatarId } })
-
-//     // Vérifier si l'avatar correspondant à l'ID existe
-//     if (!avatar) {
-//         throw new Error(`Avatar with ID ${randomAvatarId} not found`)
-//     }
-
-//     return await User.create({ pseudo, email, password, avatar }).save()
-// }
 
 export async function createUser({
     pseudo,
@@ -82,7 +74,9 @@ class UsersResolver {
     }
 
     @Mutation(() => UserWithoutPassword)
-    async registrationWithToken(@Arg('data') data: InputRegistrationWithToken) {
+    async registrationWithToken(
+        @Arg('data', { validate: true }) data: InputRegistrationWithToken
+    ) {
         const user = await User.findOne({ where: { token: data.token } })
         if (!user) {
             throw new GraphQLError('Aucun utilisateur trouvé avec ce token')
@@ -94,12 +88,11 @@ class UsersResolver {
         })
 
         await user.save()
-
         return user
     }
 
     @Mutation(() => UserWithoutPassword)
-    async register(@Arg('data') data: InputRegister) {
+    async register(@Arg('data', { validate: true }) data: InputRegister) {
         const { pseudo, email, password, avatar } = data
 
         const user = await findUserByEmail(email)
@@ -117,13 +110,14 @@ class UsersResolver {
         const user = await findUserByEmail(infos.email)
 
         if (!user) {
-            throw new GraphQLError(`User doesn't exist`)
+            throw new GraphQLError(`Veuillez vérifier vos informations`)
         }
 
         const isPasswordValid = await argon2.verify(
             user.password,
-            infos.password,
+            infos.password
         )
+
         const responseMessage = new ResponseMessage()
         if (isPasswordValid) {
             const token = await new SignJWT({ email: user.email })
@@ -148,16 +142,17 @@ class UsersResolver {
     @Query(() => ResponseMessage)
     async testAuthorized() {
         const responseMessage = new ResponseMessage()
-        responseMessage.message = 'Tu es arrive a cette query'
+        responseMessage.message = 'Tu es arrivé a cette query'
         responseMessage.success = true
         return responseMessage
     }
 
+    @Authorized()
     @Query(() => UserInfos)
     async getUserInfos(@Ctx() ctx: MyContext) {
         if (!ctx.user) {
             throw new GraphQLError(
-                'Merci de vous identifier pour accéder à cette page',
+                'Merci de vous identifier pour accéder à cette page'
             )
         }
         const userData = await User.findOne({
@@ -172,6 +167,7 @@ class UsersResolver {
             pseudo: userData.pseudo,
             email: userData.email,
             avatar: userData.avatar,
+            // discussions: userData.discussions,
         }
     }
 
@@ -189,10 +185,11 @@ class UsersResolver {
         return responseMessage
     }
 
+    @Authorized()
     @Mutation(() => UserWithoutPassword)
     async updateUser(
-        @Arg('data') data: InputUpdateUser,
-        @Ctx() ctx: MyContext,
+        @Arg('data', { validate: true }) data: InputUpdateUser,
+        @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {
             throw new GraphQLError("L'utilisateur n'est pas authentifié")
@@ -219,10 +216,12 @@ class UsersResolver {
             pseudo: user.pseudo,
         }
     }
+
+    @Authorized()
     @Mutation(() => UserWithoutPasswordAvatar)
     async updateAvatar(
         @Arg('data') data: InputUpdateAvatar,
-        @Ctx() ctx: MyContext,
+        @Ctx() ctx: MyContext
     ) {
         if (!ctx.user) {
             throw new GraphQLError("L'utilisateur n'est pas authentifié")
@@ -245,6 +244,109 @@ class UsersResolver {
             pseudo: user.pseudo,
             avatar: user.avatar,
         }
+    }
+
+    @Mutation(() => ResponseMessage)
+    @Authorized()
+    async updatePassword(
+        @Arg('data') data: InputUpdatePassword,
+        @Ctx() ctx: MyContext
+    ): Promise<ResponseMessage> {
+        if (!ctx.user) {
+            throw new GraphQLError("L'utilisateur n'est pas authentifié")
+        }
+        const user = await User.findOne({ where: { id: ctx.user.id } })
+        if (!user) {
+            throw new GraphQLError('Utilisateur non trouvé')
+        }
+        const isOldPasswordValid = await argon2.verify(
+            user.password,
+            data.oldPassword
+        )
+        if (!isOldPasswordValid) {
+            throw new GraphQLError("L'ancien mot de passe est incorrect")
+        }
+        user.password = data.newPassword
+        await user.save()
+
+        const responseMessage = new ResponseMessage()
+        responseMessage.success = true
+        responseMessage.message = 'Mot de passe modifié avec succès'
+
+        return responseMessage
+    }
+
+    @Mutation(() => ResponseMessage)
+    async forgotPassword(
+        @Arg('email') email: string
+    ): Promise<ResponseMessage> {
+        const user = await User.findOne({ where: { email } })
+        const responseMessage = new ResponseMessage()
+        if (!user) {
+            responseMessage.success = false
+            responseMessage.message = 'Email non trouvé'
+            return responseMessage
+        }
+        const resetToken = crypto.randomBytes(32).toString('hex')
+        user.token = resetToken
+        await user.save()
+
+        const resetUrl = `${url}/auth/reset-password?token=${resetToken}`
+        const message = `
+            <h1>Vous avez demandé une réinitialisation du mot de passe</h1>
+            <p>Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe:</p>
+            <a href="${resetUrl}">${resetUrl}</a>
+        `
+        try {
+            // await mailer.sendMail({
+            //     to: email,
+            //     from: 'crazygift24@gmail.com',
+            //     subject: 'Réinitialisation du mot de passe',
+            //     html: message,
+            // })
+            await sendMail({
+                Messages: [
+                    {
+                        Subject: 'Réinitialisation du mot de passe',
+                        To: [{ Email: email, Name: user.pseudo }],
+                        From: {
+                            Email: 'crazygift24@gmail.com',
+                            Name: 'CrazyGift',
+                        },
+                        HTMLPart: message,
+                    },
+                ],
+            })
+            responseMessage.success = true
+            responseMessage.message = 'Email envoyé avec succès'
+        } catch (err) {
+            console.error("Erreur lors de l'envoi de l'email:", err)
+            responseMessage.success = false
+            responseMessage.message = "Erreur lors de l'envoi de l'email"
+        }
+        return responseMessage
+    }
+
+    @Mutation(() => ResponseMessage)
+    async resetPassword(
+        @Arg('token') token: string,
+        @Arg('newPassword') newPassword: string
+    ): Promise<ResponseMessage> {
+        const user = await User.findOne({ where: { token } })
+        const responseMessage = new ResponseMessage()
+        if (!user) {
+            responseMessage.success = false
+            responseMessage.message = 'Token invalide'
+            return responseMessage
+        }
+
+        user.password = newPassword
+        user.token = null
+        await user.save()
+
+        responseMessage.success = true
+        responseMessage.message = 'Mot de passe réinitialisé avec succès'
+        return responseMessage
     }
 }
 

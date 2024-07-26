@@ -5,8 +5,7 @@ import {
     Column,
     OneToMany,
 } from 'typeorm'
-import { ObjectType, Field, Int, InputType } from 'type-graphql'
-import { Length } from 'class-validator'
+import { ObjectType, Field, Int } from 'type-graphql'
 import { User } from './user'
 import { Group } from './group'
 
@@ -17,11 +16,8 @@ export class Avatar extends BaseEntity {
     @Field(() => Int)
     id: number
 
-    @Column({ length: 30 })
+    @Column({ length: 150 })
     @Field()
-    @Length(3, 30, {
-        message: "Le nom de l'avatar doit contenir entre 3 and 30 caractères",
-    })
     name: string
 
     @Column()

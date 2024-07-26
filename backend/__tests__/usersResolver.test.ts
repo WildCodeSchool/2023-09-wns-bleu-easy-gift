@@ -3,6 +3,9 @@ import getUsers from './operations/getUsers'
 import { execute } from '../jest.setup'
 import register from './operations/register'
 
+// !!!! IMPORTANT !!!!
+// If the test fails, you can try to erase what is written between brackets in the toMatchInlineSnapshot() function
+
 describe('user resolver', () => {
     it('should return the users', async () => {
         await User.create({

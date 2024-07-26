@@ -1,7 +1,6 @@
-import { Field, Int, ObjectType } from 'type-graphql'
+import { Field, Int, ObjectType, InputType } from 'type-graphql'
 import {
     BaseEntity,
-    Column,
     Entity,
     PrimaryGeneratedColumn,
     CreateDateColumn,
@@ -14,6 +13,7 @@ import {
 import { Group } from './group'
 import { Message } from './message'
 import { User } from './user'
+import { ObjectId } from '../utils'
 
 @Entity()
 @ObjectType()
@@ -22,9 +22,9 @@ export class Discussion extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ length: 50 })
-    @Field()
-    name: string
+    // @Column({ length: 50 })
+    // @Field()
+    // name: string
 
     @CreateDateColumn()
     @Field()
@@ -39,15 +39,41 @@ export class Discussion extends BaseEntity {
         onDelete: 'CASCADE',
     })
     @Field(() => Group)
-    group: Group
+    group?: Group
 
     @OneToMany(() => Message, m => m.discussion)
-    messages: Message[]
+    messages?: Message[]
 
+    @ManyToMany(() => User)
     @JoinTable()
-    @ManyToMany(() => User, u => u.discussions, {
-        cascade: true,
-    })
     @Field(() => [User])
-    users: User[]
+    users?: User[]
+
+    @Field(() => User)
+    @ManyToOne(() => User, user => user.discussions)
+    userDiscussion: User
+}
+
+@InputType()
+export class NewDiscussionInput {
+    @Field()
+    name: string
+
+    @Field(() => ObjectId)
+    group: ObjectId
+
+    @Field(() => [ObjectId], { nullable: true })
+    users?: ObjectId[]
+}
+
+@ObjectType()
+export class GroupDiscussionsResponse {
+    @Field(() => [Discussion])
+    discussions: Discussion[]
+
+    @Field(() => String)
+    groupName: string
+
+    @Field(() => String)
+    groupAvatarUrl: string
 }

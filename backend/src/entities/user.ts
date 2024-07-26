@@ -9,7 +9,6 @@ import {
     Column,
     CreateDateColumn,
     Entity,
-    ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
@@ -18,6 +17,7 @@ import {
 import * as argon2 from 'argon2'
 import { UserToGroup } from './userToGroup'
 import { ObjectId } from '../utils'
+import { IsDateString, IsEmail, IsNotEmpty, Length } from 'class-validator'
 
 @Entity()
 @ObjectType()
@@ -65,13 +65,14 @@ export class User extends BaseEntity {
     @Field(() => Avatar, { nullable: true })
     avatar: Avatar | null
 
-    @ManyToMany(() => Discussion, discussion => discussion.users)
-    @Field(() => [Discussion])
-    discussions: Discussion[]
+    // @ManyToMany(() => Discussion, discussion => discussion.users)
+    // @Field(() => [Discussion])
+    // discussions: Discussion[]
 
     @OneToMany(() => Message, message => message.user)
     messages: Message[]
 
+    @Field(() => [UserToGroup])
     @OneToMany(() => UserToGroup, userToGroup => userToGroup.user)
     public userToGroups: UserToGroup[]
 
@@ -86,6 +87,10 @@ export class User extends BaseEntity {
     // @Field(() => String, { nullable: true })
     @Column({ nullable: true, type: 'varchar', unique: true })
     token: string | null
+
+    @Field(() => [Discussion])
+    @OneToMany(() => Discussion, discussion => discussion.userDiscussion)
+    discussions: Discussion[]
 }
 
 @InputType()
@@ -94,13 +99,29 @@ export class InputRegister {
     pseudo: string
 
     @Field()
+    @IsEmail(
+        {},
+        {
+            message: 'Une adresse mail valide est requise',
+        }
+    )
+    @IsNotEmpty({
+        message: 'Veuillez renseigner votre email',
+    })
     email: string
 
     @Field()
+    @IsNotEmpty({
+        message: 'Veuillez renseigner un mot de passe',
+    })
     password: string
 
     @Field(() => ObjectId, { nullable: true })
     avatar?: Avatar | null
+
+    @Field({ nullable: true })
+    @IsDateString({}, { message: 'Vérifier la date choisie' })
+    birthday?: string
 }
 
 @ObjectType()
@@ -127,9 +148,21 @@ export class UserWithoutPasswordAvatar {
 @InputType()
 export class InputLogin {
     @Field()
+    @IsEmail(
+        {},
+        {
+            message: 'Une adresse mail valide est requise',
+        }
+    )
+    @IsNotEmpty({
+        message: 'Veuillez renseigner votre email',
+    })
     email: string
 
     @Field()
+    @IsNotEmpty({
+        message: 'Veuillez renseigner votre mot de passe',
+    })
     password: string
 }
 
@@ -155,11 +188,17 @@ export class UserInfos {
 
     @Field(() => Avatar, { nullable: true })
     avatar?: Avatar | null
+
+    // @Field(() => [Discussion])
+    // discussions: Discussion[]
 }
 
 @InputType()
 export class InputRegistrationWithToken {
     @Field()
+    @Length(3, 50, {
+        message: 'Le pseudo doit contenir entre 3 et 50 caractères',
+    })
     pseudo: string
 
     @Field()
@@ -172,9 +211,18 @@ export class InputRegistrationWithToken {
 @InputType()
 export class InputUpdateUser {
     @Field({ nullable: true })
+    @Length(3, 50, {
+        message: 'Le pseudo doit contenir entre 3 et 50 caractères',
+    })
     pseudo?: string
 
     @Field({ nullable: true })
+    @IsEmail(
+        {},
+        {
+            message: 'Une adresse mail valide est requise',
+        }
+    )
     email?: string
 }
 
@@ -182,4 +230,13 @@ export class InputUpdateUser {
 export class InputUpdateAvatar {
     @Field(() => Int)
     avatarId: number
+}
+
+@InputType()
+export class InputUpdatePassword {
+    @Field()
+    oldPassword: string
+
+    @Field()
+    newPassword: string
 }
