@@ -97,7 +97,7 @@ export default function ModalModifyDetails({
             <div className='fixed inset-0 bg-black/50 z-50'>
                 <div
                     ref={modalContentRef}
-                    className='bg-white w-9/12 md:w-7/12 lg:w-4/12 2xl:w-3/12 xl:p-5'
+                    className='bg-white p-5 w-9/12 md:w-7/12 lg:w-4/12 2xl:w-3/12 rounded-lg'
                     style={modalStyles}
                 >
                     <div className='p-3'>

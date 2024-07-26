@@ -63,8 +63,8 @@ function Register() {
             <Head>
                 <title>Création de mon compte - Easy Gift</title>
             </Head>
-            <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+            <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
+                <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
                     Inscription
                 </h1>
                 <div>
@@ -82,14 +82,13 @@ function Register() {
                             )
                         )}
                 </div>
-
                 <form
-                    className='flex flex-col items-center gap-2'
+                    className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
                     <label className='mb-3'>
                         Pseudo
-                        <Input type='text' name='pseudo' />
+                        <Input type='text' name='pseudo' required />
                     </label>
                     <label className='mb-3'>
                         Email <span className='text-red-600'>*</span>
@@ -99,13 +98,14 @@ function Register() {
                         Mot de passe <span className='text-red-600'>*</span>
                         <Input type='password' name='password' required />
                     </label>
-                    <Button type='submit' className='mt-6'>
+                    <Button type='submit' className='mt-9 mb-5 lg:mb-8'>
                         {'Valider'}
                     </Button>
-                    <p className='text-red-600 mt-4'>* Champs obligatoires</p>
+                    <p className='text-red-600'>* Champs obligatoires</p>
                 </form>
             </section>
         </>
+
     )
 }
 

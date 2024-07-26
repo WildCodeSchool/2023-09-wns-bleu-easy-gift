@@ -28,15 +28,15 @@ function ForgotPassword() {
                     - Easy Gift
                 </title>
             </Head>
-            <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+            <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
+                <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
                     Réinitialisation du mot de passe
                 </h1>
-                <p>Recevoir un email pour ré-initialiser son mot de passe</p>
                 <form
-                    className='flex flex-col items-center gap-2'
+                    className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
+                    <p className='mb-3'>Recevoir un email pour ré-initialiser son mot de passe</p>
                     <label className='mb-3'>
                         Mon email
                         <Input
@@ -49,7 +49,7 @@ function ForgotPassword() {
                             required
                         />
                     </label>
-                    <Button type='submit' className='mt-5' disabled={loading}>
+                    <Button type='submit' className='mt-9 mb-5 lg:mb-8' disabled={loading}>
                         Envoyer
                     </Button>
                 </form>

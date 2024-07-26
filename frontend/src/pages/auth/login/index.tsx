@@ -63,8 +63,8 @@ function Login() {
             <Head>
                 <title>Connexion à mon compte - Easy Gift</title>
             </Head>
-            <section className='flex flex-col gap-6 pb-6 justify-center items-center mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <h1 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+            <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
+                <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
                     Connexion
                 </h1>
                 <div>
@@ -73,7 +73,7 @@ function Login() {
                     )}
                 </div>
                 <form
-                    className='flex flex-col items-center gap-2'
+                    className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
                     <label className='mb-3'>
@@ -99,21 +99,18 @@ function Login() {
                     <Button
                         data-testid='login-button'
                         type='submit'
-                        className='mt-6'
+                        className='mt-9 mb-5 lg:mb-8'
                     >
                         {'Se connecter'}
                     </Button>
 
-                    <Link
-                        href={'/auth/register'}
-                        className='text-blue-600 hover:underline mt-4'
-                    >
+                    <Link href={'/auth/register'} className='text-blue-600 mb-2 lg:mb-4'>
                         Pas encore de compte ?
                     </Link>
 
                     <Link
                         href={'/auth/forgot-password'}
-                        className='text-blue-600 hover:underline mt-4'
+                        className='text-blue-600 hover:underline'
                     >
                         J'ai oublié mon mot de passe 🤭
                     </Link>

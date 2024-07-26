@@ -56,7 +56,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
         data?.getDiscussionsByGroupIdWithoutCtxUser.discussions[0]?.id
 
     return (
-        <article className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px]'>
+        <article className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px] 2xl:max-w-[343px] 2xl:mx-auto'>
             <div className='flex flex-col p-5 shadow-sm rounded-t-lg gap-3'>
                 <img
                     src={group.avatar.url}
@@ -75,11 +75,10 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                 <div>Membres du groupe</div>
                 <div className={`flex justify-start`}>
                     <div
-                        className={`flex ${
-                            displayedUsers.length > 7
-                                ? 'flex-wrap gap-2'
-                                : ' -space-x-3'
-                        }`}
+                        className={`flex ${displayedUsers.length > 7
+                            ? 'flex-wrap gap-2'
+                            : ' -space-x-3'
+                            }`}
                     >
                         {displayedUsers.map(user => (
                             <div

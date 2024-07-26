@@ -42,11 +42,11 @@ export default function GroupDetails() {
             <Head>
                 <title>Groupe {group?.name} - Easy Gift</title>
             </Head>
-            <div className='flex flex-col justify-between align-center text-left mb-5'>
+            <section className='w-full h-full flex-grow flex flex-col  gap-6 pb-6 my-10 justify-center items-center lg:min-h-screen lg:my-12 2xl:my-20'>
                 <div className='flex flex-col gap-3 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                    <h2 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
-                        Groupe "{group?.name}"
-                    </h2>
+                    <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
+                        Groupe {group?.name}
+                    </h1>
                     <p className='text-md 2xl:text-xl'>
                         Gère les informations de ton groupe Easy Gift.
                     </p>
@@ -153,7 +153,7 @@ export default function GroupDetails() {
                             <div className='shrink sm:w-1/2 sm:max-w-lg'>
                                 <div>
                                     <div className='text-2xl font-medium'>
-                                        Membres du groups
+                                        Membres du groupe
                                     </div>
                                     <div className='text-sm text-black/60'>
                                         Voici la liste des membres de votre
@@ -194,7 +194,7 @@ export default function GroupDetails() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
             {isModalAvatarOpen && (
                 <ModalModifyAvatar
                     isOpen={isModalAvatarOpen}

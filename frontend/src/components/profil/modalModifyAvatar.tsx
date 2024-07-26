@@ -139,7 +139,7 @@ export default function ModalModifyAvatar({
             <div className='fixed inset-0 bg-black/50 z-50'>
                 <div
                     ref={modalContentRef}
-                    className='w-10/12 bg-white p-3 xl:max-w-6/12 xl:p-5'
+                    className='w-10/12 bg-white p-5 xl:max-w-6/12 rounded-lg'
                     style={modalStyles}
                 >
                     <div className='flex justify-between'>
@@ -167,7 +167,7 @@ export default function ModalModifyAvatar({
                                 className={clsx(
                                     'w-12 h-12 mb-5 hover:border-solid hover:border-4 hover:border-primaryRed duration-100 rounded-full mr-2 md:w-14 md:h-14 lg:w-16 lg:h-16 xl:w-20 xl:h-20 2xl:w-24 2xl:h-24',
                                     avatarItem.id === avatar &&
-                                        'border-solid border-4 border-primaryRed'
+                                    'border-solid border-4 border-primaryRed'
                                 )}
                                 alt={avatarItem.name}
                                 onClick={() => setAvatarId(avatarItem.id)}

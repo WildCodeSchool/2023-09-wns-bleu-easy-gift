@@ -33,9 +33,9 @@ export default function Profile() {
             <Head>
                 <title>Mon profil - Easy Gift</title>
             </Head>
-            <section className='mb-10 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-10/12  2xl:mb-40 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <div>
-                    <h1 className='mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+            <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
+                <div className='lg:h-3/5'>
+                    <h1 className='text-xl mb-4 md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
                         Informations personnelles
                     </h1>
                     <p className='text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl'>
