@@ -77,7 +77,7 @@ export default function Home() {
             <Head>
                 <title>Page d'accueil - Easy Gift</title>
             </Head>
-            <section className='my-10 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center mx-auto w-4/5 md:my-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:my-44 lg:max-w-7xl xl:my-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:min-h-150 2xl:content-center 2xl:my-40'>
+            <section className='my-10 min-h-40 h-auto flex flex-initial flex-wrap content-start items-center mx-auto w-4/5 md:my-28 md:min-h-80 md:justify-evenly md:max-w-2xl lg:flex-nowrap lg:my-44 lg:max-w-7xl xl:my-20 xl:min-h-120  2xl:max-w-[1800px] 2xl:h-[85vh] 2xl:content-center 2xl:my-0'>
                 <div className='hidden relative w-full order-2 md:block md:max-w-4xl md:min-w-96 lg:mb-24 lg:order-1 lg:max-w-xl:min-h-130 lg:max-w-lg 2xl:max-w-4xl'>
                     <Image
                         src='/images/img-pages/hero-img.png'
