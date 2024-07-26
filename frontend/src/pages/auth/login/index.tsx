@@ -34,11 +34,11 @@ function Login() {
         }
     }, [data, error])
 
-    useEffect(() => {
-        if (isLoggedIn) {
-            router.push('/')
-        }
-    }, [isLoggedIn, router])
+    // useEffect(() => {
+    //     if (isLoggedIn) {
+    //         router.push('/')
+    //     }
+    // }, [isLoggedIn, router])
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -58,6 +58,8 @@ function Login() {
                         password: loginData.password,
                     },
                 },
+            }).then(() => {
+                router.push('/')
             })
         }
     }
