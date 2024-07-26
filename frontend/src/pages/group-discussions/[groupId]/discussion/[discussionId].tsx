@@ -44,7 +44,6 @@ const DiscussionsPage = () => {
                 <MenuDiscussions
                     isMenuHidden={isMenuHidden}
                     toggleMenu={toggleMenu}
-                    // setSelectedDiscussionId={setSelectedDiscussionId}
                 />
                 <EspaceDiscussion
                     isMenuHidden={isMenuHidden}
