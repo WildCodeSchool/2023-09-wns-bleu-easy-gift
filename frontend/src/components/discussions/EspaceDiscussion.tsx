@@ -108,7 +108,8 @@ const EspaceDiscussion = ({
 
     const [createMessage] = useCreateMessageMutation()
 
-    const handleSendMessage = async () => {
+    const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         try {
             await createMessage({
                 variables: {
@@ -120,6 +121,7 @@ const EspaceDiscussion = ({
                     setMessages(prev => [...prev, data.createMessage])
                 },
             })
+            setContent('')
         } catch (error) {
             console.error('Error sending message:', error)
         }
@@ -143,7 +145,7 @@ const EspaceDiscussion = ({
             }, 500)
         }
         handleScrollContainer('all')
-    }, [messages])
+    }, [messages, isGettingMore])
 
     const messagesContainerRef = useRef<React.LegacyRef<HTMLUListElement>>(null)
 
@@ -151,7 +153,7 @@ const EspaceDiscussion = ({
         setMessages([])
         setOffset(0)
         refetch()
-    }, [discussionId])
+    }, [refetch, selectedDiscussionId])
 
     return (
         <div
@@ -160,7 +162,7 @@ const EspaceDiscussion = ({
             <div
                 className={`hidden h-full md:w-7/12 md:flex md:flex-grow md:justify-center md:items-center transition-all duration-1000 ease-in-out ${isMenuHidden ? 'md:w-full' : 'md:w-12/12'}`}
             >
-                <div className='w-full h-full relative mx-10 p-3 bg-slate-200 rounded-lg'>
+                <div className='w-full h-full relative mx-10 p-3 rounded-lg'>
                     <ul
                         className='  absolute bottom-10 pb-5 pt-20 w-full max-h-full overflow-y-scroll gap-4 flex-col flex right-1 '
                         //@ts-ignore
@@ -169,7 +171,7 @@ const EspaceDiscussion = ({
                         {canShowIntersector && canGetMore ? (
                             <div
                                 ref={ref}
-                                className='absolute w-full h-2/5 p-3'
+                                className=' absolute w-full h-2/5 p-3'
                             />
                         ) : (
                             <p className='font-semibold w-full text-center pb-4'>
@@ -181,15 +183,25 @@ const EspaceDiscussion = ({
                         ))}
                     </ul>
 
-                    <div className='absolute bottom-0 flex w-full items-center justify-evenly p-3'>
+                    <form
+                        className='absolute bottom-0 flex w-full items-center justify-evenly p-3'
+                        onSubmit={handleSendMessage}
+                    >
                         <input
                             className='w-3/6 p-2 rounded-md'
                             type='text'
                             value={content}
                             onChange={e => setContent(e.target.value)}
                         />
-                        <Button disabled={!content.length}>Envoyer</Button>
-                    </div>
+                        <Button
+                            disabled={
+                                !content.length ||
+                                content.split(' ').join('').length === 0
+                            }
+                        >
+                            Envoyer
+                        </Button>
+                    </form>
                 </div>
             </div>
         </div>

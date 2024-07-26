@@ -55,6 +55,7 @@ class MessageResolver {
         await pubsub.publish(`NEW_DISCUSSION_${discussionId}`, message)
         return message
     }
+
     @Subscription(() => Message, {
         topics: ({ args }) => `NEW_DISCUSSION_${args.discussionId}`,
     })
