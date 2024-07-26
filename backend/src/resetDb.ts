@@ -42,19 +42,19 @@ export async function main() {
         await user.save()
     }
     //on récupère la liste des users fraichement crées
-    const users = await User.find()
-    for (const user of users) {
-        //on détermine le nombre de groupe à creer pour chaque users
-        const numberOfGroups = faker.number.int({ min: 5, max: 15 })
+    // const users = await User.find()
+    // for (const user of users) {
+    //     //on détermine le nombre de groupe à creer pour chaque users
+    //     const numberOfGroups = faker.number.int({ min: 1, max: 2 })
 
-        Array.from({ length: numberOfGroups }).forEach(() => {
-            //pour chaque groupe on détermine le nombre de users qui le composeront
-            const numberOfGroupUser = faker.number.int({ min: 2, max: 15 })
-            try {
-                groupFactory(user, numberOfGroupUser)
-            } catch {}
-        })
-    }
+    //     Array.from({ length: numberOfGroups }).forEach(() => {
+    //         //pour chaque groupe on détermine le nombre de users qui le composeront
+    //         const numberOfGroupUser = faker.number.int({ min: 1, max: 3 })
+    //         try {
+    //             groupFactory(user, numberOfGroupUser)
+    //         } catch {}
+    //     })
+    // }
 }
 
 main()
