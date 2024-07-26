@@ -10,7 +10,11 @@ import Head from 'next/head'
 function Login() {
     const router = useRouter()
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
-    const [login, { data, error }] = useLoginLazyQuery()
+    const [login, { data, error }] = useLoginLazyQuery({
+        onCompleted: () => {
+            router.push('/')
+        },
+    })
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     useEffect(() => {
