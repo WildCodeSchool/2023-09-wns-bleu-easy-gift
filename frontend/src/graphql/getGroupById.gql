@@ -23,5 +23,11 @@ query GetGroupById($groupId: Int!) {
             url
             name
         }
+        discussions {
+            id
+            userDiscussion {
+                id
+            }
+        }
     }
 }

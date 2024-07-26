@@ -39,6 +39,7 @@ export class Group extends BaseEntity {
     @UpdateDateColumn()
     modified_at: string
 
+    @Field(() => [Discussion])
     @OneToMany(() => Discussion, discussion => discussion.group)
     discussions: Discussion[]
 

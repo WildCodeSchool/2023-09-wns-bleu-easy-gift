@@ -93,7 +93,7 @@ function Register() {
                         >
                             Pseudo
                         </label>
-                        <Input id='pseudo' type='text' name='pseudo' required />
+                        <Input id='pseudo' type='text' name='pseudo' />
                     </div>
 
                     <div className='grid gap-1'>

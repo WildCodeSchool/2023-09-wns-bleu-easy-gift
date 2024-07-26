@@ -76,6 +76,8 @@ class GroupsResolver {
                 'userToGroups',
                 'userToGroups.user',
                 'userToGroups.user.avatar',
+                'discussions',
+                'discussions.userDiscussion',
             ],
         })
         if (
