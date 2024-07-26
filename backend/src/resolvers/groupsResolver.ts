@@ -173,8 +173,6 @@ class GroupsResolver {
                     is_admin: false,
                 })
                 try {
-                    // console.log('DANS INVITATION MAIL')
-                    // console.log('TO', email)
                     // await mailer.sendMail({
                     //     subject: `Bienvenue sur le groupe ${name} !`,
                     //     to: email,
@@ -183,9 +181,6 @@ class GroupsResolver {
                     //     Connecte toi vite pour commencer à discuter : ${url}/group/${newGroup.id}`,
                     // })
                     // return isUser
-
-                    console.log('DANS INVITATION MAIL')
-                    console.log('TO', email)
                     await sendMail({
                         Messages: [
                             {
@@ -202,8 +197,6 @@ class GroupsResolver {
                     })
                     return isUser
                 } catch (error) {
-                    console.log('DANS LE ERROR INVITATIONMAIL')
-                    console.log('ERROR', error)
                     throw new GraphQLError("Erreur d'envoi de mail")
                 }
             }
@@ -221,8 +214,6 @@ class GroupsResolver {
             })
 
             try {
-                console.log('DANS creation MAIL')
-                console.log('TO', email)
                 // await mailer.sendMail({
                 //     subject: `Bienvenue sur EasyGift ${pseudo}, une action de ta part est requise!`,
                 //     to: email,
@@ -249,8 +240,6 @@ class GroupsResolver {
 
                 return newUser
             } catch (error) {
-                console.log('DANS LE ERROR CREATION MAIL')
-                console.log('ERROR1', error)
                 throw new GraphQLError("Erreur d'envoi de mail")
             }
         })

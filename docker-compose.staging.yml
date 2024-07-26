@@ -24,6 +24,7 @@ services:
       SMTP_PORT: ${SMTP_PORT:-production}
       SMTP_USER: ${SMTP_USER:-production}
       SMTP_PASSWORD: ${SMTP_PASSWORD:-production}
+      SITE_URL: ${SITE_URL:-production}
       EMAIL_FROM: crazygift24@gmail.com
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-changeme}
     stop_grace_period: 0s
