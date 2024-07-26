@@ -101,7 +101,7 @@ export default function ModalModifyDetails({
                     style={modalStyles}
                 >
                     <div className='p-3'>
-                        <div className='flex justify-between '>
+                        <div className='flex justify-between'>
                             <p className='mb-9 text-lg text-left md:mb-10 md:text-xl text-primaryBlue'>
                                 Modifier mes informations
                             </p>
@@ -113,6 +113,7 @@ export default function ModalModifyDetails({
                                 className='bi bi-x-lg hover:cursor-pointer 2xl:ml-10'
                                 viewBox='0 0 16 16'
                                 onClick={() => handleClose()}
+                                aria-label='Fermer la fenetre de modification des mes infoprmations'
                             >
                                 <path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z' />
                             </svg>
@@ -120,29 +121,40 @@ export default function ModalModifyDetails({
 
                         <div className='flex justify-center'>
                             <form className='gap-2' onSubmit={onConfirm}>
-                                <label htmlFor='pseudo'>
-                                    Choisissez un nouveau pseudo
-                                </label>
+                                <div className='grid gap-1'>
+                                    <label
+                                        htmlFor='pseudo'
+                                        className='text-sm font-medium text-muted-foreground'
+                                    >
+                                        Choisissez un nouveau pseudo
+                                    </label>
+                                    <Input
+                                        id='pseudo'
+                                        type='text'
+                                        name='pseudo'
+                                        value={pseudo}
+                                        onChange={e =>
+                                            setPseudo(e.target.value)
+                                        }
+                                        className='mb-6'
+                                    />
+                                </div>
 
-                                <Input
-                                    id='pseudo'
-                                    type='text'
-                                    name='pseudo'
-                                    value={pseudo}
-                                    onChange={e => setPseudo(e.target.value)}
-                                    className='mb-6'
-                                />
-
-                                <label htmlFor='email'>
-                                    Modifier votre email
-                                </label>
-                                <Input
-                                    id='email'
-                                    type='email'
-                                    name='email'
-                                    value={email}
-                                    onChange={e => setEmail(e.target.value)}
-                                />
+                                <div className='grid gap-1'>
+                                    <label
+                                        htmlFor='email'
+                                        className='text-sm font-medium text-muted-foreground'
+                                    >
+                                        Modifier votre email
+                                    </label>
+                                    <Input
+                                        id='email'
+                                        type='email'
+                                        name='email'
+                                        value={email}
+                                        onChange={e => setEmail(e.target.value)}
+                                    />
+                                </div>
 
                                 <div className='mb-4'>
                                     {errorMessages &&

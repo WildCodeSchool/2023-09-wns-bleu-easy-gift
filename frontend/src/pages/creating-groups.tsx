@@ -92,24 +92,23 @@ export default function CreatingGroups() {
                     onSubmit={handleSubmit}
                     className='w-full max-w-lg bg-white p-8 rounded shadow-md mb-5'
                 >
-                    <h2 className='text-3xl font-bold mb-4'>
+                    <h2 className='text-2xl font-bold mb-7'>
                         Invitez vos amis
                     </h2>
-                    <p className='mb-4'>
+                    <p className='mb-10'>
                         Les échanges de cadeaux nécessitent au moins 3
                         participants
                     </p>
                     <div className='mb-4'>
                         <label
                             htmlFor='group-name'
-                            className='block mb-2 font-bold'
+                            className='block mb-2 font-medium text-muted-foreground'
                         >
                             Nom du groupe
                         </label>
                         <Input
                             type='text'
                             id='group-name'
-                            placeholder='name'
                             value={name}
                             onChange={handleNameChange}
                             className='w-full p-2 border rounded'
@@ -118,15 +117,14 @@ export default function CreatingGroups() {
                     <div className='mb-4'>
                         <label
                             htmlFor='event-date'
-                            className='block mb-2 font-bold'
+                            className='block mb-2 font-medium text-muted-foreground'
                         >
                             Date de l'évenement
                         </label>
                         <Input
                             type='date'
                             id='event-date'
-                            placeholder='date'
-                            value={event_date}
+                            value='{event_date}'
                             onChange={handleDateChange}
                             className='w-full p-2 border rounded'
                         />
@@ -134,14 +132,14 @@ export default function CreatingGroups() {
                     <div className='mb-4'>
                         <label
                             htmlFor='add-email'
-                            className='block mb-2 font-bold'
+                            className='block mb-2 font-medium text-muted-foreground'
                         >
-                            Ajouter des personnes (e-mail)
+                            Ajouter des personnes (un email à la fois)
                         </label>
                         <Input
                             type='email'
                             id='add-email'
-                            placeholder='ajouter un email'
+                            placeholder='exemple@exemple.com'
                             value={email}
                             onChange={handleEmailChange}
                             className='w-full p-2 border rounded'

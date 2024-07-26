@@ -30,15 +30,22 @@ function ForgotPassword() {
             </Head>
             <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
                 <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
-                    Réinitialisation du mot de passe
+                    Réinitialiser le mot de passe
                 </h1>
                 <form
                     className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
-                    <p className='mb-3'>Recevoir un email pour ré-initialiser son mot de passe</p>
-                    <label className='mb-3'>
-                        Mon email
+                    <p className='mb-3'>
+                        Recevoir un email pour ré-initialiser son mot de passe
+                    </p>
+                    <div className='grid gap-1'>
+                        <label
+                            className='text-sm font-medium text-muted-foreground'
+                            htmlFor='email'
+                        >
+                            Mon email
+                        </label>
                         <Input
                             data-testid='forgot-password-email'
                             id='email'
@@ -48,8 +55,13 @@ function ForgotPassword() {
                             onChange={e => setEmail(e.target.value)}
                             required
                         />
-                    </label>
-                    <Button type='submit' className='mt-9 mb-5 lg:mb-8' disabled={loading}>
+                    </div>
+
+                    <Button
+                        type='submit'
+                        className='mt-9 mb-5 lg:mb-8'
+                        disabled={loading}
+                    >
                         Envoyer
                     </Button>
                 </form>
