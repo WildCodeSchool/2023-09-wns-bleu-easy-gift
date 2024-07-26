@@ -123,7 +123,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                             <Link
                                 href={`/group-discussions/${group.id}/discussion/${discussionId}`}
                             >
-                                Discussion
+                                Discussions
                             </Link>
                         </Button>
                         <Button>

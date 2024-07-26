@@ -33,7 +33,7 @@ function ForgotPassword() {
                     Réinitialiser le mot de passe
                 </h1>
                 <form
-                    className='flex flex-col items-center gap-2 lg:h-3/5'
+                    className='flex flex-col items-center gap-2'
                     onSubmit={handleSubmit}
                 >
                     <p className='mb-3'>
