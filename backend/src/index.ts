@@ -35,7 +35,7 @@ const httpServer = http.createServer(app)
 
 const wsServer = new WebSocketServer({
     server: httpServer,
-    path: '/',
+    path: '/subscriptions',
 })
 
 schema.then(async schema => {
