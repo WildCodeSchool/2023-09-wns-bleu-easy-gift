@@ -5,11 +5,14 @@ import EspaceDiscussion from '@/components/discussions/EspaceDiscussion'
 
 const DiscussionsPage = () => {
     const router = useRouter()
-    const { groupId, discussionId } = router.query
+    const {
+        groupId,
+        // , discussionId
+    } = router.query
     const [isMenuHidden, setIsMenuHidden] = useState<boolean>(false)
-    const [selectedDiscussionId, setSelectedDiscussionId] = useState<
-        number | null
-    >(discussionId ? parseInt(discussionId as string, 10) : null)
+    // const [selectedDiscussionId, setSelectedDiscussionId] = useState<
+    //     number | null
+    // >(discussionId ? parseInt(discussionId as string, 10) : null)
 
     const toggleMenu = () => {
         setIsMenuHidden(!isMenuHidden)
@@ -41,11 +44,10 @@ const DiscussionsPage = () => {
                 <MenuDiscussions
                     isMenuHidden={isMenuHidden}
                     toggleMenu={toggleMenu}
-                    setSelectedDiscussionId={setSelectedDiscussionId}
+                    // setSelectedDiscussionId={setSelectedDiscussionId}
                 />
                 <EspaceDiscussion
                     isMenuHidden={isMenuHidden}
-                    selectedDiscussionId={selectedDiscussionId}
                     groupId={Number(groupId)}
                 />
                 {isMenuHidden && <FloatingButton toggleMenu={toggleMenu} />}

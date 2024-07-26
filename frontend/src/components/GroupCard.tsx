@@ -75,10 +75,11 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                 <div>Membres du groupe</div>
                 <div className={`flex justify-start`}>
                     <div
-                        className={`flex ${displayedUsers.length > 7
-                            ? 'flex-wrap gap-2'
-                            : ' -space-x-3'
-                            }`}
+                        className={`flex ${
+                            displayedUsers.length > 7
+                                ? 'flex-wrap gap-2'
+                                : ' -space-x-3'
+                        }`}
                     >
                         {displayedUsers.map(user => (
                             <div

@@ -41,7 +41,11 @@ export default function Profile() {
                     </div>
                 ) : (
                     <>
-                        <div className={'flex flex-col justify-between items-center mb-5'}>
+                        <div
+                            className={
+                                'flex flex-col justify-between items-center mb-5'
+                            }
+                        >
                             <p className='text-md 2xl:text-xl mb-3'>
                                 Accède à tes groupes Easy Gift.
                             </p>
@@ -52,9 +56,7 @@ export default function Profile() {
                             </Button>
                         </div>
 
-                        <div
-                            className="flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-8 lg:gap xl:max-w-[1200px] xl:grid-cols-4 2xl:gap-y-10"
-                        >
+                        <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-8 lg:gap xl:max-w-[1200px] xl:grid-cols-4 2xl:gap-y-10'>
                             <label className='w-full inline-flex items-center  justify-end cursor-pointer  lg:col-start-2 lg:col-end-4 xl:col-start-4 xl:col-end-5'>
                                 <input
                                     type='checkbox'

@@ -13,6 +13,9 @@ mutation createMessage(
         user {
             id
             pseudo
+            avatar {
+                url
+            }
         }
         discussion {
             id

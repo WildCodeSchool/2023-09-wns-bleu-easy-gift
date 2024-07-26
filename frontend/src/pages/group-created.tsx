@@ -8,7 +8,9 @@ export default function GroupCreated() {
     return (
         <>
             <Head>
-                <title>Page de validation de création d'un groupe - Easy Gift</title>
+                <title>
+                    Page de validation de création d'un groupe - Easy Gift
+                </title>
             </Head>
             <div className='flex flex-col justify-center items-center'>
                 <h1 className='text-3xl font-bold mb-4'>
