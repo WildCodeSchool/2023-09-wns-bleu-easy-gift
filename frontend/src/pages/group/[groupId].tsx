@@ -4,6 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import React, { useState } from 'react'
 import ProfileCard from '@/components/ProfileCard'
 import ModalUpdateGroup from '@/components/group/modalUpdateGroup'
+import ModalAddMembers from '@/components/group/modalAddMembers'
 import { Button } from '@/components/ui/button'
 import { createPortal } from 'react-dom'
 import ModalModifyAvatar from '@/components/profil/modalModifyAvatar'
@@ -21,6 +22,7 @@ export default function GroupDetails() {
         skip: typeof groupId === 'undefined',
     })
     const [showModal, setShowModal] = useState(false)
+    const [showModalAddMembers, setShowModalAddMembers] = useState(false)
     const [isModalAvatarOpen, setIsModalAvatarOpen] = useState(false)
 
     if (loading) return <h1>Loading...</h1>
@@ -34,13 +36,13 @@ export default function GroupDetails() {
     return (
         <div>
             <Head>
-                <title>Page du groupe {group?.name} - Easy Gift</title>
+                <title>Groupe {group?.name} - Easy Gift</title>
             </Head>
-            <div className='flex flex-col justify-between align-center text-left mb-5'>
+            <section className='w-full h-full flex-grow flex flex-col  gap-6 pb-6 my-10 justify-center items-center lg:min-h-screen lg:my-12 2xl:my-20'>
                 <div className='flex flex-col gap-3 justify-between mx-auto w-10/12 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                    <h2 className='text-xl lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
-                        Groupe "{group?.name}"
-                    </h2>
+                    <h1 className='text-xl md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
+                        Groupe {group?.name}
+                    </h1>
                     <p className='text-md 2xl:text-xl'>
                         Gère les informations de ton groupe Easy Gift.
                     </p>
@@ -147,7 +149,7 @@ export default function GroupDetails() {
                             <div className='shrink sm:w-1/2 sm:max-w-lg'>
                                 <div>
                                     <div className='text-2xl font-medium'>
-                                        Membres du groups
+                                        Membres du groupe
                                     </div>
                                     <div className='text-sm text-black/60'>
                                         Voici la liste des membres de votre
@@ -166,9 +168,29 @@ export default function GroupDetails() {
                                 })}
                             </div>
                         </div>
+                        <div className='flex sm:justify-end'>
+                            <Button
+                                className='bg-blue-500 text-white px-4 py-2 rounded mt-10'
+                                onClick={() => setShowModalAddMembers(true)}
+                            >
+                                Ajouter des membres au groupe
+                            </Button>
+                            {showModalAddMembers &&
+                                createPortal(
+                                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+                                        <ModalAddMembers
+                                            onClose={() =>
+                                                setShowModalAddMembers(false)
+                                            }
+                                            group={group}
+                                        />
+                                    </div>,
+                                    document.body
+                                )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
             {isModalAvatarOpen && (
                 <ModalModifyAvatar
                     isOpen={isModalAvatarOpen}

@@ -1,45 +1,80 @@
 import { useGetDiscussionsByGroupIdWithoutCtxUserQuery } from '@/graphql/generated/schema'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 type MenuDiscussionsProps = {
     isMenuHidden: boolean
     toggleMenu: () => void
-    // setSelectedDiscussionId: (id: number) => void
 }
 
 const MenuDiscussions = ({
     isMenuHidden,
     toggleMenu,
-    // setSelectedDiscussionId,
 }: MenuDiscussionsProps) => {
     const router = useRouter()
-    const groupId = Number(router.query.groupId)
+    const { groupId, search } = router.query
+    const [searchValue, setSearchValue] = useState<string>(
+        (search as string) || ''
+    )
 
     const { discussionId } = router.query
 
-    const { data, loading, error } =
-        useGetDiscussionsByGroupIdWithoutCtxUserQuery({
-            variables: { groupId },
-            fetchPolicy: 'cache-and-network',
-        })
-
+    const { data, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
+        variables: { groupId: Number(12) },
+        fetchPolicy: 'cache-and-network',
+    })
     const dataOnDiscussions = data?.getDiscussionsByGroupIdWithoutCtxUser
-
-    if (loading) return <div>Chargement...</div>
-    if (error) return <div>Oups, une erreur est survenue</div>
-    if (!data || !data.getDiscussionsByGroupIdWithoutCtxUser) {
-        return <div>Groupe introuvable</div>
-    }
 
     const currentDiscussion = dataOnDiscussions?.discussions.find(
         discussion => discussion.id === parseInt(discussionId as string, 10)
     )
 
+    //eslint-disable-next-line
+    let matchingDiscussions: any[] = []
+    //eslint-disable-next-line
+    let otherDiscussions: any[] = []
+
+    function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearchValue(e.target.value)
+
+        router.push(
+            {
+                pathname: router.pathname,
+                query: { ...router.query, search: searchValue },
+            },
+            undefined,
+            { shallow: true }
+        )
+    }
+
+    if (error) return <div>Oups, une erreur est survenue</div>
+    if (!data || !dataOnDiscussions) return <div>Groupe introuvable</div>
+
+    if (searchValue.length >= 2) {
+        matchingDiscussions = dataOnDiscussions.discussions.filter(discussion =>
+            discussion.userDiscussion.pseudo
+                .toLowerCase()
+                .includes(searchValue.toLowerCase())
+        )
+
+        otherDiscussions = dataOnDiscussions.discussions.filter(
+            discussion =>
+                !discussion.userDiscussion.pseudo
+                    .toLowerCase()
+                    .includes(searchValue.toLowerCase())
+        )
+    }
+
     return (
         <nav
-            className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start md:pb-6 md:w-5/12 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start transition-all duration-1000 ease-in-out ${isMenuHidden ? 'w-0 max-w-0 md:max-w-0 overflow-hidden -translate-x-full opacity-25' : 'w-full md:w-5/12 translate-x-0 opacity-100'}
-    `}
+            className={`bg-slate-200 w-full h-full pt-5 pb-6 flex flex-col justify-start transition-all duration-1000 ease-in-out ${
+                isMenuHidden
+                    ? 'w-0 max-w-0 overflow-hidden -translate-x-full opacity-25'
+                    : 'w-full'
+            } md:pb-6 md:max-w-screen-sm md:h-auto md:justify-between md:overflow-y-auto md:shadow-[-11px_6px_21px_3px_theme(colors.slate.500)] lg:justify-start ${
+                isMenuHidden ? 'md:w-0 md:max-w-0' : 'md:w-5/12'
+            }`}
         >
             <div className='w-4/5 mx-auto h-36 flex flex-shrink-0 flex-wrap justify-between items-center md:min-h-40 md:w-11/12 lg:w-4/5'>
                 <div className='basis-5/6 flex justify-start items-center h-14'>
@@ -50,7 +85,7 @@ const MenuDiscussions = ({
                     />
                     <h1
                         className='text-4xl md:text-2xl xl:text-4xl 2xl:text-5xl font-bold text-primaryBlue inline-block
-          ml-4 self-center'
+                        ml-4 self-center'
                     >
                         {dataOnDiscussions?.groupName}
                     </h1>
@@ -73,7 +108,7 @@ const MenuDiscussions = ({
                         </svg>
                     </button>
                 </div>
-                <div className='basis-full h-11 2xl:h-12'>
+                <div className='basis-full h-11 2xl:h-12 relative'>
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
                         width='16'
@@ -88,53 +123,137 @@ const MenuDiscussions = ({
                     <input
                         type='search'
                         className='w-full h-full rounded-3xl shadow-lg pl-9 outline-slate-200 outline-2 outline '
-                        placeholder="Pour trouver tes copains... c'est ici"
+                        placeholder='Trouve la discussion de....'
+                        value={searchValue}
+                        onChange={handleSearchChange}
                     />
                 </div>
             </div>
             <ul className='w-4/5 max-h-[68vh] min-h-0 overflow-y-auto mx-auto flex flex-col flex-grow flex-shrink justify-evenly max-w-96 mt-8 pt-3 md:h-auto md:min-h-auto md:max-h-none md:flex-grow md:justify-start'>
-                {currentDiscussion && (
-                    <li
-                        className={`w-full h-16 rounded-full 
+                {
+                    !searchValue && (
+                        <>
+                            {currentDiscussion && (
+                                <li
+                                    className={`w-full h-16 rounded-full 
                                bg-red400 shadow-md border-red500 md:mb-12
                                
                          hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300 `}
-                    >
-                        <div className='h-full flex items-center justify-start'>
-                            <div className='relative mr-3 w-12 h-12'>
-                                <img
-                                    src={
-                                        currentDiscussion.userDiscussion?.avatar
-                                            ?.url
-                                    }
-                                    className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 '
-                                    alt='Avatar of the user'
-                                />
-                            </div>
-                            <div className='self-center flex flex-wrap w-3/4'>
-                                <h2 className={`text-xl text-white`}>
-                                    {currentDiscussion.userDiscussion.pseudo}
-                                </h2>
-                            </div>
-                        </div>
-                    </li>
-                )}
-                {dataOnDiscussions?.discussions
-                    .filter(
-                        discussion => discussion.id !== currentDiscussion?.id
-                    )
-                    .map((discussion, index) => (
-                        <li
-                            className='w-full h-16 rounded-full
+                                >
+                                    <div className='h-full flex items-center justify-start'>
+                                        <div className='relative mr-3 w-12 h-12'>
+                                            <img
+                                                src={
+                                                    currentDiscussion
+                                                        .userDiscussion?.avatar
+                                                        ?.url
+                                                }
+                                                className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 '
+                                                alt='Avatar of the user'
+                                            />
+                                        </div>
+                                        <div className='self-center flex flex-wrap w-3/4'>
+                                            <h2
+                                                className={`text-xl text-white`}
+                                            >
+                                                {
+                                                    currentDiscussion
+                                                        .userDiscussion.pseudo
+                                                }
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </li>
+                            )}
+                            {dataOnDiscussions?.discussions
+                                .filter(
+                                    discussion =>
+                                        discussion.id !== currentDiscussion?.id
+                                )
+                                .map((discussion, index) => (
+                                    <li
+                                        className='w-full h-16 rounded-full
                                    bg-blue200 hover:border-primaryBlue hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300'
+                                        key={index}
+                                    >
+                                        <Link
+                                            href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
+                                            className='h-full flex items-center justify-start'
+                                        >
+                                            <div className='relative mr-3 w-12 h-12'>
+                                                <img
+                                                    src={
+                                                        discussion
+                                                            .userDiscussion
+                                                            ?.avatar?.url
+                                                    }
+                                                    className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4
+                                                border-primaryBlue'
+                                                    alt='Avatar of the user'
+                                                />
+                                            </div>
+                                            <div className='self-center flex flex-wrap w-3/4'>
+                                                <h2 className='text-xl text-primaryBlue font-semibold'>
+                                                    {
+                                                        discussion
+                                                            .userDiscussion
+                                                            .pseudo
+                                                    }
+                                                </h2>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                ))}
+                        </>
+                    )
+                    // dataOnDiscussions.discussions.map((discussion, index) => (
+                    //     <li
+                    //         className={`w-full h-16 rounded-full ${
+                    //             index === 0
+                    //                 ? 'bg-red400 shadow-md border-red500 md:mb-12'
+                    //                 : 'bg-blue200 hover:border-primaryBlue'
+                    //         } hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300`}
+                    //         key={index}
+                    //     >
+                    //         <Link
+                    //             href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
+                    //             className='h-full flex items-center justify-start'
+                    //         >
+                    //             <div className='relative mr-3 w-12 h-12'>
+                    //                 <img
+                    //                     src={
+                    //                         discussion.userDiscussion?.avatar
+                    //                             ?.url
+                    //                     }
+                    //                     className={`absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 ${
+                    //                         index === 0
+                    //                             ? 'border-red500'
+                    //                             : 'border-primaryBlue'
+                    //                     }`}
+                    //                     alt='Avatar of the user'
+                    //                 />
+                    //             </div>
+                    //             <div className='self-center flex flex-wrap w-3/4'>
+                    //                 <h2
+                    //                     className={`text-xl ${index === 0 ? 'text-white' : 'text-primaryBlue font-semibold'}`}
+                    //                 >
+                    //                     {discussion.userDiscussion.pseudo}
+                    //                 </h2>
+                    //             </div>
+                    //         </Link>
+                    //     </li>
+                    // ))
+                }
+                {searchValue &&
+                    matchingDiscussions.map((discussion, index) => (
+                        <li
+                            className='w-full h-16 rounded-full bg-red400 shadow-md border-red500 md:mb-12
+                                hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300'
                             key={index}
                         >
                             <Link
                                 href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
                                 className='h-full flex items-center justify-start'
-                                // onClick={() =>
-                                //     setSelectedDiscussionId(discussion.id)
-                                // }
                             >
                                 <div className='relative mr-3 w-12 h-12'>
                                     <img
@@ -143,7 +262,36 @@ const MenuDiscussions = ({
                                                 ?.url
                                         }
                                         className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4
-                                                border-primaryBlue'
+                                        border-red500'
+                                        alt='Avatar of the user'
+                                    />
+                                </div>
+                                <div className='self-center flex flex-wrap w-3/4'>
+                                    <h2 className='text-xl text-white'>
+                                        {discussion.userDiscussion.pseudo}
+                                    </h2>
+                                </div>
+                            </Link>
+                        </li>
+                    ))}
+                {searchValue &&
+                    otherDiscussions.map((discussion, index) => (
+                        <li
+                            className='w-full h-16 rounded-full bg-blue200 hover:border-primaryBlue
+                                hover:border-2 pl-4 pr-6 py-2 mb-4 lg:transition lg:duration-500 lg:hover:shadow-lg lg:hover:shadow-slate-300'
+                            key={index}
+                        >
+                            <Link
+                                href={`/group-discussions/${groupId}/discussion/${discussion.id}`}
+                                className='h-full flex items-center justify-start'
+                            >
+                                <div className='relative mr-3 w-12 h-12'>
+                                    <img
+                                        src={
+                                            discussion.userDiscussion?.avatar
+                                                ?.url
+                                        }
+                                        className='absolute inset-0 w-12 h-12 rounded-full mr-2 border-solid border-4 border-primaryBlue'
                                         alt='Avatar of the user'
                                     />
                                 </div>
@@ -156,6 +304,7 @@ const MenuDiscussions = ({
                         </li>
                     ))}
             </ul>
+
             <div className='w-4/5 mx-auto self-start flex flex-grow justify-end items-start shadow-[1px_-7px_8px_-8px_theme(colors.slate.400)] md:shadow-none md:max-h-20'>
                 <div className='flex justify-end mt-4 lg:self-end'>
                     <img src='' alt='' />

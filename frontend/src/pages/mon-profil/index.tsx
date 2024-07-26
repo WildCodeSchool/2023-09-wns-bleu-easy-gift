@@ -1,10 +1,7 @@
 import ModalModifyAvatar from '@/components/profil/modalModifyAvatar'
 import ModalModifyDetails from '@/components/profil/modalModifyDetails'
 import ModalModifyPassword from '@/components/profil/ModalModifyPassword'
-import {
-    useUserGroupsQuery,
-    useGetUserInfosQuery,
-} from '../../graphql/generated/schema'
+import { useGetUserInfosQuery } from '../../graphql/generated/schema'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useState } from 'react'
@@ -17,25 +14,15 @@ export default function Profile() {
     const [isModalPasswordOpen, setIsModalPasswordOpen] = useState(false)
 
     const {
-        data: groupsData,
-        loading: groupsLoading,
-        error: groupsError,
-    } = useUserGroupsQuery()
-    const {
         data: userData,
         loading: userLoading,
         error: userError,
     } = useGetUserInfosQuery()
 
     const user = userData?.getUserInfos
-    // const groups = groupsData?.userGroups;
     const avatarId = user?.avatar?.id
 
-    if (groupsLoading || userLoading) return <h1>Loading...</h1>
-    if (groupsError) {
-        toast.error(groupsError.message)
-        return <h1>Error: {groupsError.message}</h1>
-    }
+    if (userLoading) return <h1>Loading...</h1>
     if (userError) {
         toast.error(userError.message)
         return <h1>Error: {userError.message}</h1>
@@ -44,11 +31,11 @@ export default function Profile() {
     return (
         <>
             <Head>
-                <title>Page mon profil - Easy Gift</title>
+                <title>Mon profil - Easy Gift</title>
             </Head>
-            <section className='mb-10 h-auto flex-col flex-initial flex-wrap justify-evenly items-center my-0 mx-auto w-10/12  2xl:mb-40 md:max-w-2xl lg:max-w-4xl xl:max-w-[1100px]'>
-                <div>
-                    <h1 className='mb-3 text-xl md:mb-3 lg:text-2xl 2xl:text-3xl font-bold text-primaryBlue'>
+            <section className='w-full h-full flex-grow flex flex-col gap-6 pb-6 my-10 justify-center items-center lg:h-screen lg:m-0'>
+                <div className='lg:h-3/5'>
+                    <h1 className='text-xl mb-4 md:text-2xl lg:text-3xl 2xl:text-4xl font-bold text-primaryBlue lg:mb-8'>
                         Informations personnelles
                     </h1>
                     <p className='text-md text-left mb-3 md:mb-4 lg:mb-6 xl:mb-8 2xl:mb-10 2xl:text-xl'>
@@ -109,19 +96,6 @@ export default function Profile() {
                         </Button>
                     </div>
                 </div>
-
-                {/* <h2 className="mb-8 mt-10 text-2xl md:mb-3 md:text-4xl font-bold text-primaryBlue">Mes groupes</h2>
-        <p className="mb-9 text-lg text-justify md:mb-10 md:text-xl">Accède à tes groupes Easy Gift.</p>
-        <ul>
-          {groups?.map((group) => (
-            <>
-              <div key={group.id}>
-                <p>{group.name}</p>
-                <img src={group.avatar.url} className="w-32 h-32" alt="Avatar for the group" />
-              </div>
-            </>
-          ))}
-        </ul> */}
             </section>
 
             {isModalAvatarOpen && (

@@ -139,7 +139,7 @@ export default function ModalModifyAvatar({
             <div className='fixed inset-0 bg-black/50 z-50'>
                 <div
                     ref={modalContentRef}
-                    className='w-10/12 bg-white p-3 xl:max-w-6/12 xl:p-5'
+                    className='w-10/12 bg-white p-5 xl:max-w-6/12 rounded-lg'
                     style={modalStyles}
                 >
                     <div className='flex justify-between'>

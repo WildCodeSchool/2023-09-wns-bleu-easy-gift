@@ -36,6 +36,8 @@ const config = {
                 blue500: '#4F69FF',
                 blue600: '#2F3DFC',
                 primaryRed: '#F94C63',
+                red200: '#FECDD2',
+                red300: '#FDA4AD',
                 red400: '#FB7182',
                 red500: '#F43F5B',
                 red600: '#E3264C',
@@ -50,7 +52,7 @@ const config = {
                     foreground: 'hsl(var(--secondary-foreground))',
                 },
                 destructive: {
-                    DEFAULT: '#F94C63',
+                    DEFAULT: '#E11414',
                     foreground: 'hsl(var(--destructive-foreground))',
                 },
                 muted: {

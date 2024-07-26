@@ -97,7 +97,7 @@ export default function ModalModifyDetails({
             <div className='fixed inset-0 bg-black/50 z-50'>
                 <div
                     ref={modalContentRef}
-                    className='bg-white w-9/12 md:w-7/12 lg:w-4/12 2xl:w-3/12 xl:p-5'
+                    className='bg-white p-5 w-9/12 md:w-7/12 lg:w-4/12 2xl:w-3/12 rounded-lg'
                     style={modalStyles}
                 >
                     <div className='p-3'>
@@ -121,28 +121,29 @@ export default function ModalModifyDetails({
                         <div className='flex justify-center'>
                             <form className='gap-2' onSubmit={onConfirm}>
                                 <label htmlFor='pseudo'>
-                                    <Input
-                                        id='pseudo'
-                                        type='text'
-                                        name='pseudo'
-                                        label='Choisissez un nouveau pseudo'
-                                        value={pseudo}
-                                        onChange={e =>
-                                            setPseudo(e.target.value)
-                                        }
-                                    />
+                                    Choisissez un nouveau pseudo
                                 </label>
 
+                                <Input
+                                    id='pseudo'
+                                    type='text'
+                                    name='pseudo'
+                                    value={pseudo}
+                                    onChange={e => setPseudo(e.target.value)}
+                                    className='mb-6'
+                                />
+
                                 <label htmlFor='email'>
-                                    <Input
-                                        id='email'
-                                        type='email'
-                                        name='email'
-                                        label='Modifier votre email'
-                                        value={email}
-                                        onChange={e => setEmail(e.target.value)}
-                                    />
+                                    Modifier votre email
                                 </label>
+                                <Input
+                                    id='email'
+                                    type='email'
+                                    name='email'
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
+                                />
+
                                 <div className='mb-4'>
                                     {errorMessages &&
                                         errorMessages.map((item, index) =>

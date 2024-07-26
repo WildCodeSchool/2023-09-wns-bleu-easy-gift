@@ -17,7 +17,7 @@ import {
 import * as argon2 from 'argon2'
 import { UserToGroup } from './userToGroup'
 import { ObjectId } from '../utils'
-import { IsDateString, IsEmail, Length } from 'class-validator'
+import { IsDateString, IsEmail, IsNotEmpty, Length } from 'class-validator'
 
 @Entity()
 @ObjectType()
@@ -96,9 +96,6 @@ export class User extends BaseEntity {
 @InputType()
 export class InputRegister {
     @Field({ nullable: true })
-    @Length(3, 50, {
-        message: 'Le pseudo doit contenir entre 3 et 50 caractères',
-    })
     pseudo: string
 
     @Field()
@@ -108,9 +105,15 @@ export class InputRegister {
             message: 'Une adresse mail valide est requise',
         }
     )
+    @IsNotEmpty({
+        message: 'Veuillez renseigner votre email',
+    })
     email: string
 
     @Field()
+    @IsNotEmpty({
+        message: 'Veuillez renseigner un mot de passe',
+    })
     password: string
 
     @Field(() => ObjectId, { nullable: true })
@@ -151,9 +154,15 @@ export class InputLogin {
             message: 'Une adresse mail valide est requise',
         }
     )
+    @IsNotEmpty({
+        message: 'Veuillez renseigner votre email',
+    })
     email: string
 
     @Field()
+    @IsNotEmpty({
+        message: 'Veuillez renseigner votre mot de passe',
+    })
     password: string
 }
 

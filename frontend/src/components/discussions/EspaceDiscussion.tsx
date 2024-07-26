@@ -49,6 +49,7 @@ const EspaceDiscussion = ({
                 return setCanGetMore(false)
             setCanGetMore(true)
         },
+        fetchPolicy: 'network-only',
     })
 
     const { data: subscriptionData } = useAddNewMessageSubscription({
@@ -129,10 +130,13 @@ const EspaceDiscussion = ({
 
     const handleScrollContainer = (off: 'all' | 'step') => {
         if (messagesContainerRef.current) {
+            //@ts-ignore
             messagesContainerRef.current.scrollTop =
                 off === 'all'
-                    ? messagesContainerRef.current.scrollHeight
-                    : messagesContainerRef.current.scrollTop + 100
+                    ? //@ts-ignore
+                      messagesContainerRef.current.scrollHeight
+                    : //@ts-ignore
+                      messagesContainerRef.current.scrollTop + 100
         }
     }
 

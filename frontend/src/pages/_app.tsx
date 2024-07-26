@@ -6,11 +6,11 @@ import Layout from './layout'
 import { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Head from 'next/head'
 import { UserDataProvider } from '@/context/userContext'
 
 export default function App({ Component, pageProps }: AppProps) {
     const [isClient, setIsClient] = useState(false)
-    const [user, setUser] = useState(null)
 
     useEffect(() => {
         setIsClient(true)
@@ -19,6 +19,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
     return (
         <ApolloProvider client={client}>
+            <Head>
+                <title>Easy Gift</title>
+            </Head>
             <UserDataProvider>
                 <Layout>
                     <Component {...pageProps} />

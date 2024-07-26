@@ -56,12 +56,12 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
         data?.getDiscussionsByGroupIdWithoutCtxUser.discussions[0]?.id
 
     return (
-        <article className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px]'>
+        <article className='rounded-xl border bg-white shadow shadow-slate-300 hover:scale-105 transition-transform duration-300 ease-in-out sm:max-w-[318px] 2xl:max-w-[343px] 2xl:mx-auto'>
             <div className='flex flex-col p-5 shadow-sm rounded-t-lg gap-3'>
                 <img
                     src={group.avatar.url}
                     alt={group.avatar.name}
-                    className='rounded-t-lg'
+                    className='w-full h-[180px] object-cover rounded-t-lg'
                 />
                 <div className='font-bold text-xl'>Groupe {group.name}</div>
                 {group.event_date && (
