@@ -163,6 +163,7 @@ export default function GroupDetails() {
                                         <ProfileCard
                                             key={userToGroup.user_id}
                                             userToGroup={userToGroup}
+                                            discussions={group.discussions}
                                         />
                                     )
                                 })}

@@ -63,7 +63,7 @@ export default function MyGroup({ group, link }: GroupComponentProps) {
                     alt={group.avatar.name}
                     className='w-full h-[180px] object-cover rounded-t-lg'
                 />
-                <div className='font-bold text-xl'>Groupe {group.name}</div>
+                <div className='font-bold text-xl'>{group.name}</div>
                 {group.event_date && (
                     <div>
                         Date de l'évenement :{' '}
