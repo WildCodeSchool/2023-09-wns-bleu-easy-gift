@@ -105,7 +105,6 @@ function Register() {
                 </form>
             </section>
         </>
-
     )
 }
 

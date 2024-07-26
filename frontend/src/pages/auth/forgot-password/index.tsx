@@ -36,7 +36,9 @@ function ForgotPassword() {
                     className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
-                    <p className='mb-3'>Recevoir un email pour ré-initialiser son mot de passe</p>
+                    <p className='mb-3'>
+                        Recevoir un email pour ré-initialiser son mot de passe
+                    </p>
                     <label className='mb-3'>
                         Mon email
                         <Input
@@ -49,7 +51,11 @@ function ForgotPassword() {
                             required
                         />
                     </label>
-                    <Button type='submit' className='mt-9 mb-5 lg:mb-8' disabled={loading}>
+                    <Button
+                        type='submit'
+                        className='mt-9 mb-5 lg:mb-8'
+                        disabled={loading}
+                    >
                         Envoyer
                     </Button>
                 </form>

@@ -441,7 +441,12 @@ export type AddNewMessageSubscription = {
         content: string
         created_at: string
         modified_at: string
-        user: { __typename?: 'User'; id: number; pseudo: string }
+        user: {
+            __typename?: 'User'
+            id: number
+            pseudo: string
+            avatar?: { __typename?: 'Avatar'; url: string } | null
+        }
     }
 }
 
@@ -459,7 +464,12 @@ export type CreateMessageMutation = {
         content: string
         created_at: string
         modified_at: string
-        user: { __typename?: 'User'; id: number; pseudo: string }
+        user: {
+            __typename?: 'User'
+            id: number
+            pseudo: string
+            avatar?: { __typename?: 'Avatar'; url: string } | null
+        }
         discussion: { __typename?: 'Discussion'; id: number }
     }
 }
@@ -547,7 +557,12 @@ export type GetMessagesByDisscutionQuery = {
         content: string
         created_at: string
         modified_at: string
-        user: { __typename?: 'User'; id: number; pseudo: string }
+        user: {
+            __typename?: 'User'
+            id: number
+            pseudo: string
+            avatar?: { __typename?: 'Avatar'; url: string } | null
+        }
     }>
 }
 
@@ -1098,6 +1113,9 @@ export const AddNewMessageDocument = gql`
             user {
                 id
                 pseudo
+                avatar {
+                    url
+                }
             }
             created_at
             modified_at
@@ -1154,6 +1172,9 @@ export const CreateMessageDocument = gql`
             user {
                 id
                 pseudo
+                avatar {
+                    url
+                }
             }
             discussion {
                 id
@@ -1433,6 +1454,9 @@ export const GetMessagesByDisscutionDocument = gql`
             user {
                 id
                 pseudo
+                avatar {
+                    url
+                }
             }
             created_at
             modified_at

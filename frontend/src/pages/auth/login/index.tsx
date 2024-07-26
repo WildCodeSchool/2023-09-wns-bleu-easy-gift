@@ -104,7 +104,10 @@ function Login() {
                         {'Se connecter'}
                     </Button>
 
-                    <Link href={'/auth/register'} className='text-blue-600 mb-2 lg:mb-4'>
+                    <Link
+                        href={'/auth/register'}
+                        className='text-blue-600 mb-2 lg:mb-4'
+                    >
                         Pas encore de compte ?
                     </Link>
 

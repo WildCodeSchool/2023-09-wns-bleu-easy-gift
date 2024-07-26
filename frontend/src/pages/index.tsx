@@ -113,7 +113,6 @@ export default function Home() {
             </section>
             <section className='w-full mb-28 mx-auto min-h-175 h-full bg-indigo-50 flex flex-col justify-center items-center sm:min-h-160 md:min-h-170  md:mb-14 lg:pt-20 lg:pb-16 lg:flex-wrap lg:flex-row lg:content-center lg:justify-around lg:min-h-140 2xl:pt-0 xl:pb-0 2xl:items-start 2xl:justify-center 2xl:content-end 2xl:flex-row'>
                 <h2 className='w-4/5 text-xl mb-8  sm:text-center md:text-4xl 4xl:text-5xl font-bold  lg:mb-14 lg:w-full 2xl:mb-8 2xl:mt-32 text-primaryRed'>
-
                     Crée ton groupe
                 </h2>
                 <article className='w-4/5 sm:max-w-xl 2xl:ml-36 4xl:ml-52 lg:order-3'>
@@ -181,28 +180,24 @@ export default function Home() {
             <section className='w-full h-full flex-grow flex flex-col  gap-6 pb-6 my-10 justify-center items-center md:my-12 2xl:my-28'>
                 {(!isConnected ||
                     (isConnected && groups && groups?.length < 1)) && (
-
-                        <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:w-full lg:max-w-full'>
-                            <h2 className='w-full flex-grow text-3xl mb-6 text-primaryRed sm:text-center md:mb-10 md:text-4xl 4xl:text-5xl font-bold  2xl:mt-0'>
-                                Retrouve tes groupes
-                            </h2>
-                            <p className='mb-8 text-lg basis-full text-center md:mb-10 md:text-xl  2xl:text-2xl lg:mb-14 '>
-                                Une fois que tu auras créé ou rejoint un groupe,
-                                retrouve-le ici !
-                            </p>
-                            <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-center w-10/12 md:max-w-none md:min-w-[680px]  md:w-4/5 lg:w-full lg:max-w-[1000px]'>
-                                <GroupCard key='1' group={group1} link={link1}
-                                />
-                                <GroupCard key='2' group={group2} link={link2} />
-                                <GroupCard key='3' group={group3} link={link3} />
-                            </div>
+                    <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:w-full lg:max-w-full'>
+                        <h2 className='w-full flex-grow text-3xl mb-6 text-primaryRed sm:text-center md:mb-10 md:text-4xl 4xl:text-5xl font-bold  2xl:mt-0'>
+                            Retrouve tes groupes
+                        </h2>
+                        <p className='mb-8 text-lg basis-full text-center md:mb-10 md:text-xl  2xl:text-2xl lg:mb-14 '>
+                            Une fois que tu auras créé ou rejoint un groupe,
+                            retrouve-le ici !
+                        </p>
+                        <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-center w-10/12 md:max-w-none md:min-w-[680px]  md:w-4/5 lg:w-full lg:max-w-[1000px]'>
+                            <GroupCard key='1' group={group1} link={link1} />
+                            <GroupCard key='2' group={group2} link={link2} />
+                            <GroupCard key='3' group={group3} link={link3} />
                         </div>
-                    )}
-
-
+                    </div>
+                )}
 
                 {isConnected && groups && groups.length > 0 && (
-                    <div className="flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-8 lg:gap xl:max-w-[1200px] xl:grid-cols-4 2xl:gap-y-10">
+                    <div className='flex flex-wrap gap-6 justify-center max-w-80 lg:justify-evenly w-10/12 md:max-w-2xl lg:max-w-4xl lg:grid lg:grid-cols-3 lg:gap-y-8 lg:gap xl:max-w-[1200px] xl:grid-cols-4 2xl:gap-y-10'>
                         <h2 className='w-full h-full text-3xl mb-8 text-primaryRed sm:text-center md:mb-10 md:text-4xl lg:col-start-1 lg:col-end-4 xl:col-start-1 xl:col-end-5 font-bold 4xl:text-5xl 2xl:mt-0 2xl:mb-12 align-middle'>
                             Mes groupes
                         </h2>
@@ -214,12 +209,9 @@ export default function Home() {
                                 link={`/group/${group.id}`}
                             />
                         ))}
-
                     </div>
                 )}
-
-
-            </section >
+            </section>
         </>
     )
 }
