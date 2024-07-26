@@ -124,7 +124,7 @@ export default function CreatingGroups() {
                         <Input
                             type='date'
                             id='event-date'
-                            value='{event_date}'
+                            value={event_date}
                             onChange={handleDateChange}
                             className='w-full p-2 border rounded'
                         />
