@@ -86,18 +86,41 @@ function Register() {
                     className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
-                    <label className='mb-3'>
-                        Pseudo
-                        <Input type='text' name='pseudo' required />
-                    </label>
-                    <label className='mb-3'>
-                        Email <span className='text-red-600'>*</span>
-                        <Input type='email' name='email' required />
-                    </label>
-                    <label>
-                        Mot de passe <span className='text-red-600'>*</span>
-                        <Input type='password' name='password' required />
-                    </label>
+                    <div className='grid gap-1'>
+                        <label
+                            htmlFor='pseudo'
+                            className='text-sm font-medium text-muted-foreground'
+                        >
+                            Pseudo
+                        </label>
+                        <Input id='pseudo' type='text' name='pseudo' required />
+                    </div>
+
+                    <div className='grid gap-1'>
+                        <label
+                            htmlFor='email'
+                            className='text-sm font-medium text-muted-foreground'
+                        >
+                            Email <span className='text-red-600'>*</span>
+                        </label>
+                        <Input id='email' type='email' name='email' required />
+                    </div>
+
+                    <div className='grid gap-1'>
+                        <label
+                            htmlFor='password'
+                            className='text-sm font-medium text-muted-foreground'
+                        >
+                            Mot de passe <span className='text-red-600'>*</span>
+                        </label>
+                        <Input
+                            id='password'
+                            type='password'
+                            name='password'
+                            required
+                        />
+                    </div>
+
                     <Button type='submit' className='mt-9 mb-5 lg:mb-8'>
                         {'Valider'}
                     </Button>

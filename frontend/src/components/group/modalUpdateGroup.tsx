@@ -64,19 +64,33 @@ export default function ModalUpdateGroup({
 
     return (
         <div className='bg-white p-6 rounded-lg shadow-lg max-w-md w-full'>
-            <div className='flex justify-between items-center mb-4'>
-                <h2 className='text-2xl font-semibold'>Modifier le groupe</h2>
-                <button
+            <div className='flex justify-between'>
+                <p className='mb-9 text-lg text-left md:mb-10 md:text-xl text-primaryBlue'>
+                    Modifier le groupe
+                </p>
+                <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='20'
+                    height='20'
+                    fill='currentColor'
+                    className='bi bi-x-lg hover:cursor-pointer 2xl:ml-10'
+                    viewBox='0 0 16 16'
                     onClick={onClose}
-                    className='text-gray-400 hover:text-gray-600'
+                    aria-label='Fermer la fenetre de modification de membres'
                 >
-                    &times;
-                </button>
+                    <path d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z' />
+                </svg>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className='mb-4'>
-                    <label className='block text-gray-700'>Nom du groupe</label>
+                <div className='grid gap-1 mb-4'>
+                    <label
+                        className='text-sm font-medium text-muted-foreground'
+                        htmlFor='name'
+                    >
+                        Nom du groupe
+                    </label>
                     <Input
+                        id='name'
                         type='text'
                         name='name'
                         defaultValue={group?.name}
@@ -84,11 +98,16 @@ export default function ModalUpdateGroup({
                         className='mt-1 w-full p-2 border border-gray-300 rounded'
                     />
                 </div>
-                <div className='mb-4'>
-                    <label className='block text-gray-700'>
+
+                <div className='grid gap-1'>
+                    <label
+                        className='text-sm font-medium text-muted-foreground'
+                        htmlFor='event_date'
+                    >
                         Date de l'évenement
                     </label>
                     <Input
+                        id='event_date'
                         type='date'
                         name='event_date'
                         defaultValue={group?.event_date ?? undefined}
@@ -111,10 +130,7 @@ export default function ModalUpdateGroup({
                         )}
                 </div>
                 <div>
-                    <Button
-                        type='submit'
-                        className='w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600'
-                    >
+                    <Button type='submit' className='w-full'>
                         Valider
                     </Button>
                 </div>

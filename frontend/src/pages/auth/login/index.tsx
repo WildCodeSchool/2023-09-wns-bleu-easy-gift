@@ -76,8 +76,13 @@ function Login() {
                     className='flex flex-col items-center gap-2 lg:h-3/5'
                     onSubmit={handleSubmit}
                 >
-                    <label className='mb-3'>
-                        Email
+                    <div className='grid gap-1'>
+                        <label
+                            htmlFor='email'
+                            className='text-sm font-medium text-muted-foreground'
+                        >
+                            Email
+                        </label>
                         <Input
                             data-testid='login-email'
                             id='email'
@@ -85,9 +90,15 @@ function Login() {
                             name='email'
                             required
                         />
-                    </label>
-                    <label>
-                        Mot de passe
+                    </div>
+
+                    <div className='grid gap-1'>
+                        <label
+                            htmlFor='password'
+                            className='text-sm font-medium text-muted-foreground'
+                        >
+                            Mot de passe
+                        </label>
                         <Input
                             data-testid='login-password'
                             id='password'
@@ -95,7 +106,8 @@ function Login() {
                             name='password'
                             required
                         />
-                    </label>
+                    </div>
+
                     <Button
                         data-testid='login-button'
                         type='submit'

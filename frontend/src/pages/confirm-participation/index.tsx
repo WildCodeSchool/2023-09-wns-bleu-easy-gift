@@ -74,32 +74,53 @@ export default function ConfirmParticipationPage() {
                     className='flex flex-col items-center gap-2'
                     onSubmit={handleSubmit}
                 >
-                    <label className='mb-3'>
-                        Pseudo
+                    <div className='grid gap-1'>
+                        <label
+                            htmlFor='pseudo'
+                            className='text-sm font-medium text-muted-foreground'
+                        >
+                            Pseudo
+                        </label>
                         <Input
+                            id='pseudo'
                             type='text'
                             name='pseudo'
                             defaultValue={data.getUserByToken.pseudo}
                         />
-                    </label>
-                    <label className='mb-3'>
-                        Mot de passe
+                    </div>
+
+                    <div className='grid gap-1'>
+                        <label
+                            htmlFor='password'
+                            className='text-sm font-medium text-muted-foreground'
+                        >
+                            Mot de passe
+                        </label>
                         <Input
+                            id='password'
                             type='password'
                             name='password'
                             placeholder='Indiquez votre mot de passe'
                             required
                         />
-                    </label>
-                    <label className='mb-3'>
-                        Confirmez votre mot de passe
-                        <Input
-                            type='password'
-                            name='confirmPassword'
-                            placeholder='Confirmez votre mot de passe'
-                            required
-                        />
-                    </label>
+                    </div>
+
+                    <div className='grid gap-1'>
+                        <label
+                            className='text-sm font-medium text-muted-foreground'
+                            htmlFor='confirmPassword'
+                        >
+                            Confirmez votre mot de passe
+                            <Input
+                                id='confirmPassword'
+                                type='password'
+                                name='confirmPassword'
+                                placeholder='Confirmez votre mot de passe'
+                                required
+                            />
+                        </label>
+                    </div>
+
                     {errorMatchPassword && (
                         <p className='text-red-600'>
                             Les mots de passe ne correspondent pas

@@ -170,7 +170,6 @@ export default function GroupDetails() {
                         </div>
                         <div className='flex sm:justify-end'>
                             <Button
-                                className='bg-blue-500 text-white px-4 py-2 rounded mt-10'
                                 onClick={() => setShowModalAddMembers(true)}
                             >
                                 Ajouter des membres au groupe
