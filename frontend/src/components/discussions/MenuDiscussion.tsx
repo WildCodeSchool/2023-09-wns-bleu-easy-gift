@@ -21,7 +21,7 @@ const MenuDiscussions = ({
     const { discussionId } = router.query
 
     const { data, error } = useGetDiscussionsByGroupIdWithoutCtxUserQuery({
-        variables: { groupId: Number(12) },
+        variables: { groupId: parseInt(groupId as string, 10) },
         fetchPolicy: 'cache-and-network',
     })
     const dataOnDiscussions = data?.getDiscussionsByGroupIdWithoutCtxUser
